@@ -1,0 +1,48 @@
+# =============================================
+# springboot configurations
+# ---------------------------------------------
+spring:
+  application:
+    name: fuse-calendar-integration-api
+  datasource:
+    initialize: false
+
+api:
+  version: 1
+
+logging:
+  config: classpath:logback.xml
+
+# options from org.apache.camel.spring.boot.CamelConfigurationProperties can be configured here
+camel:
+  springboot:
+    name: fuse-calendar-integration-api
+    main-run-controller: true
+  component:
+    servlet:
+      mapping:
+        contextPath: /api/v${api.version}/*
+    jmxEnabled: true
+
+# lets listen on all ports to ensure we can be invoked from the pod ip address
+server:
+  address: 0.0.0.0
+  port: 8080
+
+# lets use a different management port in case you need to listen to HTTP requests on 8080
+management:
+  security:
+    enabled: false
+  address: 0.0.0.0
+  port: 8081
+
+# =============================================
+# springboot actuator configurations
+# ---------------------------------------------
+# disable all management endpoints except health
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+  metrics:
+    enabled: true
