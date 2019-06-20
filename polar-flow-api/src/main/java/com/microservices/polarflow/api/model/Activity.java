@@ -62,7 +62,7 @@ public class Activity extends BaseModel {
     @Column(name="load", nullable = false)
     @Min(value = 1, message = "Training load should not be less than 1 hour")
     @Max(value = 168, message = "Training load should not be greater than 168 hours")
-    private LocalTime load;
+    private Integer load;
 
     @NotNull
     @Column(name="notes", nullable = true)
@@ -82,11 +82,25 @@ public class Activity extends BaseModel {
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
-    // end-relationships
+    // 3rd party application api key
+    // The API Keys will be used to simulate an optional integration across the synchronization process.
+    // The user can switch 3rd party app integrations on/off.
+
+    @Column(name="stravaApiKey", nullable = true)
+    private String stravaApiKey;
+
+    @Column(name="nutritionistApiKey", nullable = true)
+    private String nutritionistApiKey;
+
+    @Column(name="cardiologistApiKey", nullable = true)
+    private String cardiologistApiKey;
+
+    @Column(name="googleCalendarApiKey", nullable = true)
+    private String googleCalendarApiKey;
 
     public Activity() { }
 
-    public Activity(@NotNull @Past LocalDateTime startDate, @NotNull @Past LocalDateTime endDate, @NotNull @Min(value = 30, message = "Heart rate avg should not be less than 30") @Max(value = 220, message = "Heart rate avg should not be greater than 220") Integer hrAvg, @NotNull @Min(value = 30, message = "Heart rate min should not be less than 30") @Max(value = 220, message = "Heart rate min should not be greater than 220") Integer hrMin, @NotNull @Min(value = 30, message = "Heart rate max should not be less than 30") @Max(value = 220, message = "Heart rate max should not be greater than 220") Integer hrMax, @NotNull @Max(value = 100, message = "Burned fat should not be greater than 100 percent") Integer burnedFat, @NotNull @Min(value = 1, message = "Total calories burned should not be less than 1 kcal") @Max(value = 10000, message = "Total calories burned should not be greater than 10000 kcal") Double calories, @NotNull @Min(value = 1, message = "Training load should not be less than 1 hour") @Max(value = 168, message = "Training load should not be greater than 168 hours") LocalTime load, @NotNull String notes) {
+    public Activity(LocalDateTime startDate, LocalDateTime endDate, Integer hrAvg, Integer hrMin, Integer hrMax, Integer burnedFat, Double calories, Integer load, String notes, String stravaApiKey, String nutritionistApiKey, String cardiologistApiKey, String googleCalendarApiKey) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.hrAvg = hrAvg;
@@ -96,6 +110,10 @@ public class Activity extends BaseModel {
         this.calories = calories;
         this.load = load;
         this.notes = notes;
+        this.stravaApiKey = stravaApiKey;
+        this.nutritionistApiKey = nutritionistApiKey;
+        this.cardiologistApiKey = cardiologistApiKey;
+        this.googleCalendarApiKey = googleCalendarApiKey;
     }
 
     public Long getId() {
@@ -162,11 +180,11 @@ public class Activity extends BaseModel {
         this.calories = calories;
     }
 
-    public LocalTime getLoad() {
+    public Integer getLoad() {
         return load;
     }
 
-    public void setLoad(LocalTime load) {
+    public void setLoad(Integer load) {
         this.load = load;
     }
 
@@ -200,6 +218,38 @@ public class Activity extends BaseModel {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getStravaApiKey() {
+        return stravaApiKey;
+    }
+
+    public void setStravaApiKey(String stravaApiKey) {
+        this.stravaApiKey = stravaApiKey;
+    }
+
+    public String getNutritionistApiKey() {
+        return nutritionistApiKey;
+    }
+
+    public void setNutritionistApiKey(String nutritionistApiKey) {
+        this.nutritionistApiKey = nutritionistApiKey;
+    }
+
+    public String getCardiologistApiKey() {
+        return cardiologistApiKey;
+    }
+
+    public void setCardiologistApiKey(String cardiologistApiKey) {
+        this.cardiologistApiKey = cardiologistApiKey;
+    }
+
+    public String getGoogleCalendarApiKey() {
+        return googleCalendarApiKey;
+    }
+
+    public void setGoogleCalendarApiKey(String googleCalendarApiKey) {
+        this.googleCalendarApiKey = googleCalendarApiKey;
     }
 
     @Override

@@ -46,3 +46,13 @@ endpoints:
     enabled: true
   metrics:
     enabled: true
+
+# =============================================
+# google api parameters
+# ---------------------------------------------
+# http://localhost:8070/api/v1/event
+google:
+  host: 127.0.0.1
+  port: 8070
+  contextPath: /api/v1/event
+  apiKeyName: Google-Calendar-API-User-Key

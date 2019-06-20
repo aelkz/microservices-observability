@@ -17,6 +17,7 @@
     <description>polar flow mobile api</description>
 
     <properties>
+        <springboot.version>2.1.4.RELEASE</springboot.version>
         <main.basedir>${basedir}/../..</main.basedir>
     </properties>
 

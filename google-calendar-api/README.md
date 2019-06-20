@@ -7,11 +7,14 @@ https://dzone.com/articles/eclipse-vertx-application-configuration-rhd-blog?from
 https://dzone.com/articles/some-rest-with-vertx-part-3-of-introduction-to-ver
 
 
-
+```
 java -jar target/my-first-app-1.0-SNAPSHOT.jar \
   -conf src/main/resources/external-configuration/application-conf.json
+```
 
+```
 mvn clean package
 java -jar target/my-first-app-1.0-SNAPSHOT.jar
 mvn compile vertx:run
+```
 

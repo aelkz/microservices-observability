@@ -18,7 +18,7 @@ public class ActivityService {
     }
 
     public void delete(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
 }

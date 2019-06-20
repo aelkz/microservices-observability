@@ -14,12 +14,25 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>calendar-integration-api</name>
+    <name>fuse-calendar-integration-api</name>
     <description>calendar integration api</description>
 
     <properties>
+        <springboot.version>1.5.17.RELEASE</springboot.version>
         <main.basedir>${basedir}/../..</main.basedir>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.redhat-fuse</groupId>
+                <artifactId>fuse-springboot-bom</artifactId>
+                <version>${fuse.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -33,14 +46,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -53,10 +72,6 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-swagger-java-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>spring-cloud-kubernetes-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -97,6 +112,20 @@
             <artifactId>gson</artifactId>
             <version>${google-gson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-hystrix</artifactId>
+            <version>${camel.hystrix.version}</version>
+        </dependency>
+        <!-- use undertow as rest producer -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-undertow-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http-common</artifactId>
+        </dependency>
         <!-- testing -->
         <dependency>
             <groupId>junit</groupId>
@@ -116,11 +145,6 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-arquillian</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
