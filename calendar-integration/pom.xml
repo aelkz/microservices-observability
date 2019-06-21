@@ -112,19 +112,16 @@
             <artifactId>gson</artifactId>
             <version>${google-gson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hystrix</artifactId>
-            <version>${camel.hystrix.version}</version>
-        </dependency>
-        <!-- use undertow as rest producer -->
+        <!-- use undertow as http producer -->
+        <!--
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-undertow-starter</artifactId>
         </dependency>
+       -->
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-http-common</artifactId>
+            <artifactId>camel-http4-starter</artifactId>
         </dependency>
         <!-- testing -->
         <dependency>
@@ -145,11 +142,6 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

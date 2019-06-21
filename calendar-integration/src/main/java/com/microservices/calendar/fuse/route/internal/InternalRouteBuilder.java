@@ -6,9 +6,6 @@ import com.microservices.calendar.fuse.route.RouteDescriptor;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.undertow.UndertowComponent;
-import org.apache.camel.component.undertow.UndertowHostOptions;
-import org.apache.camel.component.undertow.springboot.UndertowComponentConfiguration;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class InternalRouteBuilder extends RouteBuilder {
@@ -33,7 +32,10 @@ public class InternalRouteBuilder extends RouteBuilder {
 
         onException(Exception.class)
             .handled(true)
-            .process(exceptionProcessor);
+            .process(exceptionProcessor)
+            .redeliveryDelay(150)
+            .maximumRedeliveries(3)
+            .to("log:exception");
 
         // /--------------------------------------------------\
         // | Internal route definition                        |
@@ -41,15 +43,17 @@ public class InternalRouteBuilder extends RouteBuilder {
 
         // for testing purposes: http://ipinfo.io/ip
         // https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/7.0-tp/html/apache_camel_component_reference/undertow-component
+        // https://github.com/apache/camel/blob/master/components/camel-http4/src/main/docs/http4-component.adoc
+        // https://access.redhat.com/solutions/1528693
 
         from(RouteDescriptor.INTERNAL_POST_CALENDAR.getUri())
-            .log(LoggingLevel.WARN, logger, "internal route: preparing to call external api using undertow producer")
+            .log(LoggingLevel.WARN, logger, "internal route: preparing to call external api using http4 producer")
             .marshal().json(JsonLibrary.Jackson)
             .setHeader(Exchange.HTTP_METHOD, constant(HttpMethod.POST))
             .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
             //.setHeader(InfinispanConstants.KEY, constant("${header.google-api-integration-key}"))
             .setHeader(calendarConfig.getApiKeyName(), header(calendarConfig.getApiKeyName()))
-            .to("undertow:http://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getContextPath()+"?options.read-timeout=1")
+            .to("http4://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")
             .end();
 
     }
