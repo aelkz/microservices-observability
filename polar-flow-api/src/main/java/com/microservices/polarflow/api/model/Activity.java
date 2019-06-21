@@ -3,7 +3,6 @@ package com.microservices.polarflow.api.model;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
@@ -55,7 +54,7 @@ public class Activity extends BaseModel {
     @Min(value = 1, message = "Total calories burned should not be less than 1 kcal")
     @Max(value = 10000, message = "Total calories burned should not be greater than 10000 kcal")
     @Column(name="calories", nullable = false)
-    private Double calories;
+    private Integer calories;
 
     // used to determine total training load (for recovery) in hours.
     @NotNull
@@ -71,15 +70,15 @@ public class Activity extends BaseModel {
     // relationships
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="device_id", referencedColumnName = "id")
+    @JoinColumn(name="device_id", referencedColumnName = "id", nullable = false)
     private Device device;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="sport_id", referencedColumnName = "id")
+    @JoinColumn(name="sport_id", referencedColumnName = "id", nullable = false)
     private Sport sport;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id", referencedColumnName = "id")
+    @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     // 3rd party application api key
@@ -100,7 +99,7 @@ public class Activity extends BaseModel {
 
     public Activity() { }
 
-    public Activity(LocalDateTime startDate, LocalDateTime endDate, Integer hrAvg, Integer hrMin, Integer hrMax, Integer burnedFat, Double calories, Integer load, String notes, String stravaApiKey, String nutritionistApiKey, String cardiologistApiKey, String googleCalendarApiKey) {
+    public Activity(LocalDateTime startDate, LocalDateTime endDate, Integer hrAvg, Integer hrMin, Integer hrMax, Integer burnedFat, Integer calories, Integer load, String notes, String stravaApiKey, String nutritionistApiKey, String cardiologistApiKey, String googleCalendarApiKey) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.hrAvg = hrAvg;
@@ -172,11 +171,11 @@ public class Activity extends BaseModel {
         this.burnedFat = burnedFat;
     }
 
-    public Double getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
-    public void setCalories(Double calories) {
+    public void setCalories(Integer calories) {
         this.calories = calories;
     }
 

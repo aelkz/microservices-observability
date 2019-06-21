@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+@RequestMapping(path = "/api", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 @Validated //required for @Valid on method parameters such as @RequesParam, @PathVariable, @RequestHeader
 public class SyncController extends BaseController {
 
@@ -25,10 +25,11 @@ public class SyncController extends BaseController {
             value = "Sync polar user data across linked 3rd party software",
             notes = "The polar user data will be sent to all devices registered in the account user preferences.",
             response = Activity.class)
-    public ResponseEntity<Activity> sync(@Valid @RequestBody Activity e) {
+    public ResponseEntity<Activity> sync(@Valid @RequestBody Activity a) {
+        a = service.save(a);
+        service.refresh(a);
 
-        e = service.save(e);
-        return ResponseEntity.ok().body(e);
+        return ResponseEntity.ok().body(a);
     }
 
     @InitBinder("event")

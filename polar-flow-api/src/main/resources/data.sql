@@ -31,3 +31,5 @@ insert into sport(id,name,type_id) values (15, 'Muay Thai', 1);
 
 insert into user(id,email,handle,first_name,last_name,birth_date,gender,weight,height,measurement_unit,hr_max,hr_rest,vo2max,training_background,daily_activity_goal)
 values (1, 'rabreu@redhat.com', '@aelkz', 'raphael', 'abreu', '1984-10-16', 0, 99.4, 182.0, 0, 192, 55, 42, 3, 0);
+
+commit;

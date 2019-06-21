@@ -1,11 +1,9 @@
 package com.microservices.calendar.api;
 
 import com.microservices.calendar.api.configuration.InitConfiguration;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.rxjava.core.AbstractVerticle;
 import io.vertx.rxjava.core.http.HttpServer;
-import io.vertx.rxjava.core.http.HttpServerResponse;
 import io.vertx.rxjava.ext.web.Router;
 import io.vertx.rxjava.ext.web.RoutingContext;
 import io.vertx.rxjava.ext.web.handler.BodyHandler;
@@ -26,12 +24,8 @@ public class CalendarApplication extends AbstractVerticle {
         Router router = Router.router(vertx);
         // enable parsing of request bodies
         router.route().handler(BodyHandler.create());
-        // perform validation of the :id parameter
-        router.route("/api/v1/event/:id").handler(this::validateId);
         // implement a basic REST CRUD mapping
-        router.get("/api/v1/events").handler(this::retrieveAll);
         router.post("/api/v1/event").handler(this::createEvent);
-        router.get("/api/v1/event/:id").handler(this::getOne);
         // health check
         router.get("/health").handler(rc -> rc.response().end("OK"));
         // web interface
@@ -58,45 +52,6 @@ public class CalendarApplication extends AbstractVerticle {
 
     }
 
-    private void validateId(RoutingContext ctx) {
-        try {
-            ctx.put("fruitId", Long.parseLong(ctx.pathParam("id")));
-            // continue with the next handler in the route
-            ctx.next();
-        } catch (NumberFormatException e) {
-            error(ctx, 400, "invalid id: " + e.getCause());
-        }
-    }
-
-    private void retrieveAll(RoutingContext ctx) {
-        HttpServerResponse response = ctx.response()
-                .putHeader("Content-Type", "application/json");
-        JsonArray res = new JsonArray();
-
-        res.add(1L);
-        response.end(res.encodePrettily());
-    }
-
-
-    private void getOne(RoutingContext ctx) {
-        HttpServerResponse response = ctx.response()
-                .putHeader("Content-Type", "application/json");
-
-//        store.read(ctx.get("fruitId"))
-//                .subscribe(
-//                        json -> response.end(json.encodePrettily()),
-//                        err -> {
-//                            if (err instanceof NoSuchElementException) {
-//                                error(ctx, 404, err);
-//                            } else if (err instanceof IllegalArgumentException) {
-//                                error(ctx, 415, err);
-//                            } else {
-//                                error(ctx, 500, err);
-//                            }
-//                        }
-//                );
-    }
-
     private void createEvent(RoutingContext ctx) {
         JsonObject item;
 
@@ -112,24 +67,15 @@ public class CalendarApplication extends AbstractVerticle {
             return;
         }
 
+        item.put("synced",true);
+
         ctx.response()
-                .putHeader("Location", "/api/fruits/" + item.getLong("id"))
+                .putHeader("Location", "/api/v1/event/" + item.getLong("id"))
                 .putHeader("Content-Type", "application/json")
                 .setStatusCode(201)
                 .end(item.encodePrettily());
 
-        System.out.println("hello master");
-
-//        store.create(item)
-//                .subscribe(
-//                        json ->
-//                                ctx.response()
-//                                        .putHeader("Location", "/api/fruits/" + json.getLong("id"))
-//                                        .putHeader("Content-Type", "application/json")
-//                                        .setStatusCode(201)
-//                                        .end(json.encodePrettily()),
-//                        err -> writeError(ctx, err)
-//                );
+        System.out.println("hello google-calendar");
     }
 
     private void writeError(RoutingContext ctx, Throwable err) {
@@ -140,23 +86,6 @@ public class CalendarApplication extends AbstractVerticle {
         } else {
             error(ctx, 409, err);
         }
-    }
-
-    private void deleteOne(RoutingContext ctx) {
-//        store.delete(ctx.get("fruitId"))
-//                .subscribe(
-//                        () ->
-//                                ctx.response()
-//                                        .setStatusCode(204)
-//                                        .end(),
-//                        err -> {
-//                            if (err instanceof NoSuchElementException) {
-//                                error(ctx, 404, err);
-//                            } else {
-//                                error(ctx, 415, err);
-//                            }
-//                        }
-//                );
     }
 
     private String getEnv(String key, String dv) {

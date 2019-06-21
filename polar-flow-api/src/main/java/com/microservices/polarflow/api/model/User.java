@@ -123,6 +123,134 @@ public class User extends BaseModel {
         this.dailyActivityGoal = dailyActivityGoal;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
+    }
+
+    public Measurement getMeasurementUnit() {
+        return measurementUnit;
+    }
+
+    public void setMeasurementUnit(Measurement measurementUnit) {
+        this.measurementUnit = measurementUnit;
+    }
+
+    public Integer getHrMax() {
+        return hrMax;
+    }
+
+    public void setHrMax(Integer hrMax) {
+        this.hrMax = hrMax;
+    }
+
+    public Integer getHrRest() {
+        return hrRest;
+    }
+
+    public void setHrRest(Integer hrRest) {
+        this.hrRest = hrRest;
+    }
+
+    public Integer getVo2max() {
+        return vo2max;
+    }
+
+    public void setVo2max(Integer vo2max) {
+        this.vo2max = vo2max;
+    }
+
+    public TrainingBackground getTrainingBackground() {
+        return trainingBackground;
+    }
+
+    public void setTrainingBackground(TrainingBackground trainingBackground) {
+        this.trainingBackground = trainingBackground;
+    }
+
+    public DailyActivityGoal getDailyActivityGoal() {
+        return dailyActivityGoal;
+    }
+
+    public void setDailyActivityGoal(DailyActivityGoal dailyActivityGoal) {
+        this.dailyActivityGoal = dailyActivityGoal;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

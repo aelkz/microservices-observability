@@ -14,8 +14,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 @Component
 public class InternalRouteBuilder extends RouteBuilder {
 
@@ -53,7 +51,14 @@ public class InternalRouteBuilder extends RouteBuilder {
             .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
             //.setHeader(InfinispanConstants.KEY, constant("${header.google-api-integration-key}"))
             .setHeader(calendarConfig.getApiKeyName(), header(calendarConfig.getApiKeyName()))
+            .process((e) -> {
+                e.getIn().getHeaders().forEach((k,v) -> {
+                    System.out.println(k+"="+v);
+                });
+            })
+            .removeHeader(Exchange.HTTP_PATH)
             .to("http4://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")
+            .unmarshal().json(JsonLibrary.Jackson)
             .end();
 
     }
