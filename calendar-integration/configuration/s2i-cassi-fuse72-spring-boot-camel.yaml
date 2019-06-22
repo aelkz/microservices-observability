@@ -17,7 +17,7 @@ metadata:
   selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/s2i-cassi-fuse72-spring-boot-camel
   uid: 1d781857-3a30-11e9-ae49-00000cassi01
 objects:
-  # imagestream configuration block
+  # imagestream conf block
   - apiVersion: v1
     kind: ImageStream
     metadata:
@@ -32,7 +32,7 @@ objects:
     spec: {}
     status:
       dockerImageRepository: ""
-  # buildconfig configuration block
+  # buildconfig conf block
   - apiVersion: v1
     kind: BuildConfig
     metadata:
@@ -72,7 +72,7 @@ objects:
               value: ${MAVEN_ARGS_APPEND}
           forcePull: true
           from:
-            # custom imagestream (docker image) configuration block
+            # custom imagestream (docker image) conf block
             kind: ImageStreamTag
             name: cassi-fuse7-java-openshift:${BUILDER_VERSION}
             namespace: ${IMAGE_STREAM_NAMESPACE}
@@ -90,7 +90,7 @@ objects:
           type: ImageChange
     status:
       lastVersion: 0
-  # service configuration block
+  # service conf block
   - apiVersion: v1
     kind: Service
     metadata:
@@ -141,7 +141,7 @@ objects:
         group: ${APP_GROUP}
       type: ClusterIP
       sessionAffinity: "None"
-  # default route configuration block (only 8080 will be exposed)
+  # default route conf block (only 8080 will be exposed)
   - apiVersion: route.openshift.io/v1
     kind: Route
     metadata:
@@ -158,7 +158,7 @@ objects:
       to:
         kind: Service
         name: ${APP_NAME}
-  # deploymentconfig configuration block
+  # deploymentconfig conf block
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:

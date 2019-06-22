@@ -1,23 +1,39 @@
 package com.microservices.calendar.api;
 
 import com.microservices.calendar.api.configuration.InitConfiguration;
+import io.reactivex.Single;
+import io.vertx.core.Launcher;
 import io.vertx.core.json.JsonObject;
-import io.vertx.rxjava.core.AbstractVerticle;
-import io.vertx.rxjava.core.http.HttpServer;
-import io.vertx.rxjava.ext.web.Router;
-import io.vertx.rxjava.ext.web.RoutingContext;
-import io.vertx.rxjava.ext.web.handler.BodyHandler;
-import io.vertx.rxjava.ext.web.handler.StaticHandler;
-import rx.Single;
 import java.util.NoSuchElementException;
+import io.vertx.reactivex.config.ConfigRetriever;
+import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.http.HttpServer;
+import io.vertx.reactivex.core.http.HttpServerResponse;
+import io.vertx.reactivex.ext.web.Router;
+import io.vertx.reactivex.ext.web.handler.BodyHandler;
+import io.vertx.reactivex.ext.web.handler.StaticHandler;
+import io.vertx.reactivex.ext.web.RoutingContext;
 import static com.microservices.calendar.api.controller.Errors.error;
 
 public class CalendarApplication extends AbstractVerticle {
+
+    public static void main(final String[] args) {
+        Launcher.executeCommand("run", CalendarApplication.class.getName());
+    }
 
     @Override
     public void start() {
         // Create a router object.
         Router router = Router.router(vertx);
+
+        // Bind "/" to our hello message - so we are still compatible.
+        router.route("/").handler(routingContext -> {
+            HttpServerResponse response = routingContext.response();
+            response
+                .putHeader("content-type", "text/html")
+                .end("<h1>Google Calendar API Vert.x 3 application</h1>");
+        });
+
         // enable parsing of request bodies
         router.route().handler(BodyHandler.create());
         // implement a basic REST CRUD mapping
@@ -27,16 +43,25 @@ public class CalendarApplication extends AbstractVerticle {
         // web interface
         router.get().handler(StaticHandler.create());
 
+        ConfigRetriever retriever = ConfigRetriever.create(vertx);
+        // retriever.rxGetConfig()
+
         InitConfiguration.init(vertx)
-                .andThen(initHttpServer(router))
-                .subscribe(
-                        (http) -> System.out.println("Server ready on port " + http.actualPort()),
-                        Throwable::printStackTrace
-                );
+            .andThen(startHttpServer(router))
+            .subscribe(
+                    (http) -> System.out.println("Server ready on port " + http.actualPort()),
+                    Throwable::printStackTrace
+            );
+
+//        retriever.rxGetConfig()
+//            .doOnSuccess(config -> {
+//                System.out.println(config.getInteger("HTTP_PORT", 8070));
+//            })
+//           .flatMapCompletable(config -> startHttpServer(config, router).toCompletable());
 
     }
 
-    private Single<HttpServer> initHttpServer(Router router) {
+    private Single<HttpServer> startHttpServer(Router router) {
         System.out.println("VertX app listening on port:"+config().getInteger("HTTP_PORT", 8070));
 
         // Create the HTTP server and pass the "accept" method to the request handler.
