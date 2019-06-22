@@ -81,25 +81,9 @@ public class Activity extends BaseModel {
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    // 3rd party application api key
-    // The API Keys will be used to simulate an optional integration across the synchronization process.
-    // The user can switch 3rd party app integrations on/off.
-
-    @Column(name="stravaApiKey", nullable = true)
-    private String stravaApiKey;
-
-    @Column(name="nutritionistApiKey", nullable = true)
-    private String nutritionistApiKey;
-
-    @Column(name="cardiologistApiKey", nullable = true)
-    private String cardiologistApiKey;
-
-    @Column(name="googleCalendarApiKey", nullable = true)
-    private String googleCalendarApiKey;
-
     public Activity() { }
 
-    public Activity(LocalDateTime startDate, LocalDateTime endDate, Integer hrAvg, Integer hrMin, Integer hrMax, Integer burnedFat, Integer calories, Integer load, String notes, String stravaApiKey, String nutritionistApiKey, String cardiologistApiKey, String googleCalendarApiKey) {
+    public Activity(LocalDateTime startDate, LocalDateTime endDate, Integer hrAvg, Integer hrMin, Integer hrMax, Integer burnedFat, Integer calories, Integer load, String notes) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.hrAvg = hrAvg;
@@ -109,10 +93,6 @@ public class Activity extends BaseModel {
         this.calories = calories;
         this.load = load;
         this.notes = notes;
-        this.stravaApiKey = stravaApiKey;
-        this.nutritionistApiKey = nutritionistApiKey;
-        this.cardiologistApiKey = cardiologistApiKey;
-        this.googleCalendarApiKey = googleCalendarApiKey;
     }
 
     public Long getId() {
@@ -217,38 +197,6 @@ public class Activity extends BaseModel {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getStravaApiKey() {
-        return stravaApiKey;
-    }
-
-    public void setStravaApiKey(String stravaApiKey) {
-        this.stravaApiKey = stravaApiKey;
-    }
-
-    public String getNutritionistApiKey() {
-        return nutritionistApiKey;
-    }
-
-    public void setNutritionistApiKey(String nutritionistApiKey) {
-        this.nutritionistApiKey = nutritionistApiKey;
-    }
-
-    public String getCardiologistApiKey() {
-        return cardiologistApiKey;
-    }
-
-    public void setCardiologistApiKey(String cardiologistApiKey) {
-        this.cardiologistApiKey = cardiologistApiKey;
-    }
-
-    public String getGoogleCalendarApiKey() {
-        return googleCalendarApiKey;
-    }
-
-    public void setGoogleCalendarApiKey(String googleCalendarApiKey) {
-        this.googleCalendarApiKey = googleCalendarApiKey;
     }
 
     @Override

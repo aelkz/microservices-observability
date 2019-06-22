@@ -10,6 +10,7 @@ public class CalendarIntegrationConfiguration {
     private String host;
     private String port;
     private String path;
+    private String googleCalendarKey;
 
     public String getHost() {
         return host;
@@ -33,5 +34,13 @@ public class CalendarIntegrationConfiguration {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getGoogleCalendarKey() {
+        return googleCalendarKey;
+    }
+
+    public void setGoogleCalendarKey(String googleCalendarKey) {
+        this.googleCalendarKey = googleCalendarKey;
     }
 }

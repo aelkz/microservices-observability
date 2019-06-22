@@ -8,15 +8,11 @@ import io.vertx.rxjava.ext.web.Router;
 import io.vertx.rxjava.ext.web.RoutingContext;
 import io.vertx.rxjava.ext.web.handler.BodyHandler;
 import io.vertx.rxjava.ext.web.handler.StaticHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rx.Single;
 import java.util.NoSuchElementException;
 import static com.microservices.calendar.api.controller.Errors.error;
 
 public class CalendarApplication extends AbstractVerticle {
-
-    private static Logger logger = LoggerFactory.getLogger(CalendarApplication.class);
 
     @Override
     public void start() {
@@ -41,7 +37,6 @@ public class CalendarApplication extends AbstractVerticle {
     }
 
     private Single<HttpServer> initHttpServer(Router router) {
-        logger.info("VertX app listening on port:"+config().getInteger("HTTP_PORT", 8070));
         System.out.println("VertX app listening on port:"+config().getInteger("HTTP_PORT", 8070));
 
         // Create the HTTP server and pass the "accept" method to the request handler.
@@ -54,6 +49,8 @@ public class CalendarApplication extends AbstractVerticle {
 
     private void createEvent(RoutingContext ctx) {
         JsonObject item;
+
+        String userApiKey = ctx.request().getHeader("Google-Calendar-API-User-Key");
 
         try {
             item = ctx.getBodyAsJson();
@@ -75,7 +72,7 @@ public class CalendarApplication extends AbstractVerticle {
                 .setStatusCode(201)
                 .end(item.encodePrettily());
 
-        System.out.println("hello google-calendar");
+        System.out.println("received new google-calendar event from user api-key="+userApiKey);
     }
 
     private void writeError(RoutingContext ctx, Throwable err) {

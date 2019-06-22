@@ -1,4 +1,4 @@
 package com.microservices.polarflow.api.service.async;
 
-public class HeartRateIntegrationService {
+public class MedicalIntegrationService {
 }

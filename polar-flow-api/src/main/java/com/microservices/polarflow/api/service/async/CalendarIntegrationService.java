@@ -20,6 +20,8 @@ import java.util.concurrent.CompletableFuture;
 // https://java2blog.com/spring-restful-client-resttemplate-example/
 // https://medium.com/red6-es/uploading-a-file-with-a-filename-with-spring-resttemplate-8ec5e7dc52ca
 // https://stackoverflow.com/questions/34045321/http-post-using-json-in-spring-rest/34046931
+// https://www.codepedia.org/ama/how-to-make-parallel-calls-in-java-with-completablefuture-example
+// https://praveergupta.in/using-asynchrony-to-reduce-response-times-in-java-8-a10d254877fd
 
 @Service
 @Transactional
@@ -31,7 +33,7 @@ public class CalendarIntegrationService implements IntegrationService<SyncStatus
     private CalendarIntegrationConfiguration calendarConfig;
 
     @Async("threadPoolTaskExecutor")
-    public CompletableFuture<SyncStatus> sendEvent(Activity activity) {
+    public CompletableFuture<SyncStatus> sendAsyncEvent(Activity activity) {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -39,12 +41,12 @@ public class CalendarIntegrationService implements IntegrationService<SyncStatus
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
+        // Retrieve the API Key from user's profile.
+        headers.set(calendarConfig.getGoogleCalendarKey(),activity.getUser().getGoogleCalendarApiKey());
+
         logger.info("preparing to async call calendar integration service.");
 
         HttpEntity<Activity> request = new HttpEntity<Activity>(activity, headers);
-
-        //SyncStatus result = restTemplate.postForObject(
-        //    "http://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getPath(), request, SyncStatus.class);
 
         ResponseEntity<SyncStatus> result =
                 restTemplate.exchange("http://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getPath(),

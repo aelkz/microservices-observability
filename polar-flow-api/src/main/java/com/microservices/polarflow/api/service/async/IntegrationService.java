@@ -4,6 +4,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface IntegrationService<T,A> {
 
-    CompletableFuture<T> sendEvent(A payload);
+    CompletableFuture<T> sendAsyncEvent(A payload);
 
 }

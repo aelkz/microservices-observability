@@ -10,6 +10,8 @@ public class MedicalIntegrationConfiguration {
     private String host;
     private String port;
     private String path;
+    private String nutritionistKey;
+    private String cardiologistKey;
 
     public String getHost() {
         return host;
@@ -33,5 +35,21 @@ public class MedicalIntegrationConfiguration {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getNutritionistKey() {
+        return nutritionistKey;
+    }
+
+    public void setNutritionistKey(String nutritionistKey) {
+        this.nutritionistKey = nutritionistKey;
+    }
+
+    public String getCardiologistKey() {
+        return cardiologistKey;
+    }
+
+    public void setCardiologistKey(String cardiologistKey) {
+        this.cardiologistKey = cardiologistKey;
     }
 }

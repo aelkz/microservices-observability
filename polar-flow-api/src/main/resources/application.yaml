@@ -52,11 +52,17 @@ integration:
     host: 127.0.0.1
     port: 8080
     path: /api/v1/social
+    stravaKey: Strava-API-User-Key
+    myFitnessPalKey: MyFitnessPal-API-User-Key
+    appleHealthKey: AppleHealth-API-User-Key
   medical:
     host: 127.0.0.1
     port: 8080
     path: /api/v1/medical
+    nutritionistKey: Nutritionist-API-User-Key
+    cardiologistKey: Cardiologist-API-User-Key
   calendar:
     host: 127.0.0.1
     port: 8080
     path: /api/v1/calendar
+    googleCalendarKey: Google-Calendar-API-User-Key

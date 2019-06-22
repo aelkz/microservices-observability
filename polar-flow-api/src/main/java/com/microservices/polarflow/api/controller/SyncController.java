@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping(path = "/api", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -42,7 +41,7 @@ public class SyncController extends BaseController {
         activity = service.save(activity);
         service.refresh(activity);
 
-        CompletableFuture<SyncStatus> event1 = calendarIntegrationService.sendEvent(activity);
+        CompletableFuture<SyncStatus> event1 = calendarIntegrationService.sendAsyncEvent(activity);
         try {
             System.out.println("synced="+event1.get().getSynced());
         } catch (InterruptedException e) {

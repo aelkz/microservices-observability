@@ -29,7 +29,11 @@ insert into sport(id,name,type_id) values (13, 'Weight Lifting', 1);
 insert into sport(id,name,type_id) values (14, 'Crossfit', 1);
 insert into sport(id,name,type_id) values (15, 'Muay Thai', 1);
 
-insert into user(id,email,handle,first_name,last_name,birth_date,gender,weight,height,measurement_unit,hr_max,hr_rest,vo2max,training_background,daily_activity_goal)
-values (1, 'rabreu@redhat.com', '@aelkz', 'raphael', 'abreu', '1984-10-16', 0, 99.4, 182.0, 0, 192, 55, 42, 3, 0);
+insert into user(id,email,handle,first_name,last_name,birth_date,gender,weight,height,measurement_unit,hr_max,hr_rest,vo2max,training_background,daily_activity_goal,strava_api_key,google_calendar_api_key,nutritionist_api_key,cardiologist_api_key)
+values (1, 'rabreu@redhat.com', '@aelkz', 'raphael', 'abreu', '1984-10-16', 0, 99.4, 182.0, 0, 192, 55, 42, 3, 0,
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdHJhdmEuY29tL2F1dGgiLCJzdWIiOiJyYXBoYWVsLmFsZXhAZ21haWwuY29tIiwibmFtZSI6IlJhcGhhZWwgQWJyZXUiLCJpYXQiOjE1MTYyMzkwMjJ9.kic8uctcWS0BmjxpXicA78Uv-TDoqoJlzPtBTsoVTPA',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjYWxlbmRhci5nb29nbGUuY29tL2F1dGgiLCJzdWIiOiJyYXBoYWVsLmFsZXhAZ21haWwuY29tIiwibmFtZSI6IlJhcGhhZWwgQWJyZXUiLCJpYXQiOjE1MTYyMzkwMjJ9.rDpZA5xp_Xi_Vknw0BOJKcXtkrPdm6A9c806u8OGsUE',
+        '0292eaa7-0618-43d6-ae3e-17253489e42a',
+        '952cf92d-0b5f-490c-84d6-551210c0c4b3');
 
 commit;
