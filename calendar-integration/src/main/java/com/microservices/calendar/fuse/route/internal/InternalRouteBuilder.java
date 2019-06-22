@@ -43,6 +43,7 @@ public class InternalRouteBuilder extends RouteBuilder {
         // https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/7.0-tp/html/apache_camel_component_reference/undertow-component
         // https://github.com/apache/camel/blob/master/components/camel-http4/src/main/docs/http4-component.adoc
         // https://access.redhat.com/solutions/1528693
+        // https://rphgoossens.wordpress.com/tag/camel-json/
 
         from(RouteDescriptor.INTERNAL_POST_CALENDAR.getUri())
             .log(LoggingLevel.WARN, logger, "internal route: preparing to call external api using http4 producer")

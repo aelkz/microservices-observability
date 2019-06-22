@@ -1,9 +1,9 @@
 package com.microservices.polarflow.api.service.async;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 public interface IntegrationService<T,A> {
 
-    Future<T> sendEvent(A payload);
+    CompletableFuture<T> sendEvent(A payload);
 
 }

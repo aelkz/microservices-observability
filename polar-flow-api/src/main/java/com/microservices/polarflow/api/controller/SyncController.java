@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 @RestController
@@ -35,14 +37,21 @@ public class SyncController extends BaseController {
             value = "Sync polar user data across linked 3rd party software",
             notes = "The polar user data will be sent to all devices registered in the account user preferences.",
             response = Activity.class)
-    public ResponseEntity<Activity> sync(@Valid @RequestBody Activity a) {
+    public ResponseEntity<Activity> sync(@Valid @RequestBody Activity activity) {
 
-        a = service.save(a);
-        service.refresh(a);
+        activity = service.save(activity);
+        service.refresh(activity);
 
-        Future<SyncStatus> greet1 = calendarIntegrationService.sendEvent(a);
+        CompletableFuture<SyncStatus> event1 = calendarIntegrationService.sendEvent(activity);
+        try {
+            System.out.println("synced="+event1.get().getSynced());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
-        return ResponseEntity.ok().body(a);
+        return ResponseEntity.ok().body(activity);
     }
 
     @InitBinder("event")

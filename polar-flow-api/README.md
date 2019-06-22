@@ -1,3 +1,13 @@
+### Endpoints
+
+| Método | URI | Descrição |
+| ------ | --- | ---------- |
+| GET    |/v2/api-docs     | swagger json |
+| GET    |/swagger-ui.html | swagger html |
+| GET    |/actuator/info   | info / heartbeat - provided by spring boot actuator |
+| GET    |/actuator/health | application health - provided by spring boot actuator |
+| GET    |/v1/sync         | sync polar application data across 3rd party software |
+
 ```sql
 select a.*, d.name device, s.name sport 
 from activity a 

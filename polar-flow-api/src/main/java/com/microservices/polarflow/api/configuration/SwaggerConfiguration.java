@@ -21,7 +21,7 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.regex("/v1/.*"))
+                .paths(PathSelectors.regex("/api/v1/.*"))
                 .build();
     }
 }
