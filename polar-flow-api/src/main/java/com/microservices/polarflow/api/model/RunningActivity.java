@@ -37,6 +37,7 @@ public class RunningActivity extends BaseModel {
     @Max(value = 1000, message = "Descent should not be greater than 1000")
     private Integer descent;
 
+    // see: https://jogtunes.com
     @Column(name="cadenceAvg", nullable = true)
     @Min(value = 1, message = "Cadence Average should not be less than 1")
     @Max(value = 250, message = "Cadence Average should not be greater than 250")

@@ -53,9 +53,11 @@ public class InternalRouteBuilder extends RouteBuilder {
             //.setHeader(InfinispanConstants.KEY, constant("${header.google-api-integration-key}"))
             .setHeader(calendarConfig.getApiKeyName(), header(calendarConfig.getApiKeyName()))
             .process((e) -> {
+                System.out.println("--- START-HEADER VALUES ---");
                 e.getIn().getHeaders().forEach((k,v) -> {
                     System.out.println(k+"="+v);
                 });
+                System.out.println("--- END-HEADER VALUES ---");
             })
             .removeHeader(Exchange.HTTP_PATH)
             .to("http4://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")

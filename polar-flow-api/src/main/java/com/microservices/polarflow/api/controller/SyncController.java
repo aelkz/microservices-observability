@@ -42,13 +42,14 @@ public class SyncController extends BaseController {
         service.refresh(activity);
 
         CompletableFuture<SyncStatus> event1 = calendarIntegrationService.sendAsyncEvent(activity);
-        try {
-            System.out.println("synced="+event1.get().getSynced());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+
+//        try {
+//            System.out.println("synced="+event1.get().getSynced());
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
         return ResponseEntity.ok().body(activity);
     }

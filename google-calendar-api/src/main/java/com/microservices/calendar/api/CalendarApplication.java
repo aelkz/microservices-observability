@@ -54,8 +54,6 @@ public class CalendarApplication extends AbstractVerticle {
         // enable parsing of request bodies
         router.route().handler(BodyHandler.create());
         // implement REST CRUD mapping
-        router.post("/api/v1/event").handler(this::checkHeaderApiKey);
-        router.post("/api/v1/event").handler(this::checkRequestBody);
         router.post("/api/v1/event").handler(this::createEvent);
         // health check
         router.get("/health").handler(rc -> rc.response().end("OK"));
@@ -98,6 +96,7 @@ public class CalendarApplication extends AbstractVerticle {
     }
 
     private void checkRequestBody(RoutingContext ctx) {
+        logger.info("VertX - checking request body");
         JsonObject item;
 
         try {
@@ -114,6 +113,7 @@ public class CalendarApplication extends AbstractVerticle {
     }
 
     private void checkHeaderApiKey(RoutingContext ctx) {
+        logger.info("VertX - checking request header");
         String userApiKey = ctx.request().getHeader(API_KEY);
 
         if (userApiKey == null) {
@@ -124,12 +124,18 @@ public class CalendarApplication extends AbstractVerticle {
     }
 
     private void createEvent(RoutingContext ctx) {
+        checkHeaderApiKey(ctx);
+        checkRequestBody(ctx);
+
+        logger.info("VertX - post new event");
         JsonObject item;
         item = ctx.getBodyAsJson();
 
         String userApiKey = ctx.request().getHeader(API_KEY);
 
-        logger.info("bla bla bla");
+        logger.info("start: "+item.getValue("startDate"));
+        logger.info("end: "+item.getValue("endDate"));
+        logger.info("calories: "+item.getInteger("calories"));
 
         item.put("synced",true);
 
