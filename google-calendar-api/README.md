@@ -5,7 +5,12 @@ However, Vert.x verticles are single threaded. It means that only one thread is 
 https://dzone.com/articles/introduction-to-eclipse-vertx-my-first-vertx-appli
 https://dzone.com/articles/eclipse-vertx-application-configuration-rhd-blog?fromrel=true
 https://dzone.com/articles/some-rest-with-vertx-part-3-of-introduction-to-ver
+https://piotrminkowski.wordpress.com/2018/03/20/running-vert-x-microservices-on-kubernetes-openshift/
+http://www.sczyh30.com/vertx-blueprint-microservice/
+https://medium.com/@alexpitacci/vert-x-and-keycloak-working-together-9d459a5ebd9e
 
+metrics:
+https://vertx.io/docs/vertx-micrometer-metrics/java/
 
 ```
 java -jar target/my-first-app-1.0-SNAPSHOT.jar \

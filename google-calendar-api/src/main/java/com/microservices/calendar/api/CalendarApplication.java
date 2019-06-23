@@ -2,6 +2,8 @@ package com.microservices.calendar.api;
 
 import com.microservices.calendar.api.configuration.InitConfiguration;
 import io.reactivex.Single;
+import io.vertx.config.ConfigRetrieverOptions;
+import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.Launcher;
 import io.vertx.core.json.JsonObject;
 import java.util.NoSuchElementException;
@@ -11,11 +13,20 @@ import io.vertx.reactivex.core.http.HttpServer;
 import io.vertx.reactivex.core.http.HttpServerResponse;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.handler.BodyHandler;
+import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
 import io.vertx.reactivex.ext.web.RoutingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static com.microservices.calendar.api.controller.Errors.error;
+import static io.vertx.core.http.HttpHeaders.CONTENT_TYPE;
+import static io.vertx.core.http.HttpMethod.*;
 
 public class CalendarApplication extends AbstractVerticle {
+
+    private static Logger logger = LoggerFactory.getLogger(CalendarApplication.class);
+
+    private final String API_KEY = "Google-Calendar-API-User-Key";
 
     public static void main(final String[] args) {
         Launcher.executeCommand("run", CalendarApplication.class.getName());
@@ -25,6 +36,12 @@ public class CalendarApplication extends AbstractVerticle {
     public void start() {
         // Create a router object.
         Router router = Router.router(vertx);
+
+        CorsHandler cors = CorsHandler.create("*");
+        cors.allowedHeader(CONTENT_TYPE.toString());
+        cors.allowedMethod(POST);
+        router.route().handler(cors);
+
 
         // Bind "/" to our hello message - so we are still compatible.
         router.route("/").handler(routingContext -> {
@@ -36,15 +53,23 @@ public class CalendarApplication extends AbstractVerticle {
 
         // enable parsing of request bodies
         router.route().handler(BodyHandler.create());
-        // implement a basic REST CRUD mapping
+        // implement REST CRUD mapping
+        router.post("/api/v1/event").handler(this::checkHeaderApiKey);
+        router.post("/api/v1/event").handler(this::checkRequestBody);
         router.post("/api/v1/event").handler(this::createEvent);
         // health check
         router.get("/health").handler(rc -> rc.response().end("OK"));
         // web interface
         router.get().handler(StaticHandler.create());
 
-        ConfigRetriever retriever = ConfigRetriever.create(vertx);
-        // retriever.rxGetConfig()
+        ConfigStoreOptions store = new ConfigStoreOptions()
+            .setType("file")
+            .setFormat("yaml")
+            .setConfig(new JsonObject().put("path", "conf/config.yaml")
+            );
+
+        ConfigRetriever retriever = ConfigRetriever.create(vertx,
+                new ConfigRetrieverOptions().addStore(store));
 
         InitConfiguration.init(vertx)
             .andThen(startHttpServer(router))
@@ -72,22 +97,39 @@ public class CalendarApplication extends AbstractVerticle {
 
     }
 
-    private void createEvent(RoutingContext ctx) {
+    private void checkRequestBody(RoutingContext ctx) {
         JsonObject item;
-
-        String userApiKey = ctx.request().getHeader("Google-Calendar-API-User-Key");
 
         try {
             item = ctx.getBodyAsJson();
         } catch (RuntimeException e) {
-            error(ctx, 415, "invalid payload");
+            error(ctx, 415, "invalid payload: expecting json");
             return;
         }
 
         if (item == null) {
-            error(ctx, 415, "invalid payload");
+            error(ctx, 415, "invalid payload: expecting json");
             return;
         }
+    }
+
+    private void checkHeaderApiKey(RoutingContext ctx) {
+        String userApiKey = ctx.request().getHeader(API_KEY);
+
+        if (userApiKey == null) {
+            error(ctx, 400, "invalid header: "+API_KEY+" not found");
+            return;
+
+        }
+    }
+
+    private void createEvent(RoutingContext ctx) {
+        JsonObject item;
+        item = ctx.getBodyAsJson();
+
+        String userApiKey = ctx.request().getHeader(API_KEY);
+
+        logger.info("bla bla bla");
 
         item.put("synced",true);
 
