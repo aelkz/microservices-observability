@@ -41,7 +41,6 @@ public class User extends BaseModel {
     @Column(name="email", nullable = false)
     private String email;
 
-    @NotNull
     @Column(name="handle", nullable = true)
     private String handle;
 
@@ -74,19 +73,16 @@ public class User extends BaseModel {
     @Column(name="measurementUnit", nullable = false)
     private User.Measurement measurementUnit;
 
-    @NotNull
     @Column(name="hrMax", nullable = true)
     @Min(value = 140, message = "Heart rate max should not be less than 120")
     @Max(value = 220, message = "Heart rate max should not be greater than 220")
     private Integer hrMax;
 
-    @NotNull
     @Column(name="hrRest", nullable = true)
     @Min(value = 30, message = "Heart rate rest should not be less than 30")
     @Max(value = 120, message = "Heart rate rest should not be greater than 120")
     private Integer hrRest;
 
-    @NotNull
     @Column(name="vo2max", nullable = true)
     @Min(value = 1, message = "VO2max should not be less than 1")
     @Max(value = 120, message = "VO2max should not be greater than 120")

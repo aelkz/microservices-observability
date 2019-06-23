@@ -63,7 +63,6 @@ public class Activity extends BaseModel {
     @Max(value = 168, message = "Training load should not be greater than 168 hours")
     private Integer load;
 
-    @NotNull
     @Column(name="notes", nullable = true)
     private String notes;
 
@@ -80,6 +79,10 @@ public class Activity extends BaseModel {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, optional = true)
+    @JoinColumn(name="running_id", referencedColumnName = "id")
+    private RunningActivity running;
 
     public Activity() { }
 
@@ -197,6 +200,14 @@ public class Activity extends BaseModel {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public RunningActivity getRunning() {
+        return running;
+    }
+
+    public void setRunning(RunningActivity running) {
+        this.running = running;
     }
 
     @Override
