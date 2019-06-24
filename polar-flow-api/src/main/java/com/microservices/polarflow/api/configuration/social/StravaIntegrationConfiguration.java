@@ -1,17 +1,16 @@
-package com.microservices.polarflow.api.configuration;
+package com.microservices.polarflow.api.configuration.social;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "integration.medical")
-public class MedicalIntegrationConfiguration {
+@ConfigurationProperties(prefix = "integration.social.strava")
+public class StravaIntegrationConfiguration {
 
     private String host;
     private String port;
     private String path;
-    private String nutritionistKey;
-    private String cardiologistKey;
+    private String apiKey;
 
     public String getHost() {
         return host;
@@ -37,19 +36,11 @@ public class MedicalIntegrationConfiguration {
         this.path = path;
     }
 
-    public String getNutritionistKey() {
-        return nutritionistKey;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public void setNutritionistKey(String nutritionistKey) {
-        this.nutritionistKey = nutritionistKey;
-    }
-
-    public String getCardiologistKey() {
-        return cardiologistKey;
-    }
-
-    public void setCardiologistKey(String cardiologistKey) {
-        this.cardiologistKey = cardiologistKey;
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

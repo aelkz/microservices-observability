@@ -49,20 +49,35 @@ spring:
 # http://localhost:8070/api/v1/event
 integration:
   social:
-    host: 127.0.0.1
-    port: 8080
-    path: /api/v1/social
-    stravaKey: Strava-API-User-Key
-    myFitnessPalKey: MyFitnessPal-API-User-Key
-    appleHealthKey: AppleHealth-API-User-Key
+    strava:
+      host: 127.0.0.1
+      port: 8080
+      path: /api/v1/social
+      apiKey: Strava-API-User-Key
+    myfitnesspal:
+      host: 127.0.0.1
+      port: 8080
+      path: /api/v1/social
+      apiKey: MyFitnessPal-API-User-Key
+    applehealth:
+      host: 127.0.0.1
+      port: 8080
+      path: /api/v1/social
+      apiKey: AppleHealth-API-User-Key
   medical:
-    host: 127.0.0.1
-    port: 8080
-    path: /api/v1/medical
-    nutritionistKey: Nutritionist-API-User-Key
-    cardiologistKey: Cardiologist-API-User-Key
+    nutritionist:
+      host: 127.0.0.1
+      port: 8080
+      path: /api/v1/medical
+      apiKey: Nutritionist-API-User-Key
+    cardiologist:
+      host: 127.0.0.1
+      port: 8080
+      path: /api/v1/medical
+      apiKey: Cardiologist-API-User-Key
   calendar:
-    host: 127.0.0.1
-    port: 8080
-    path: /api/v1/calendar
-    googleCalendarKey: Google-Calendar-API-User-Key
+    google:
+      host: 127.0.0.1
+      port: 8080
+      path: /api/v1/calendar
+      apiKey: Google-Calendar-API-User-Key

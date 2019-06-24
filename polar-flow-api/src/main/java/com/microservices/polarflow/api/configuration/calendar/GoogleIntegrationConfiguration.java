@@ -1,16 +1,16 @@
-package com.microservices.polarflow.api.configuration;
+package com.microservices.polarflow.api.configuration.calendar;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "integration.calendar")
-public class CalendarIntegrationConfiguration {
+@ConfigurationProperties(prefix = "integration.calendar.google")
+public class GoogleIntegrationConfiguration {
 
     private String host;
     private String port;
     private String path;
-    private String googleCalendarKey;
+    private String apiKey;
 
     public String getHost() {
         return host;
@@ -36,11 +36,11 @@ public class CalendarIntegrationConfiguration {
         this.path = path;
     }
 
-    public String getGoogleCalendarKey() {
-        return googleCalendarKey;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public void setGoogleCalendarKey(String googleCalendarKey) {
-        this.googleCalendarKey = googleCalendarKey;
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

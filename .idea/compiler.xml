@@ -9,7 +9,7 @@
         <module name="calendar-integration" />
         <module name="cardiologist-api" />
         <module name="google-calendar-api" />
-        <module name="heart-rate-integration" />
+        <module name="medical-integration" />
         <module name="nutritionist-api" />
         <module name="polar-flow-api" />
         <module name="running-social-network-integration" />

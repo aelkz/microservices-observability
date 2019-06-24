@@ -1,17 +1,16 @@
-package com.microservices.polarflow.api.configuration;
+package com.microservices.polarflow.api.configuration.medical;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "integration.social")
-public class SocialIntegrationConfiguration {
+@ConfigurationProperties(prefix = "integration.medical.nutritionist")
+public class NutritionistIntegrationConfiguration {
 
     private String host;
     private String port;
     private String path;
-    private String myFitnessPalKey;
-    private String appleHealthKey;
+    private String apiKey;
 
     public String getHost() {
         return host;
@@ -37,19 +36,11 @@ public class SocialIntegrationConfiguration {
         this.path = path;
     }
 
-    public String getMyFitnessPalKey() {
-        return myFitnessPalKey;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public void setMyFitnessPalKey(String myFitnessPalKey) {
-        this.myFitnessPalKey = myFitnessPalKey;
-    }
-
-    public String getAppleHealthKey() {
-        return appleHealthKey;
-    }
-
-    public void setAppleHealthKey(String appleHealthKey) {
-        this.appleHealthKey = appleHealthKey;
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }

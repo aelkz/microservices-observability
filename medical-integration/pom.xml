@@ -9,12 +9,12 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>heartrate-integration</artifactId>
+    <artifactId>medical-integration</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>fuse-heartrate-integration-api</name>
-    <description>heart rate integration api</description>
+    <name>fuse-medical-integration-api</name>
+    <description>medical integration api</description>
 
     <properties>
         <springboot.version>1.5.17.RELEASE</springboot.version>

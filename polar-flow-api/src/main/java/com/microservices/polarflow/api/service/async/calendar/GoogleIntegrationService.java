@@ -1,7 +1,8 @@
-package com.microservices.polarflow.api.service.async;
+package com.microservices.polarflow.api.service.async.calendar;
 
-import com.microservices.polarflow.api.configuration.CalendarIntegrationConfiguration;
+import com.microservices.polarflow.api.configuration.calendar.GoogleIntegrationConfiguration;
 import com.microservices.polarflow.api.model.Activity;
+import com.microservices.polarflow.api.service.async.IntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,12 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional
-public class CalendarIntegrationService implements IntegrationService<SyncStatus,Activity> {
+public class GoogleIntegrationService implements IntegrationService<SyncStatus,Activity> {
 
-    private static Logger logger = LoggerFactory.getLogger(CalendarIntegrationService.class);
+    private static Logger logger = LoggerFactory.getLogger(GoogleIntegrationService.class);
 
     @Autowired
-    private CalendarIntegrationConfiguration calendarConfig;
+    private GoogleIntegrationConfiguration googleConfig;
 
     @Async("threadPoolTaskExecutor")
     public CompletableFuture<SyncStatus> sendAsyncEvent(Activity activity) {
@@ -41,15 +42,14 @@ public class CalendarIntegrationService implements IntegrationService<SyncStatus
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
+        logger.info("async call: google calendar service.");
         // Retrieve the API Key from user's profile.
-        headers.set(calendarConfig.getGoogleCalendarKey(),activity.getUser().getGoogleCalendarApiKey());
-
-        logger.info("preparing to async call calendar integration service.");
+        headers.set(googleConfig.getApiKey(),activity.getUser().getGoogleCalendarApiKey());
 
         HttpEntity<Activity> request = new HttpEntity<Activity>(activity, headers);
 
         ResponseEntity<SyncStatus> result =
-                restTemplate.exchange("http://"+calendarConfig.getHost()+":"+calendarConfig.getPort()+calendarConfig.getPath(),
+                restTemplate.exchange("http://"+ googleConfig.getHost()+":"+ googleConfig.getPort()+ googleConfig.getPath(),
                 HttpMethod.POST, request, SyncStatus.class);
 
         System.out.println(result.getBody().getSynced());

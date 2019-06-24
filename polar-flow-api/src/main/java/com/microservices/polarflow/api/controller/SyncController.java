@@ -3,7 +3,9 @@ package com.microservices.polarflow.api.controller;
 import com.microservices.polarflow.api.controller.validator.EventValidator;
 import com.microservices.polarflow.api.model.Activity;
 import com.microservices.polarflow.api.service.ActivityService;
-import com.microservices.polarflow.api.service.async.CalendarIntegrationService;
+import com.microservices.polarflow.api.service.async.calendar.GoogleIntegrationService;
+import com.microservices.polarflow.api.service.async.medical.CardiologistIntegrationService;
+import com.microservices.polarflow.api.service.async.medical.NutritionistIntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping(path = "/api", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -29,7 +30,13 @@ public class SyncController extends BaseController {
     ActivityService service;
 
     @Autowired
-    CalendarIntegrationService calendarIntegrationService;
+    GoogleIntegrationService googleIntegrationService;
+
+    @Autowired
+    NutritionistIntegrationService nutritionistIntegrationService;
+
+    @Autowired
+    CardiologistIntegrationService cardiologistIntegrationService;
 
     @RequestMapping(path = "/v1/sync", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ApiOperation(
@@ -41,15 +48,9 @@ public class SyncController extends BaseController {
         activity = service.save(activity);
         service.refresh(activity);
 
-        CompletableFuture<SyncStatus> event1 = calendarIntegrationService.sendAsyncEvent(activity);
-
-//        try {
-//            System.out.println("synced="+event1.get().getSynced());
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        CompletableFuture<SyncStatus> event1 = googleIntegrationService.sendAsyncEvent(activity);
+        CompletableFuture<SyncStatus> event2 = nutritionistIntegrationService.sendAsyncEvent(activity);
+        CompletableFuture<SyncStatus> event3 = cardiologistIntegrationService.sendAsyncEvent(activity);
 
         return ResponseEntity.ok().body(activity);
     }
