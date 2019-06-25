@@ -3,7 +3,7 @@
 # ---------------------------------------------
 spring:
   application:
-    name: fuse-heartrate-integration-api
+    name: fuse-medical-integration-api
   datasource:
     initialize: false
 
@@ -16,7 +16,7 @@ logging:
 # options from org.apache.camel.spring.boot.CamelConfigurationProperties can be configured here
 camel:
   springboot:
-    name: fuse-heartrate-integration-api
+    name: fuse-medical-integration-api
     main-run-controller: true
   component:
     servlet:

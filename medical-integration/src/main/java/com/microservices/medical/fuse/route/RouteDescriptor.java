@@ -3,9 +3,9 @@ package com.microservices.medical.fuse.route;
 public enum RouteDescriptor {
 
     REST_CONFIG( "/medical", "medical-api", "fuse-medical-integration-api"),
-    REST_POST_NUTRITIONIST( "/", "post-fuse-nutritionist-integration-api", "POST fuse-nutritionist-integration-api"),
+    REST_POST_NUTRITIONIST( "/nutritionist", "post-fuse-nutritionist-integration-api", "POST fuse-nutritionist-integration-api"),
     INTERNAL_POST_NUTRITIONIST( "direct:internal-nutritionist", "post-nutritionist-api", "POST nutritionist-api"),
-    REST_POST_CARDIOLOGIST( "/", "post-fuse-cardiologist-integration-api", "POST fuse-cardiologist-integration-api"),
+    REST_POST_CARDIOLOGIST( "/cardiologist", "post-fuse-cardiologist-integration-api", "POST fuse-cardiologist-integration-api"),
     INTERNAL_POST_CARDIOLOGIST( "direct:internal-cardiologist", "post-cardiologist-api", "POST cardiologist-api");
 
     private String uri;

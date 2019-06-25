@@ -111,6 +111,13 @@
             <artifactId>gson</artifactId>
             <version>${google-gson.version}</version>
         </dependency>
+        <!-- use undertow as http producer -->
+        <!--
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-undertow-starter</artifactId>
+        </dependency>
+       -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4-starter</artifactId>

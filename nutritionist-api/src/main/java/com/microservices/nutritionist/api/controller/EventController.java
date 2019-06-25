@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+@RequestMapping(path = "/api", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 @Validated //required for @Valid on method parameters such as @RequesParam, @PathVariable, @RequestHeader
 public class EventController extends BaseController {
 
@@ -30,6 +30,9 @@ public class EventController extends BaseController {
             notes = "Creates new event. Returns created event with id.",
             response = Event.class)
     public ResponseEntity<Event> add(@Valid @RequestBody Event e) {
+
+
+
         e = service.save(e);
         return ResponseEntity.ok().body(e);
     }

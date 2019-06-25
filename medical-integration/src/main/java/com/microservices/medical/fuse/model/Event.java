@@ -1,6 +1,5 @@
-package com.microservices.nutritionist.api.model;
+package com.microservices.medical.fuse.model;
 
-import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,87 +8,46 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
 public class Event extends BaseModel {
 
     public static enum Gender {
         M, F;
     }
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="id")
     private Long id;
 
     // =====
-    @NotNull
-    @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters")
-    @Column(name="email", nullable = false)
     private String email;
 
     // =====
-    @NotNull
-    @Column(name="handle", nullable = false)
     private String handle;
 
     // =====
-    @NotNull
-    @Column(name="birthDate", nullable = false)
     private LocalDate birthDate;
 
     // =====
-    @NotNull
-    @Column(name="gender", nullable = false)
     private Gender gender;
 
-    @NotNull
-    @Column(name="calories", nullable = false)
     private Double calories;
 
-    @NotNull
-    @Max(value = 100, message = "Burned fat should not be greater than 100 percent")
-    @Column(name="burnedFat", nullable = false)
     private Integer burnedFat;
 
     // =====
-    @NotNull
-    @Column(name="sportId", nullable = false)
     private String sportId;
 
-    @NotNull
-    @Column(name="startDate", nullable = false)
     private LocalDateTime startDate;
 
-    @NotNull
-    @Column(name="endDate", nullable = false)
     private LocalDateTime endDate;
 
-    @NotNull
-    @Min(value = 30, message = "Heart rate avg should not be less than 30")
-    @Max(value = 220, message = "Heart rate avg should not be greater than 220")
-    @Column(name="hrAgv", nullable = false)
     private Integer hrAvg;
 
-    @NotNull
-    @Min(value = 30, message = "Heart rate min should not be less than 30")
-    @Max(value = 220, message = "Heart rate min should not be greater than 220")
-    @Column(name="hrMin", nullable = false)
     private Integer hrMin;
 
-    @NotNull
-    @Min(value = 30, message = "Heart rate max should not be less than 30")
-    @Max(value = 220, message = "Heart rate max should not be greater than 220")
-    @Column(name="hrMax", nullable = false)
     private Integer hrMax;
 
     // used to determine total training load (for recovery) in hours.
-    @NotNull
-    @Column(name="load", nullable = false)
-    @Min(value = 1, message = "Training load should not be less than 1 hour")
-    @Max(value = 168, message = "Training load should not be greater than 168 hours")
     private Integer load;
 
-    @Column(name="notes", nullable = true)
     private String notes;
 
     public Event() { }

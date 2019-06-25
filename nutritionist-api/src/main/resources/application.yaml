@@ -8,14 +8,14 @@ logging:
 # contextPath: /api/v${api.version}/*
 server:
   address: 0.0.0.0
-  port: 8090
+  port: 8070
 
 # =============================================
 # spring configurations
 # ---------------------------------------------
 spring:
   application:
-    name: polar-flow-api
+    name: nutritionist-api
   jpa:
     # log generated sql
     database-platform: org.hibernate.dialect.H2Dialect
@@ -42,42 +42,3 @@ spring:
     #spring.jackson.date-format=yyyy-MM-dd'T'HH:mm:ss.SSSZ
     serialization:
       write_dates_as_timestamps: true
-
-# =============================================
-# google api parameters
-# ---------------------------------------------
-# http://localhost:8070/api/v1/event
-integration:
-  social:
-    strava:
-      host: 127.0.0.1
-      port: 8080
-      path: /api/v1/social
-      apiKey: Strava-API-User-Key
-    myfitnesspal:
-      host: 127.0.0.1
-      port: 8080
-      path: /api/v1/social
-      apiKey: MyFitnessPal-API-User-Key
-    applehealth:
-      host: 127.0.0.1
-      port: 8080
-      path: /api/v1/social
-      apiKey: AppleHealth-API-User-Key
-  medical:
-    nutritionist:
-      host: 127.0.0.1
-      port: 8080
-      path: /api/v1/medical/nutritionist
-      apiKey: Nutritionist-API-User-Key
-    cardiologist:
-      host: 127.0.0.1
-      port: 8080
-      path: /api/v1/medical/cardiologist
-      apiKey: Cardiologist-API-User-Key
-  calendar:
-    google:
-      host: 127.0.0.1
-      port: 8080
-      path: /api/v1/calendar
-      apiKey: Google-Calendar-API-User-Key
