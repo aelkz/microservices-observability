@@ -60,9 +60,9 @@ nutritionist:
 # =============================================
 # cardiologist api parameters
 # ---------------------------------------------
-# http://localhost:8070/api/v1/event
+# http://localhost:8071/api/v1/event
 cardiologist:
   host: 127.0.0.1
-  port: 8070
+  port: 8071
   contextPath: /api/v1/event
   apiKeyName: Cardiologist-API-User-Key

@@ -21,37 +21,32 @@ public class Event extends BaseModel {
     @Column(name="id")
     private Long id;
 
-    // =====
     @NotNull
     @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters")
     @Column(name="email", nullable = false)
     private String email;
 
-    // =====
     @NotNull
     @Column(name="handle", nullable = false)
     private String handle;
 
-    // =====
     @NotNull
     @Column(name="birthDate", nullable = false)
     private LocalDate birthDate;
 
-    // =====
     @NotNull
     @Column(name="gender", nullable = false)
-    private Gender gender;
+    private Event.Gender gender;
 
     @NotNull
     @Column(name="calories", nullable = false)
-    private Double calories;
+    private Integer calories;
 
     @NotNull
     @Max(value = 100, message = "Burned fat should not be greater than 100 percent")
     @Column(name="burnedFat", nullable = false)
     private Integer burnedFat;
 
-    // =====
     @NotNull
     @Column(name="sportId", nullable = false)
     private String sportId;
@@ -94,7 +89,7 @@ public class Event extends BaseModel {
 
     public Event() { }
 
-    public Event(@NotNull @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters") String email, @NotNull String handle, @NotNull LocalDate birthDate, @NotNull Gender gender, @NotNull Double calories, @NotNull @Max(value = 100, message = "Burned fat should not be greater than 100 percent") Integer burnedFat, @NotNull String sportId, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull @Min(value = 30, message = "Heart rate avg should not be less than 30") @Max(value = 220, message = "Heart rate avg should not be greater than 220") Integer hrAvg, @NotNull @Min(value = 30, message = "Heart rate min should not be less than 30") @Max(value = 220, message = "Heart rate min should not be greater than 220") Integer hrMin, @NotNull @Min(value = 30, message = "Heart rate max should not be less than 30") @Max(value = 220, message = "Heart rate max should not be greater than 220") Integer hrMax, @NotNull @Min(value = 1, message = "Training load should not be less than 1 hour") @Max(value = 168, message = "Training load should not be greater than 168 hours") Integer load, String notes) {
+    public Event(@NotNull @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters") String email, @NotNull String handle, @NotNull LocalDate birthDate, @NotNull Event.Gender gender, @NotNull Integer calories, @NotNull @Max(value = 100, message = "Burned fat should not be greater than 100 percent") Integer burnedFat, @NotNull String sportId, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull @Min(value = 30, message = "Heart rate avg should not be less than 30") @Max(value = 220, message = "Heart rate avg should not be greater than 220") Integer hrAvg, @NotNull @Min(value = 30, message = "Heart rate min should not be less than 30") @Max(value = 220, message = "Heart rate min should not be greater than 220") Integer hrMin, @NotNull @Min(value = 30, message = "Heart rate max should not be less than 30") @Max(value = 220, message = "Heart rate max should not be greater than 220") Integer hrMax, @NotNull @Min(value = 1, message = "Training load should not be less than 1 hour") @Max(value = 168, message = "Training load should not be greater than 168 hours") Integer load, String notes) {
         this.email = email;
         this.handle = handle;
         this.birthDate = birthDate;
@@ -151,11 +146,11 @@ public class Event extends BaseModel {
         this.gender = gender;
     }
 
-    public Double getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
-    public void setCalories(Double calories) {
+    public void setCalories(Integer calories) {
         this.calories = calories;
     }
 
