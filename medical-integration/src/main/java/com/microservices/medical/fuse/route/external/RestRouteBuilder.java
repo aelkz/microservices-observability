@@ -87,6 +87,7 @@ public class RestRouteBuilder extends RouteBuilder {
             .endRest()
 
             .post(RouteDescriptor.REST_POST_CARDIOLOGIST.getUri())
+                .type(Activity.class)
                 .id(RouteDescriptor.REST_POST_CARDIOLOGIST.getId())
                 .description(RouteDescriptor.REST_POST_CARDIOLOGIST.getDescription())
                 .responseMessage().code(204).message("success").endResponseMessage()
