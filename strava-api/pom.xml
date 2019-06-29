@@ -103,15 +103,36 @@
             <version>${thorntail.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.196</version>
+            <groupId>io.thorntail</groupId>
+            <artifactId>jmx</artifactId>
+            <version>${thorntail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.remotingjmx</groupId>
+            <artifactId>remoting-jmx</artifactId>
+            <version>3.0.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>management</artifactId>
+            <version>${thorntail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>microprofile-opentracing</artifactId>
+            <version>${thorntail.version}</version>
+        </dependency>
+        <!-- microprofile -->
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>microprofile-openapi</artifactId>
+            <version>${thorntail.version}</version>
         </dependency>
         <!-- data access -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.199</version>
+            <version>${h2.version}</version>
             <scope>compile</scope>
         </dependency>
         <!-- use jackson for xml instead of jaxb -->
@@ -217,7 +238,7 @@
 
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>

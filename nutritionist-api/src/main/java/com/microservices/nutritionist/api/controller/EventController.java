@@ -5,13 +5,12 @@ import javax.validation.Valid;
 import com.microservices.nutritionist.api.model.Event;
 import com.microservices.nutritionist.api.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -27,9 +26,18 @@ public class EventController extends BaseController {
             value = "Create new event",
             notes = "Creates new event. Returns created event with id.",
             response = Event.class)
-    public ResponseEntity<Event> add(@Valid @RequestBody Event e) {
-        e = service.save(e);
-        return ResponseEntity.ok().body(e);
+    public ResponseEntity<Event> add(@RequestHeader HttpHeaders headers, @Valid @RequestBody Event e) {
+
+        ResponseEntity response = null;
+
+        if (service.checkApiKey(headers)) {
+            e = service.save(e);
+            response = ResponseEntity.ok().body(e);
+        }else {
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("api-key header missing");
+        }
+
+        return response;
     }
 
 }

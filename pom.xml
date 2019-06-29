@@ -58,7 +58,7 @@
         <!-- -->
         <maven.failsafe.plugin.version>2.22.1</maven.failsafe.plugin.version>
         <maven.vertx.plugin.version>1.0.18</maven.vertx.plugin.version>
-        <maven.compiler.plugin.version>3.6.0</maven.compiler.plugin.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
         <maven.jboss.plugin.version>7.9.Final</maven.jboss.plugin.version>
     </properties>

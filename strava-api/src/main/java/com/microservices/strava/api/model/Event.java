@@ -1,13 +1,18 @@
 package com.microservices.strava.api.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@XmlRootElement
 public class Event extends BaseModel {
+
+    public static enum Gender {
+        M, F;
+    }
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -17,6 +22,7 @@ public class Event extends BaseModel {
     @NotNull
     @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters")
     @Column(name="email", nullable = false)
+    @Email(message = "Invalid email")
     private String email;
 
     @NotNull
@@ -25,7 +31,8 @@ public class Event extends BaseModel {
 
     @NotNull
     @Column(name="calories", nullable = false)
-    private Double calories;
+    @Size(min = 1, max = 10000, message = "Invalid calories count")
+    private Integer calories;
 
     @NotNull
     @Column(name="startDate", nullable = false)
@@ -40,12 +47,25 @@ public class Event extends BaseModel {
     private Double distance;
 
     @NotNull
-    @Column(name="avgPace", nullable = false)
-    private Double avgPace;
+    @Column(name="paceAvg", nullable = false)
+    private String paceAvg;
 
     @NotNull
-    @Column(name="avgHeartRate", nullable = false)
-    private Double avgHeartRate;
+    @Column(name="paceMax", nullable = false)
+    private String paceMax;
+
+    public Event() { }
+
+    public Event(@NotNull @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters") String email, @NotNull String handle, @NotNull Integer calories, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull Double distance, @NotNull String paceAvg, @NotNull String paceMax) {
+        this.email = email;
+        this.handle = handle;
+        this.calories = calories;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.distance = distance;
+        this.paceAvg = paceAvg;
+        this.paceMax = paceMax;
+    }
 
     public Long getId() {
         return id;
@@ -71,11 +91,11 @@ public class Event extends BaseModel {
         this.handle = handle;
     }
 
-    public Double getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
-    public void setCalories(Double calories) {
+    public void setCalories(Integer calories) {
         this.calories = calories;
     }
 
@@ -103,20 +123,20 @@ public class Event extends BaseModel {
         this.distance = distance;
     }
 
-    public Double getAvgPace() {
-        return avgPace;
+    public String getPaceAvg() {
+        return paceAvg;
     }
 
-    public void setAvgPace(Double avgPace) {
-        this.avgPace = avgPace;
+    public void setPaceAvg(String paceAvg) {
+        this.paceAvg = paceAvg;
     }
 
-    public Double getAvgHeartRate() {
-        return avgHeartRate;
+    public String getPaceMax() {
+        return paceMax;
     }
 
-    public void setAvgHeartRate(Double avgHeartRate) {
-        this.avgHeartRate = avgHeartRate;
+    public void setPaceMax(String paceMax) {
+        this.paceMax = paceMax;
     }
 
     @Override
@@ -130,11 +150,13 @@ public class Event extends BaseModel {
                 getCalories().equals(event.getCalories()) &&
                 getStartDate().equals(event.getStartDate()) &&
                 getEndDate().equals(event.getEndDate()) &&
-                getDistance().equals(event.getDistance());
+                getDistance().equals(event.getDistance()) &&
+                Objects.equals(getPaceAvg(), event.getPaceAvg()) &&
+                Objects.equals(getPaceMax(), event.getPaceMax());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getHandle(), getCalories(), getStartDate(), getEndDate(), getDistance());
+        return Objects.hash(getId(), getEmail(), getHandle(), getCalories(), getStartDate(), getEndDate(), getDistance(), getPaceAvg(), getPaceMax());
     }
 }

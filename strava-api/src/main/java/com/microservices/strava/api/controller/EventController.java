@@ -6,8 +6,11 @@ import io.swagger.annotations.*;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import static javax.ws.rs.core.Response.Status;
 
 @Path("/event")
 @Api(value = "/event", description = "Save a new STRAVA event", tags = {"event"})
@@ -40,9 +43,19 @@ public class EventController {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New event received.") })
-    public Response calculate(Event e) {
-        e = service.save(e);
-        return Response.status(201).entity(e).build();
+    public Response calculate(@Context HttpHeaders headers, Event e) {
+
+        Response response = null;
+
+        if (service.checkApiKey(headers)) {
+            e = service.save(e);
+            response = Response.status(Status.CREATED).entity(e).build();
+        }else {
+            e = service.save(e);
+            response = Response.status(Status.BAD_REQUEST).entity(e).build();
+        }
+
+        return response;
     }
 
     private Response error(int code, String message) {

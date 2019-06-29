@@ -6,6 +6,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class RunningActivity extends BaseModel {
@@ -148,5 +149,26 @@ public class RunningActivity extends BaseModel {
 
     private void setActivities(List<Activity> activities) {
         this.activities = activities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RunningActivity that = (RunningActivity) o;
+        return getId().equals(that.getId()) &&
+                getDistance().equals(that.getDistance()) &&
+                getPaceAvg().equals(that.getPaceAvg()) &&
+                Objects.equals(getPaceMax(), that.getPaceMax()) &&
+                Objects.equals(getAscent(), that.getAscent()) &&
+                Objects.equals(getDescent(), that.getDescent()) &&
+                getCadenceAvg().equals(that.getCadenceAvg()) &&
+                Objects.equals(getCadenceMax(), that.getCadenceMax()) &&
+                getRunningIndex().equals(that.getRunningIndex());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getDistance(), getPaceAvg(), getPaceMax(), getAscent(), getDescent(), getCadenceAvg(), getCadenceMax(), getRunningIndex());
     }
 }

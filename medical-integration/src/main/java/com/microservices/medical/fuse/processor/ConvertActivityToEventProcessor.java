@@ -27,6 +27,6 @@ public class ConvertActivityToEventProcessor implements Processor {
         e.setSportId(activity.getSport().getId()+"-"+activity.getSport().getName());
 
         exchange.getOut().setBody(e);
-        exchange.getIn().setBody(e);
+        exchange.getOut().setHeaders(exchange.getIn().getHeaders());
     }
 }

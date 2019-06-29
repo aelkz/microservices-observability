@@ -1,8 +1,5 @@
-swarm:
+thorntail:
   ajp:
     enable: true
-  deployment:
-    example-jaxrs-swagger.war:
-      swagger:
-        packages:
-          - org.wildfly.swarm.examples.jaxrs.swagger
+  http:
+    port: 8080
