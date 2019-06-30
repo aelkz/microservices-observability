@@ -12,7 +12,7 @@
         <!-- mobile backend api -->
         <module>polar-flow-api</module>
         <!-- integration layer -->
-        <module>running-social-network-integration</module>
+        <module>social-network-integration</module>
         <module>medical-integration</module>
         <module>calendar-integration</module>
         <!-- vendors apis layer -->

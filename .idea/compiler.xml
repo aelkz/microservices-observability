@@ -12,7 +12,7 @@
         <module name="medical-integration" />
         <module name="nutritionist-api" />
         <module name="polar-flow-api" />
-        <module name="running-social-network-integration" />
+        <module name="social-network-integration" />
         <module name="strava-api" />
       </profile>
     </annotationProcessing>

@@ -18,6 +18,7 @@
     <description>strava-api</description>
 
     <properties>
+        <db.jndiName>java:/jboss/datasources/MyDS</db.jndiName>
         <main.basedir>${basedir}/../..</main.basedir>
     </properties>
 
@@ -120,6 +121,11 @@
         <dependency>
             <groupId>io.thorntail</groupId>
             <artifactId>microprofile-opentracing</artifactId>
+            <version>${thorntail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>thorntail-runner</artifactId>
             <version>${thorntail.version}</version>
         </dependency>
         <!-- microprofile -->

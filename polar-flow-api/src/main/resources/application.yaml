@@ -52,17 +52,17 @@ integration:
     strava:
       host: 127.0.0.1
       port: 8080
-      path: /api/v1/social
+      path: /api/v1/social/strava
       apiKey: Strava-API-User-Key
     myfitnesspal:
       host: 127.0.0.1
       port: 8080
-      path: /api/v1/social
+      path: /api/v1/social/myfitnesspal
       apiKey: MyFitnessPal-API-User-Key
     applehealth:
       host: 127.0.0.1
       port: 8080
-      path: /api/v1/social
+      path: /api/v1/social/applehealth
       apiKey: AppleHealth-API-User-Key
   medical:
     nutritionist:

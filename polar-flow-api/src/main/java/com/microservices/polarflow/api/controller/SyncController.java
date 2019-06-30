@@ -6,6 +6,7 @@ import com.microservices.polarflow.api.service.ActivityService;
 import com.microservices.polarflow.api.service.async.calendar.GoogleIntegrationService;
 import com.microservices.polarflow.api.service.async.medical.CardiologistIntegrationService;
 import com.microservices.polarflow.api.service.async.medical.NutritionistIntegrationService;
+import com.microservices.polarflow.api.service.async.social.StravaIntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -38,6 +39,9 @@ public class SyncController extends BaseController {
     @Autowired
     CardiologistIntegrationService cardiologistIntegrationService;
 
+    @Autowired
+    StravaIntegrationService stravaIntegrationService;
+
     @RequestMapping(path = "/v1/sync", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ApiOperation(
             value = "Sync polar user data across linked 3rd party software",
@@ -51,6 +55,7 @@ public class SyncController extends BaseController {
         CompletableFuture<SyncStatus> event1 = googleIntegrationService.sendAsyncEvent(activity);
         CompletableFuture<SyncStatus> event2 = nutritionistIntegrationService.sendAsyncEvent(activity);
         CompletableFuture<SyncStatus> event3 = cardiologistIntegrationService.sendAsyncEvent(activity);
+        CompletableFuture<SyncStatus> event4 = stravaIntegrationService.sendAsyncEvent(activity);
 
         return ResponseEntity.ok().body(activity);
     }

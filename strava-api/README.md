@@ -1,6 +1,9 @@
 # STRAVA API
 ###### This project is in development.
 
+
+If you use IntelliJ IDEA, use Ctrl/Cmd+N to find the `Runner` class. In Eclipse you can use Ctrl/Cmd+Shift+T. When you find it, it’s just a matter of running its main method.
+
 ```java
 mvn clean package thorntail:run
 ```
@@ -27,3 +30,5 @@ https://github.com/thorntail/thorntail-examples/blob/master/kitchensink-html5-mo
 https://medium.com/@brunodutrafranco_29841/integrated-test-with-arquillian-thorntail-763185a8ce96
 https://developer.ibm.com/recipes/tutorials/implementing-microservices-with-thorntail-and-deploying-in-openshift/
 https://github.com/debajyoti1d1mukherjee/Thorntail/blob/master/src/main/java/com/poc/thorntail/HealthChecks.java
+https://thorntail.io/posts/thorntail-runner/
+https://appdev.openshift.io/docs/thorntail-runtime.html

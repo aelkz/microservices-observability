@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class BaseRepository<T> {
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "primary")
     public EntityManager em;
 
     private Class<T> entityClass;

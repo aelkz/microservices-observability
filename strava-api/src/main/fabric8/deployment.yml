@@ -1,0 +1,17 @@
+spec:
+  template:
+    spec:
+      containers:
+        - volumeMounts:
+            - name: config
+              mountPath: /app/config
+          env:
+            - name: JAVA_OPTIONS
+              value: "-Dthorntail.project.stage.file=file:///app/config/project-defaults.yml"
+      volumes:
+        - name: config
+          configMap:
+            name: app-config
+            items:
+              - key: "app-config.yml"
+                path: "project-defaults.yml"

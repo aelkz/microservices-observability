@@ -3,13 +3,18 @@ package com.microservices.strava.api.controller;
 import com.microservices.strava.api.model.Event;
 import com.microservices.strava.api.service.EventService;
 import io.swagger.annotations.*;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import javax.inject.Inject;
 import javax.json.Json;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
+
 import static javax.ws.rs.core.Response.Status;
 
 @Path("/event")
@@ -32,18 +37,27 @@ import static javax.ws.rs.core.Response.Status;
 public class EventController {
 
     @Inject
+    @ConfigProperty(name = "greeting.message")
+    private Optional<String> message;
+
+    @Inject
     EventService service;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
     @ApiOperation(value = "Save STRAVA event",
             notes = "Event",
             response = Event.class
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New event received.") })
-    public Response calculate(@Context HttpHeaders headers, Event e) {
+    public Response add(@Context HttpHeaders headers, Event e) {
+
+        if (e == null) {
+            return error(415, "Invalid payload!");
+        }
 
         Response response = null;
 

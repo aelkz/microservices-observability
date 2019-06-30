@@ -1,56 +1,32 @@
-package com.microservices.strava.api.model;
+package com.microservices.social.fuse.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
-@XmlRootElement
-@NamedQueries({
-        @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e")
-})
 public class Event extends BaseModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "eventSequence")
-    @SequenceGenerator(name = "eventSequence", sequenceName = "event_id_seq", allocationSize = 1, initialValue = 1)
+    public static enum Gender {
+        M, F;
+    }
+
     private Long id;
 
-    @NotNull
-    @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters")
-    @Column(name="email", nullable = false)
-    @Email(message = "Invalid email")
     private String email;
 
-    @NotNull
-    @Column(name="handle", nullable = false)
     private String handle;
 
-    @NotNull
-    @Column(name="calories", nullable = false)
-    @Size(min = 1, max = 10000, message = "Invalid calories count")
     private Integer calories;
 
-    @NotNull
-    @Column(name="startDate", nullable = false)
     private LocalDateTime startDate;
 
-    @NotNull
-    @Column(name="endDate", nullable = false)
     private LocalDateTime endDate;
 
-    @NotNull
-    @Column(name="distance", nullable = false)
     private Double distance;
 
-    @NotNull
-    @Column(name="paceAvg", nullable = false)
     private String paceAvg;
 
-    @NotNull
-    @Column(name="paceMax", nullable = false)
     private String paceMax;
 
     public Event() { }
@@ -158,4 +134,5 @@ public class Event extends BaseModel {
     public int hashCode() {
         return Objects.hash(getId(), getEmail(), getHandle(), getCalories(), getStartDate(), getEndDate(), getDistance(), getPaceAvg(), getPaceMax());
     }
+
 }
