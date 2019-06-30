@@ -15,7 +15,13 @@ public class ExceptionProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         Exception exception = (Exception) exchange.getProperty(Exchange.EXCEPTION_CAUGHT);
+
+        logger.info(exception.getMessage());
+        logger.info(exception.getLocalizedMessage());
+        exception.printStackTrace();
+
         exchange.getIn().setBody("{\"error\": \"" + exception.getMessage() +"\"}");
         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, HttpStatus.INTERNAL_SERVER_ERROR.value());

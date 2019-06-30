@@ -14,9 +14,9 @@ You can also run through a war package:<br>
 Check the health of the API:<br>
 `curl -s localhost:8080/v1/health/ -i | grep HTTP`
 
-http://localhost:8080/index.html
-http://localhost:8080/swagger-ui/
-http://localhost:8080/v1/swagger.json
+http://localhost:8070/index.html
+http://localhost:8070/swagger-ui/
+http://localhost:8070/v1/swagger.json
 
 http://www.mastertheboss.com/soa-cloud/openshift/running-microprofile-applications-on-openshift
 https://developer.jboss.org/en/jberet/blog/2018/10/01/microservices-batch-application-with-thorntail-and-openshift

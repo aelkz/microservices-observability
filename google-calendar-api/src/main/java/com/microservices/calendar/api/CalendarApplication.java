@@ -95,44 +95,34 @@ public class CalendarApplication extends AbstractVerticle {
 
     }
 
-    private void checkRequestBody(RoutingContext ctx) {
+    private void createEvent(RoutingContext ctx) {
+        logger.info("VertX - checking request header");
+        String userApiKey = ctx.request().getHeader(API_KEY);
+
+        if (userApiKey == null) {
+            logger.info("invalid header: "+API_KEY+" not found");
+            error(ctx, 400, "invalid header: "+API_KEY+" not found");
+            return;
+        }
+
         logger.info("VertX - checking request body");
         JsonObject item;
 
         try {
             item = ctx.getBodyAsJson();
         } catch (RuntimeException e) {
+            logger.info("invalid payload: expecting json");
             error(ctx, 415, "invalid payload: expecting json");
             return;
         }
 
         if (item == null) {
+            logger.info("invalid payload: expecting json");
             error(ctx, 415, "invalid payload: expecting json");
             return;
         }
-    }
-
-    private void checkHeaderApiKey(RoutingContext ctx) {
-        logger.info("VertX - checking request header");
-        String userApiKey = ctx.request().getHeader(API_KEY);
-
-        if (userApiKey == null) {
-            error(ctx, 400, "invalid header: "+API_KEY+" not found");
-            return;
-
-        }
-    }
-
-    private void createEvent(RoutingContext ctx) {
-        checkHeaderApiKey(ctx);
-        checkRequestBody(ctx);
 
         logger.info("VertX - post new event");
-        JsonObject item;
-        item = ctx.getBodyAsJson();
-
-        String userApiKey = ctx.request().getHeader(API_KEY);
-
         logger.info("start: "+item.getValue("startDate"));
         logger.info("end: "+item.getValue("endDate"));
         logger.info("calories: "+item.getInteger("calories"));

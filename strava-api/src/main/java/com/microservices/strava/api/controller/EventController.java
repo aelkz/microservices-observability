@@ -4,6 +4,8 @@ import com.microservices.strava.api.model.Event;
 import com.microservices.strava.api.service.EventService;
 import io.swagger.annotations.*;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.json.Json;
@@ -17,7 +19,7 @@ import java.util.Optional;
 
 import static javax.ws.rs.core.Response.Status;
 
-@Path("/event")
+@Path("/v1")
 @Api(value = "/event", description = "Save a new STRAVA event", tags = {"event"})
 @SwaggerDefinition(
         info = @Info(
@@ -36,17 +38,19 @@ import static javax.ws.rs.core.Response.Status;
 )
 public class EventController {
 
-    @Inject
-    @ConfigProperty(name = "greeting.message")
-    private Optional<String> message;
+    private static Logger logger = LoggerFactory.getLogger(EventController.class);
+
+//    @Inject
+//    @ConfigProperty(name = "greeting.message")
+//    private Optional<String> message;
 
     @Inject
     EventService service;
 
     @POST
+    @Path("/event")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Transactional
     @ApiOperation(value = "Save STRAVA event",
             notes = "Event",
             response = Event.class
@@ -55,9 +59,13 @@ public class EventController {
             @ApiResponse(code = 201, message = "New event received.") })
     public Response add(@Context HttpHeaders headers, Event e) {
 
+        logger.info("A");
+
         if (e == null) {
             return error(415, "Invalid payload!");
         }
+
+        logger.info("B");
 
         Response response = null;
 
@@ -68,6 +76,8 @@ public class EventController {
             e = service.save(e);
             response = Response.status(Status.BAD_REQUEST).entity(e).build();
         }
+
+        logger.info("C");
 
         return response;
     }

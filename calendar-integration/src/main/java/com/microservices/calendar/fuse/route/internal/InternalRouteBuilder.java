@@ -32,7 +32,7 @@ public class InternalRouteBuilder extends RouteBuilder {
             .handled(true)
             .process(exceptionProcessor)
             .redeliveryDelay(150)
-            .maximumRedeliveries(3)
+            .maximumRedeliveries(2) // 1 + 2 retries
             .to("log:exception");
 
         // /--------------------------------------------------\
