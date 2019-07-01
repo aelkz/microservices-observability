@@ -3,6 +3,9 @@ api:
 
 logging:
   config: classpath:logback.xml
+  level:
+    io:
+      jaegertracing: DEBUG
 
 # lets listen on all ports to ensure we can be invoked from the pod ip address
 # contextPath: /api/v${api.version}/*
@@ -42,6 +45,37 @@ spring:
     #spring.jackson.date-format=yyyy-MM-dd'T'HH:mm:ss.SSSZ
     serialization:
       write_dates_as_timestamps: true
+
+# =============================================
+# spring actuator configurations
+# ---------------------------------------------
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: ["*"]
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# =============================================
+# opentracing configurations
+# ---------------------------------------------
+opentracing:
+  jaeger:
+    enabled: true
+    enable-b3-propagation: true
+    log-spans: true
+    const-sampler:
+      decision: true
+    http-sender:
+      url: http://jaeger-collector:14268/api/traces
 
 # =============================================
 # google api parameters

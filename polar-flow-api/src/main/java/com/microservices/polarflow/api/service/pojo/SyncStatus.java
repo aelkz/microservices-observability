@@ -1,10 +1,14 @@
 package com.microservices.polarflow.api.service.pojo;
 
+import io.opentracing.Span;
+
 import java.util.Objects;
 
 public class SyncStatus {
 
     private Boolean synced;
+
+    private Span childSpan;
 
     public SyncStatus() { }
 
@@ -18,6 +22,14 @@ public class SyncStatus {
 
     public void setSynced(Boolean synced) {
         this.synced = synced;
+    }
+
+    public Span getChildSpan() {
+        return childSpan;
+    }
+
+    public void setChildSpan(Span childSpan) {
+        this.childSpan = childSpan;
     }
 
     @Override

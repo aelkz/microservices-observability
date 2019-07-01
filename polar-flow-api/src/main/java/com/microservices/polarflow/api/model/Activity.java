@@ -1,11 +1,14 @@
 package com.microservices.polarflow.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.microservices.polarflow.api.instrument.listener.ActivityListener;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(ActivityListener.class)
 public class Activity extends BaseModel {
 
     public static enum Mood {
@@ -96,6 +99,17 @@ public class Activity extends BaseModel {
         this.calories = calories;
         this.load = load;
         this.notes = notes;
+    }
+
+    @Transient
+    @JsonIgnore
+    public Boolean isRunningActivity() {
+        if (this.getRunning() != null) {
+            if (this.getRunning().getDistance().intValue() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Long getId() {

@@ -1,9 +1,14 @@
 package com.microservices.polarflow.api.service.async.calendar;
 
 import com.microservices.polarflow.api.configuration.calendar.GoogleIntegrationConfiguration;
+import com.microservices.polarflow.api.instrument.RequestBuilderCarrier;
+import com.microservices.polarflow.api.instrument.tracer.ActivityTracer;
 import com.microservices.polarflow.api.model.Activity;
 import com.microservices.polarflow.api.service.async.IntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
+import io.opentracing.Span;
+import io.opentracing.propagation.Format;
+import io.opentracing.tag.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +38,11 @@ public class GoogleIntegrationService implements IntegrationService<SyncStatus,A
     @Autowired
     private GoogleIntegrationConfiguration googleConfig;
 
+    @Autowired
+    private ActivityTracer tracer;
+
     @Async("threadPoolTaskExecutor")
     public CompletableFuture<SyncStatus> sendAsyncEvent(Activity activity) {
-
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -46,10 +53,15 @@ public class GoogleIntegrationService implements IntegrationService<SyncStatus,A
         // Retrieve the API Key from user's profile.
         headers.set(googleConfig.getApiKey(),activity.getUser().getGoogleCalendarApiKey());
 
+        String uri = "http://"+ googleConfig.getHost()+":"+ googleConfig.getPort()+ googleConfig.getPath();
+
+        // inject tracing data into the wire
+        tracer.inject(uri, headers, HttpMethod.POST);
+
         HttpEntity<Activity> request = new HttpEntity<Activity>(activity, headers);
 
         ResponseEntity<SyncStatus> result =
-                restTemplate.exchange("http://"+ googleConfig.getHost()+":"+ googleConfig.getPort()+ googleConfig.getPath(),
+                restTemplate.exchange(uri,
                 HttpMethod.POST, request, SyncStatus.class);
 
         System.out.println(result.getBody().getSynced());
