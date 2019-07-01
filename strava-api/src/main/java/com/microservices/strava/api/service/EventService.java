@@ -2,7 +2,6 @@ package com.microservices.strava.api.service;
 
 import com.microservices.strava.api.model.Event;
 import com.microservices.strava.api.repository.EventRepository;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -22,9 +21,9 @@ public class EventService {
 
     @Transactional(Transactional.TxType.REQUIRED)
     public Event save(Event e) {
-        repository.create(e);
+        e = repository.create(e);
         eventSrc.fire(e);
-        return null;
+        return e;
     }
 
     /**

@@ -57,15 +57,12 @@ public class EventController {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New event received.") })
+    @Transactional
     public Response add(@Context HttpHeaders headers, Event e) {
-
-        logger.info("A");
 
         if (e == null) {
             return error(415, "Invalid payload!");
         }
-
-        logger.info("B");
 
         Response response = null;
 
@@ -73,24 +70,23 @@ public class EventController {
             e = service.save(e);
             response = Response.status(Status.CREATED).entity(e).build();
         }else {
-            e = service.save(e);
             response = Response.status(Status.BAD_REQUEST).entity(e).build();
         }
 
-        logger.info("C");
+        System.out.println("New Strava Event added with id:"+e.getId());
 
         return response;
     }
 
     private Response error(int code, String message) {
         return Response
-                .status(code)
-                .entity(Json.createObjectBuilder()
-                        .add("error", message)
-                        .add("code", code)
-                        .build()
-                )
-                .build();
+            .status(code)
+            .entity(Json.createObjectBuilder()
+                    .add("error", message)
+                    .add("code", code)
+                    .build()
+            )
+            .build();
     }
 
 }

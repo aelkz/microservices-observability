@@ -35,7 +35,8 @@ public class Event extends BaseModel {
 
     @NotNull
     @Column(name="calories", nullable = false)
-    @Size(min = 1, max = 10000, message = "Invalid calories count")
+    @Min(value = 1, message = "Total calories burned should not be less than 1 kcal")
+    @Max(value = 10000, message = "Total calories burned should not be greater than 10000 kcal")
     private Integer calories;
 
     @NotNull

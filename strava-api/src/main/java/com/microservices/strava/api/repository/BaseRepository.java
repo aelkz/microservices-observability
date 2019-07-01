@@ -20,8 +20,10 @@ public class BaseRepository<T> {
         this.entityClass = entityClass;
     }
 
-    public void create(T entity) {
+    public T create(T entity) {
         em.persist(entity);
+        em.flush();
+        return entity;
     }
 
     public void update(T entity) {

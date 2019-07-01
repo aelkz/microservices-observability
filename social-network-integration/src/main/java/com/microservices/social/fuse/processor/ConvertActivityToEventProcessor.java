@@ -1,16 +1,13 @@
 package com.microservices.social.fuse.processor;
 
 import com.microservices.social.fuse.model.Activity;
-import com.microservices.social.fuse.model.Event;
+import com.microservices.social.fuse.model.StravaEvent;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class ConvertActivityToEventProcessor implements Processor {
@@ -22,7 +19,7 @@ public class ConvertActivityToEventProcessor implements Processor {
         Activity activity = exchange.getIn().getBody(Activity.class);
 
         if (activity.getRunning() != null) {
-            Event e = new Event();
+            StravaEvent e = new StravaEvent();
             BeanUtils.copyProperties(activity,e);
 
             e.setEmail(activity.getUser().getEmail());
@@ -34,6 +31,7 @@ public class ConvertActivityToEventProcessor implements Processor {
             e.setDistance(activity.getRunning().getDistance());
             e.setPaceAvg(activity.getRunning().getPaceAvg());
             e.setPaceMax(activity.getRunning().getPaceMax());
+            e.setId(null);
 
             exchange.getOut().setBody(e);
             exchange.getOut().setHeaders(exchange.getIn().getHeaders());

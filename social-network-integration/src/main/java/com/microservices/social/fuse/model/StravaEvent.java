@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Event extends BaseModel {
+public class StravaEvent extends BaseModel {
 
     public static enum Gender {
         M, F;
@@ -29,9 +29,9 @@ public class Event extends BaseModel {
 
     private String paceMax;
 
-    public Event() { }
+    public StravaEvent() { }
 
-    public Event(@NotNull @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters") String email, @NotNull String handle, @NotNull Integer calories, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull Double distance, @NotNull String paceAvg, @NotNull String paceMax) {
+    public StravaEvent(@NotNull @Size(min = 5, max = 255, message = "E-mail must be between 5 and 255 characters") String email, @NotNull String handle, @NotNull Integer calories, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull Double distance, @NotNull String paceAvg, @NotNull String paceMax) {
         this.email = email;
         this.handle = handle;
         this.calories = calories;
@@ -118,7 +118,7 @@ public class Event extends BaseModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
+        StravaEvent event = (StravaEvent) o;
         return getId().equals(event.getId()) &&
                 getEmail().equals(event.getEmail()) &&
                 getHandle().equals(event.getHandle()) &&

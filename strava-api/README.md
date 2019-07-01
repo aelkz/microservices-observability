@@ -32,3 +32,14 @@ https://developer.ibm.com/recipes/tutorials/implementing-microservices-with-thor
 https://github.com/debajyoti1d1mukherjee/Thorntail/blob/master/src/main/java/com/poc/thorntail/HealthChecks.java
 https://thorntail.io/posts/thorntail-runner/
 https://appdev.openshift.io/docs/thorntail-runtime.html
+https://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
+https://stackoverflow.com/questions/48868034/cannot-construct-instance-of-java-time-localdate-spring-boot-elasticseach
+https://stackoverflow.com/questions/45863678/json-parse-error-can-not-construct-instance-of-java-time-localdate-no-string-a
+https://blog.oio.de/2015/06/13/add-support-for-java-8-date-time-api-to-jackson-serialized-rest-web-services/
+https://www.baeldung.com/jackson-serialize-dates
+https://programmer.group/5c355a95e259a.html
+https://kodejava.org/how-to-format-localdate-object-using-jackson/
+https://stackoverflow.com/questions/6378526/org-hibernate-persistentobjectexception-detached-entity-passed-to-persist
+https://stackoverflow.com/questions/32828778/jpa-persistentobjectexception-detached-entity-passed-to-persist
+https://stackoverflow.com/questions/50160778/no-validator-could-be-found-for-constraint-javax-validation-constraints-size
+https://www.baeldung.com/hibernate-save-persist-update-merge-saveorupdate
