@@ -1,13 +1,10 @@
 package com.microservices.polarflow.api.service.async.social;
 
 import com.microservices.polarflow.api.configuration.social.StravaIntegrationConfiguration;
-import com.microservices.polarflow.api.instrument.RequestBuilderCarrier;
 import com.microservices.polarflow.api.instrument.tracer.ActivityTracer;
 import com.microservices.polarflow.api.model.Activity;
 import com.microservices.polarflow.api.service.async.IntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
-import io.opentracing.Span;
-import io.opentracing.propagation.Format;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

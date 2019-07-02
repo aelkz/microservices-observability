@@ -10,7 +10,6 @@ import com.microservices.polarflow.api.service.async.medical.NutritionistIntegra
 import com.microservices.polarflow.api.service.async.social.StravaIntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
 import io.opentracing.Span;
-import io.opentracing.Tracer;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,19 +66,19 @@ public class SyncController extends BaseController {
         activity = service.save(activity);
         service.refresh(activity);
 
-        Span span1 = tracer.startChildSpan(rootSpan,"google.calendar.integration.svc");
+        Span span1 = tracer.startChildSpan(rootSpan,"google.calendar.async.svc");
         CompletableFuture<SyncStatus> event1 = googleIntegrationService.sendAsyncEvent(activity);
         event1.thenRun(() ->  tracer.finishSpan(span1));
 
-        Span span2 = tracer.startChildSpan(rootSpan, "nutritionist.integration.svc");
+        Span span2 = tracer.startChildSpan(rootSpan, "nutritionist.async.svc");
         CompletableFuture<SyncStatus> event2 = nutritionistIntegrationService.sendAsyncEvent(activity);
         event2.thenRun(() -> tracer.finishSpan(span2));
 
-        Span span3 = tracer.startChildSpan(rootSpan, "cardiologist.integration.svc");
+        Span span3 = tracer.startChildSpan(rootSpan, "cardiologist.async.svc");
         CompletableFuture<SyncStatus> event3 = cardiologistIntegrationService.sendAsyncEvent(activity);
         event3.thenRun(() -> tracer.finishSpan(span3));
 
-        Span span4 = tracer.startChildSpan(rootSpan, "strava.social.integration.svc");
+        Span span4 = tracer.startChildSpan(rootSpan, "strava.social.async.svc");
         CompletableFuture<SyncStatus> event4 = stravaIntegrationService.sendAsyncEvent(activity);
         event4.thenRun(() -> tracer.finishSpan(span4));
 

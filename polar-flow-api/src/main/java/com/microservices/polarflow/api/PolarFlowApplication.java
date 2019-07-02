@@ -32,7 +32,7 @@ public class PolarFlowApplication {
     }
 
     @Bean
-    public Tracer tracer() {
+    public Tracer jaegerTracer() {
         Configuration.SamplerConfiguration samplerConfig = Configuration.SamplerConfiguration.fromEnv()
             .withType(ConstSampler.TYPE)
             .withParam(1);

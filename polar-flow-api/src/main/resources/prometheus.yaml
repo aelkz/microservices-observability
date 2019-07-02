@@ -3,3 +3,9 @@ scrape_configs:
     metrics_path: /actuator/prometheus
     static_configs:
       - targets: ['0.0.0.0:8090']
+
+#scrape_configs:
+#  - job_name: 'springboot'
+#    metrics_path: '/actuator/prometheus'
+#    static_configs:
+#      - targets: ['person-service:2222']

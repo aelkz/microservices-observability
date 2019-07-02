@@ -1,14 +1,10 @@
 package com.microservices.polarflow.api.service.async.calendar;
 
 import com.microservices.polarflow.api.configuration.calendar.GoogleIntegrationConfiguration;
-import com.microservices.polarflow.api.instrument.RequestBuilderCarrier;
 import com.microservices.polarflow.api.instrument.tracer.ActivityTracer;
 import com.microservices.polarflow.api.model.Activity;
 import com.microservices.polarflow.api.service.async.IntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
-import io.opentracing.Span;
-import io.opentracing.propagation.Format;
-import io.opentracing.tag.Tags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,8 @@
 package com.microservices.social.fuse.route.external;
 
 import com.microservices.social.fuse.configuration.StravaConfiguration;
+import com.microservices.social.fuse.instrument.JaegerExtractProcessor;
+import com.microservices.social.fuse.instrument.JaegerFinishSpanProcessor;
 import com.microservices.social.fuse.model.Activity;
 import com.microservices.social.fuse.processor.APIKeyNotFoundExceptionProcessor;
 import com.microservices.social.fuse.processor.CheckRunningActivityProcessor;
@@ -9,6 +11,7 @@ import com.microservices.social.fuse.processor.RunningActivityNotFoundExceptionP
 import com.microservices.social.fuse.route.RouteDescriptor;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +47,9 @@ public class RestRouteBuilder extends RouteBuilder {
 
     @Autowired
     private ConvertActivityToEventProcessor convertActivityToEventProcessor;
+
+    @Autowired
+    private JaegerExtractProcessor jaegerExtractProcessor;
 
     @Override
     public void configure() throws Exception {
@@ -81,6 +87,7 @@ public class RestRouteBuilder extends RouteBuilder {
                     .log("route:"+RouteDescriptor.REST_POST_STRAVA.getUri())
                     .log(LoggingLevel.INFO, logger, "received request from ${header.CamelHttpServletRequest.remoteAddr}")
                     .log(LoggingLevel.INFO, logger, "checking the existence of running data")
+                    //.process(jaegerExtractProcessor) not needed
                     .process(checkRunningActivityProcessor)
                     .log(LoggingLevel.INFO, logger, "checking the existence of strava user api key into http header")
                     .choice()

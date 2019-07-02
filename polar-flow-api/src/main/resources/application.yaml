@@ -55,6 +55,8 @@ management:
       enabled: true
     prometheus:
       enabled: true
+      # if you want to change the default prometheus endpoint, just change the 'id' to another value.
+      id: prometheus
   endpoints:
     web:
       exposure:

@@ -35,6 +35,33 @@ management:
     enabled: false
   address: 0.0.0.0
   port: 8081
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+      # if you want to change the default prometheus endpoint, just change the 'id' to another value.
+      id: prometheus
+    camelroutes:
+      enabled: true
+      read-only: true
+  endpoints:
+    web:
+      exposure:
+        include: ["*"]
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# https://github.com/redhat-developer/microservices-book/blob/master/api-gateway/src/main/resources/application.properties
+
+host:
+  spring-boot-metrics-dev-101
+service:
+  social-network-metrics-svc
+region:
+  us-west-1
 
 # =============================================
 # springboot actuator configurations
@@ -46,6 +73,19 @@ endpoints:
     enabled: true
   metrics:
     enabled: true
+
+# =============================================
+# opentracing configurations
+# ---------------------------------------------
+opentracing:
+  jaeger:
+    enabled: true
+    enable-b3-propagation: true
+    log-spans: true
+    const-sampler:
+      decision: true
+    http-sender:
+      url: http://jaeger-collector:14268/api/traces
 
 # =============================================
 # strava api parameters

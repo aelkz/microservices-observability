@@ -49,11 +49,14 @@ public class InternalRouteBuilder extends RouteBuilder {
             .setHeader(Exchange.HTTP_METHOD, constant(HttpMethod.POST))
             .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
             .setHeader(stravaConfig.getApiKeyName(), header(stravaConfig.getApiKeyName()))
+            //.delay(simple("${random(1000,2000)}"))
             .process(logHeaderProcessor)
             .removeHeader(Exchange.HTTP_PATH)
             .log("http4://"+stravaConfig.getHost()+":"+stravaConfig.getPort()+stravaConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")
             .to("http4://"+stravaConfig.getHost()+":"+stravaConfig.getPort()+stravaConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")
             .unmarshal().json(JsonLibrary.Jackson)
+            //.marshal().json(JsonLibrary.Jackson)
+            //.convertBodyTo(String.class)
             .end();
 
     }

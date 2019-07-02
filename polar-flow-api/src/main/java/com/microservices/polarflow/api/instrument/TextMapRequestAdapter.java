@@ -5,10 +5,10 @@ import org.springframework.http.HttpHeaders;
 import java.util.Iterator;
 import java.util.Map;
 
-public class RequestBuilderCarrier implements TextMap {
+public class TextMapRequestAdapter implements TextMap {
     private final HttpHeaders httpHeaders;
 
-    public RequestBuilderCarrier(HttpHeaders headers) {
+    public TextMapRequestAdapter(HttpHeaders headers) {
         this.httpHeaders = headers;
     }
 

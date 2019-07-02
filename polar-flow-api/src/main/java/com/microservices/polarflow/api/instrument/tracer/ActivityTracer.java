@@ -1,7 +1,7 @@
 package com.microservices.polarflow.api.instrument.tracer;
 
 import com.google.common.collect.ImmutableMap;
-import com.microservices.polarflow.api.instrument.RequestBuilderCarrier;
+import com.microservices.polarflow.api.instrument.TextMapRequestAdapter;
 import com.microservices.polarflow.api.model.Activity;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -70,17 +70,17 @@ public class ActivityTracer implements BaseTrace<Activity> {
         Tags.SPAN_KIND.set(getTracer().activeSpan(), Tags.SPAN_KIND_CLIENT);
         Tags.HTTP_METHOD.set(getTracer().activeSpan(), httpMethod.name());
         Tags.HTTP_URL.set(getTracer().activeSpan(), uri);
-        getTracer().inject(getTracer().activeSpan().context(), Format.Builtin.HTTP_HEADERS, new RequestBuilderCarrier(httpHeaders));
+        getTracer().inject(getTracer().activeSpan().context(), Format.Builtin.HTTP_HEADERS, new TextMapRequestAdapter(httpHeaders));
     }
 
     /**
-     * Example of tracer.extract() method
+     * Example of jaegerTracer.extract() method
      * (It will be used on integration services, and 3rd party APIs later)
      *
      * @GetMapping(path = "/random")
      *     public String name(@RequestHeader HttpHeaders headers) {
-     *         SpanContext parentContext = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers.toSingleValueMap()));
-     *         Span span = tracer.buildSpan("find-random-scientist-name").asChildOf(parentContext).start();
+     *         SpanContext parentContext = jaegerTracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers.toSingleValueMap()));
+     *         Span span = jaegerTracer.buildSpan("find-random-scientist-name").asChildOf(parentContext).start();
      *         String name = scientistsNames.get(random.nextInt(scientistsNames.size()));
      *         span.finish();
      *         return name;
