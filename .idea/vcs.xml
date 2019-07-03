@@ -2,12 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/cicd-devops" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/cicd-devops/eclipse-che/ansible-openshift-eclipse-che" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/cicd-devops/jenkins/custom-functions" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/cicd-devops/sonarqube/docker-rhel-sonarqube" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/cicd-devops/sonarqube/sonarqube-ocp" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/freeipa/freeipa-container/freeipa-container" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/rhpds_files/_openshift/templates/sso72-arekkusu/sso72-oracle" vcs="Git" />
   </component>
 </project>

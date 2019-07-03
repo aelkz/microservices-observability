@@ -9,6 +9,8 @@
         <module name="calendar-integration" />
         <module name="cardiologist-api" />
         <module name="google-calendar-api" />
+        <module name="maven-archiver (1)" />
+        <module name="maven-archiver (2)" />
         <module name="medical-integration" />
         <module name="nutritionist-api" />
         <module name="polar-flow-api" />
