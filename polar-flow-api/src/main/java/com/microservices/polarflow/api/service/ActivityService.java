@@ -14,7 +14,9 @@ public class ActivityService {
     private ActivityRepository repository;
 
     public Activity save(Activity a) {
-        return repository.save(a);
+        Activity entity = repository.saveAndFlush(a);
+        repository.refresh(entity);
+        return entity;
     }
 
     public void delete(Long id) {

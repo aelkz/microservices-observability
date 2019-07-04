@@ -79,6 +79,10 @@ opentracing:
     http-sender:
       url: http://jaeger-collector:14268/api/traces
 
+jaeger.tracer:
+  host: jaeger-agent.microservices.svc
+  port: 6831
+
 # =============================================
 # google api parameters
 # ---------------------------------------------

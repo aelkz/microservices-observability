@@ -13,7 +13,6 @@ import io.opentracing.Span;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,23 +28,21 @@ public class SyncController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(SyncController.class);
 
-    @Autowired
-    ActivityService service;
+    private final ActivityService service;
+    private final GoogleIntegrationService googleIntegrationService;
+    private final NutritionistIntegrationService nutritionistIntegrationService;
+    private final CardiologistIntegrationService cardiologistIntegrationService;
+    private final StravaIntegrationService stravaIntegrationService;
+    private final ActivityTracer tracer;
 
-    @Autowired
-    GoogleIntegrationService googleIntegrationService;
-
-    @Autowired
-    NutritionistIntegrationService nutritionistIntegrationService;
-
-    @Autowired
-    CardiologistIntegrationService cardiologistIntegrationService;
-
-    @Autowired
-    StravaIntegrationService stravaIntegrationService;
-
-    @Autowired
-    ActivityTracer tracer;
+    public SyncController(ActivityService service, GoogleIntegrationService googleIntegrationService, NutritionistIntegrationService nutritionistIntegrationService, CardiologistIntegrationService cardiologistIntegrationService, StravaIntegrationService stravaIntegrationService, ActivityTracer tracer) {
+        this.service = service;
+        this.googleIntegrationService = googleIntegrationService;
+        this.nutritionistIntegrationService = nutritionistIntegrationService;
+        this.cardiologistIntegrationService = cardiologistIntegrationService;
+        this.stravaIntegrationService = stravaIntegrationService;
+        this.tracer = tracer;
+    }
 
     @RequestMapping(path = "/v1/sync", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ApiOperation(
@@ -56,15 +53,14 @@ public class SyncController extends BaseController {
         // start opentracing root span
         Span rootSpan = tracer.startRootSpan("sync activity");
 
+        activity = service.save(activity);
+
         // add context to span (tag running activities)
         if (activity.isRunningActivity()) {
             tracer.setCustomTag(rootSpan, "activity.running", true);
         }else {
             tracer.setCustomTag(rootSpan, "activity.running", false);
         }
-
-        activity = service.save(activity);
-        service.refresh(activity);
 
         Span span1 = tracer.startChildSpan(rootSpan,"google.calendar.async.svc");
         CompletableFuture<SyncStatus> event1 = googleIntegrationService.sendAsyncEvent(activity);
