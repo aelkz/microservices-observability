@@ -8,6 +8,10 @@
     <artifactId>microservices-observability</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+    <name>microservices-observability</name>
+    <description>microservices-observability</description>
+
     <modules>
         <!-- mobile backend api -->
         <module>polar-flow-api</module>
@@ -21,6 +25,17 @@
         <module>nutritionist-api</module>
         <module>google-calendar-api</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <url>${nexusReleaseRepoUrl}</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>${nexusSnapshotRepoUrl}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <java.version>1.8</java.version>
@@ -56,11 +71,15 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- -->
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven.failsafe.plugin.version>2.22.1</maven.failsafe.plugin.version>
         <maven.vertx.plugin.version>1.0.18</maven.vertx.plugin.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
         <maven.jboss.plugin.version>7.9.Final</maven.jboss.plugin.version>
+        <!-- -->
+        <nexusReleaseRepoUrl></nexusReleaseRepoUrl>
+        <nexusSnapshotRepoUrl></nexusSnapshotRepoUrl>
     </properties>
 
     <repositories>
@@ -134,5 +153,23 @@
             <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

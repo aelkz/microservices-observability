@@ -19,7 +19,20 @@
     <properties>
         <springboot.version>2.1.4.RELEASE</springboot.version>
         <main.basedir>${basedir}/../..</main.basedir>
+        <nexusReleaseRepoUrl></nexusReleaseRepoUrl>
+        <nexusSnapshotRepoUrl></nexusSnapshotRepoUrl>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-release</id>
+            <url>${nexusReleaseRepoUrl}</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <url>${nexusSnapshotRepoUrl}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -194,7 +207,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>build-info</goal>
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
                 </executions>
