@@ -1,18 +1,29 @@
 ## MICROSERVICES OBSERVABILITY
+###### A SIMPLE USE-CASE FOR OBSERVABILITY PATTERNS IN MICROSERVICES ARCHITECTURES.
+
+![observability](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/intro.png "Microservices Observability demo")
+
+<center>
 
 | FRAMEWORK       | VERSION              |
 | --------------- | -------------------- |
-| springboot      | 2.1.4.RELEASE        |
+| spring boot     | 2.1.4.RELEASE        |
 | thorntail       | 2.4.0.Final          |
 | vertx           | 3.6.3.redhat-00009   |
-| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ springboot 1.5.17.RELEASE) |
+| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) |
+
+</center>
+
+<b>TL;DR</b> This is a demonstration on how to observe, trace and monitor microservices.
+
+According to microservices architecture and modern systems design, there are 5 observability patterns that help us to achieve the best in terms of monitoring distributed systems. They are the foundation to all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business centered approach with a practical view using open-source projects sustained by the cloud native computing foundation (CNCF).
 
  <b>NOTE</b>: This is not an production application! It will not integrate with any polar API or device. 
  This project was built in order to demonstrate concepts regarding observability patterns for microservices architectures.
  The main goal is to demonstrate how to monitor, instrument and trace microservices accross the 
  network with different technologies.
 
-![virtual-network](_images/architecture-view.png "virsh net-dumpxml default > default.xml")
+![architecture](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/architecture-view.png "Architecture View")
 
 <b>The use-case scenario:</b><br>
 The user send a activity log after a training session. It could be a ordinary training session or a running session (w/ specific running data added).
@@ -25,7 +36,11 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 - <b>gauge</b>.training.load
 - <b>counter</b>.activity.sport (for different sport types)
 
+![instrumentation](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus.png "Business-centric instrumentation with prometheus and grafana")
+
 ###### sync a ordinary training session
+
+
 ```json
 {
 	"startDate":"2019-06-20T19:00:00",
@@ -50,6 +65,7 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 ```
 
 ###### sync a running training session
+
 ```json
 {
 	"startDate":"2019-06-20T19:00:00",
@@ -82,6 +98,8 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 	}
 }
 ```
+
+![tracing](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/tracing.png "Jaeger tracing in action")
 
 ### `polar-flow-api` primary endpoints
 
@@ -119,23 +137,21 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 - Cloud Native Deployment – Jaeger backend is distributed as a collection of Docker images. - Deployment to Kubernetes clusters is assisted by Kubernetes templates and a Helm chart.
 - All Jaeger backend components expose Prometheus metrics by default
 
-[Vertx](https://vertx.io) Let's talk a bit about concurrency. Obviously using an in-memory backend is not for a production setting, but it illustrates one of the key characteristics of Vert.x. We do read and write operations on this backend without using any synchronization constructs. Seasoned Java developers would clearly be mad about this.<br>
-However, Vert.x verticles are single threaded. It means that only one thread is accessing them, and always the same thread. So we don't need synchronization because we can't have concurrent access. That's great, isn't it? But how do we handle concurrent HTTP requests? Well, that's also simple, using the very same thread every time. Everything we do is not blocking processing and responses to the request are fast. So, while we won't process another request at the same time, it does not mean we can't handle concurrent requests. They are just queued; but not for long. If you try to execute concurrent requests (with tools like Gatling or wrk) you will realize very good response times, thanks to this event loop mechanism.<br>
-Source:https://developers.redhat.com/blog/2018/03/29/rest-vert-x
+[Vertx](https://vertx.io) commands:
 
-
-```
+```text
 java -jar target/my-first-app-1.0-SNAPSHOT.jar \
   -conf src/main/resources/external-configuration/application-conf.json
 ```
 
-```
+```text
 mvn clean package
 java -jar target/my-first-app-1.0-SNAPSHOT.jar
 mvn compile vertx:run
 ```
 
-[Thorntail](https://thorntail.io) Thorntail offers an innovative approach to packaging and running Java EE applications by packaging them with just enough of the server runtime to "java -jar" your application. It's MicroProfile compatible, too.
+[Thorntail](https://thorntail.io) commands:
+
 ```java
 mvn clean package thorntail:run
 ```
@@ -143,18 +159,16 @@ mvn clean package thorntail:run
 You can also run through a war package:<br>
 `java -jar target/rhamt-effort-api-1.0-hollow-thorntail.jar target/rhamt-effort-api-1.0.war`
 
-[Springboot](https://spring.io/projects/spring-boot)
-Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run".
+[Springboot](https://spring.io/projects/spring-boot) commands:
+`mvn springboot:run`
 
-[Apache Camel]()
+[Apache Camel](https://camel.apache.org)
 Apache Camel ™ is a versatile open-source integration framework based on known [Enterprise Integration Patterns](https://camel.apache.org/enterprise-integration-patterns.html).
 Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL. This means you get smart completion of routing rules in your IDE, whether in a Java, Scala or XML editor.
 
 ### `REFERENCES`
 
-01-vertx
-https://github.com/apache/camel/blob/master/components/camel-vertx/src/main/docs/vertx-component.adoc<br>
-02-API Key Generator
+API Key Generator
 https://codepen.io/corenominal/pen/rxOmMJ<br>
-03-JWT Key Generator
+JWT Key Generator
 http://jwt.io
