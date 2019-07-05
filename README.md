@@ -87,7 +87,7 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 
 | method | URI | description |
 | ------ | --- | ---------- |
-| POST    |/v1/sync         | sync polar application data across 3rd party software |
+| POST   |/v1/sync         | sync polar application data across 3rd party software |
 | GET    |/actuator/prometheus | Prometheus metrics export (will expose all custom metrics also) |
 | GET    |/actuator/metrics/activity.count | total activities |
 | GET    |/actuator/metrics/running.count | total running activities |
