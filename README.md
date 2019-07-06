@@ -3,17 +3,6 @@
 
 ![observability](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/intro.png "Microservices Observability demo")
 
-<center>
-
-| FRAMEWORK       | VERSION              |
-| --------------- | -------------------- |
-| spring boot     | 2.1.4.RELEASE        |
-| thorntail       | 2.4.0.Final          |
-| vertx           | 3.6.3.redhat-00009   |
-| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) |
-
-</center>
-
 <b>TL;DR</b> This is a demonstration on how to observe, trace and monitor microservices.
 
 According to microservices architecture and modern systems design, there are 5 observability patterns that help us to achieve the best in terms of monitoring distributed systems. They are the foundation to all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business centered approach with a practical view using open-source projects sustained by the cloud native computing foundation (CNCF).
@@ -124,6 +113,17 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 | GET    |/actuator/health | application health - provided by spring boot actuator |
 
 ### `ADDITIONAL DETAILS`
+
+<center>
+
+| FRAMEWORK       | VERSION              |
+| --------------- | -------------------- |
+| spring boot     | 2.1.4.RELEASE        |
+| thorntail       | 2.4.0.Final          |
+| vertx           | 3.6.3.redhat-00009   |
+| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) |
+
+</center>
 
 [Openshift Operators](https://www.openshift.com/learn/topics/operators) An Operator is a method of packaging, deploying and managing a Kubernetes-native application. A Kubernetes-native application is an application that is both deployed on Kubernetes and managed using the Kubernetes APIs and kubectl tooling. 
 
