@@ -140,7 +140,7 @@ oc new-project microservices --description="microservices observability" --displ
 1-Go to the Cluster Console menu:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/01.png" title="Prometheus - step 01" width="50%" height="50%" /><br>
 
-2-On the left menu, navigate through Catalog Sources:<br>
+2-On the left menu, navigate through Catalog Sources, under Operators:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/02.png" title="Prometheus - step 02" width="20%" height="20%" /><br>
 
 3-Change the namespace for our recently created namespace:<br>
