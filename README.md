@@ -138,13 +138,13 @@ oc new-project microservices --description="microservices observability" --displ
 ### `INSTALLATION STEPS: PROMETHEUS OPERATOR`
 
 1-Go to the Cluster Console menu:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/01.png" title="Prometheus - step 01" width="70%" height="70%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/01.png" title="Prometheus - step 01" width="50%" height="50%" /><br>
 
 2-On the left menu, navigate through Catalog Sources:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/02.png" title="Prometheus - step 02" width="30%" height="30%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/02.png" title="Prometheus - step 02" width="20%" height="20%" /><br>
 
 3-Change the namespace for our recently created namespace:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/04.png" title="Prometheus - step 03" width="30%" height="30%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/04.png" title="Prometheus - step 03" width="25%" height="25%" /><br>
 
 4-Under Red Hat Operators section, choose the Prometheus Operator and click on the button: Create Subscription:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/03.png" title="Prometheus - step 04" width="100%" height="100%" /><br>
