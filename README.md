@@ -287,7 +287,7 @@ mvn clean package deploy -DnexusReleaseRepoUrl=$MAVEN_URL_RELEASES -DnexusSnapsh
 
 # deploy polar-flow-api (spring boot 2 API)
 # NOTE. In order to import Red Hat container images, you must setup your credentials on openshift. See: https://access.redhat.com/articles/3399531
-
+# The config.json can be found at: /var/lib/origin/.docker/ on openshift master node.
 # create a secret with your container credentials
 oc delete secret redhat.io -n openshift
 oc create secret generic "redhat.io" --from-file=.dockerconfigjson=config.json --type=kubernetes.io/dockerconfigjson -n openshift
@@ -299,7 +299,7 @@ oc new-app openjdk-8-rhel8:latest~https://github.com/aelkz/microservices-observa
 
 oc patch svc polar-flow-api -p '{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}'
 
-oc patch svc polar-flow-api -p '{"metadata":{"labels":[{"app":"polar-flow-api","monitor":"springboot2-api"}]}}'
+oc label svc polar-flow-api monitor=springboot2-api
 ```
 
 The API can now be discoverable throught Prometheus scrape process, showing it’s state as `UP`:
