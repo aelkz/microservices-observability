@@ -147,10 +147,10 @@ oc new-project microservices --description="microservices observability" --displ
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/04.png" title="Prometheus - step 03" width="25%" height="25%" /><br>
 
 4-Under Red Hat Operators section, choose the Prometheus Operator and click on the button: Create Subscription:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/03.png" title="Prometheus - step 04" width="100%" height="100%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/03.png" title="Prometheus - step 04" width="80%" height="80%" /><br>
 
 5-Check the yaml definition and confirm the subscription clicking on the Create button:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/05.png" title="Prometheus - step 05" width="60%" height="60%" /><img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 05.1" width="10%" height="10%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/05.png" title="Prometheus - step 05" width="40%" height="40%" /><img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 05.1" width="10%" height="10%" /><br>
 
 6-Check if the subscription was created. You'll see the info: <b>1 installed</b>:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/07.png" title="Prometheus - step 06" width="70%" height="70%" />
@@ -159,7 +159,7 @@ oc new-project microservices --description="microservices observability" --displ
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/08.png" title="Prometheus - step 07" width="70%" height="70%" />
 
 8-Create a new service monitor, clicking in the Create New button:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/09.png" title="Prometheus - step 08" width="25%" height="25%" />
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/09.png" title="Prometheus - step 08" width="20%" height="20%" />
 
 9-Change the suggested yaml definition with the following:<br>
 The new definition will enable:
@@ -169,16 +169,16 @@ The new definition will enable:
 All applications using these definitions will be scraped with this service monitor configuration.
 Confirm the service monitor creation clicking on Create button.
 
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/10.png" title="Prometheus - step 09" width="60%" height="60%" /><img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 09.1" width="10%" height="10%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/10.png" title="Prometheus - step 09" width="40%" height="40%" /><img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 09.1" width="10%" height="10%" /><br>
 
 10-The service monitor will be created and be ready to scrape application metrics:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/11.png" title="Prometheus - step 10" width="100%" height="100%" />
 
 11-Next, let's deploy the prometheus server. Return to operator overview tab and select:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/12.png" title="Prometheus - step 11" width="25%" height="25%" />
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/12.png" title="Prometheus - step 11" width="20%" height="20%" />
 
 12-Change the suggested yaml definition with the following:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/13.png" title="Prometheus - step 12" width="60%" height="60%" />
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/13.png" title="Prometheus - step 12" width="40%" height="40%" />
 
 13-Check the deployment under operator instances tab:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/14.png" title="Prometheus - step 13" width="100%" height="100%" />
@@ -235,6 +235,9 @@ oc create route edge nexus-registry --service=nexus-registry --port=5000
 wget -O jaeger-all-in-one-template.yml https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/jaeger/jaeger-all-in-one-template.yml
 
 oc process -f jaeger-all-in-one-template.yml | oc create -f -
+
+# get jaeger's route
+echo https://$(oc get route jaeger-query --template='{{ .spec.host }}')
 ```
 
 ### `INSTALLATION STEPS: GRAFANA`
@@ -254,7 +257,7 @@ echo https://$(oc get route grafana --template='{{ .spec.host }}')
 
 1. access grafana and confirm user permissions.
 
-2. Add a new prometheus datasource with the prometheus service at `http://prometheus-operated.microservices.svc.cluster.local:9090`, with the following configuration. Click Save&Test, then Back.
+2. Add a new prometheus datasource with the prometheus service at<br>`http://prometheus-operated.microservices.svc.cluster.local:9090`, with the following configuration.<br>Click Save&Test, then Back.
 
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/grafana/01.png" title="Grafana Prometheus DataSource" width="60%" height="60%" />
 
@@ -300,7 +303,7 @@ oc patch svc polar-flow-api -p '{"metadata":{"labels":[{"app":"polar-flow-api","
 ```
 
 The API can now be discoverable throught Prometheus scrape process, showing it’s state as `UP`:
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/15.png" title="Prometheus - step 13" width="100%" height="100%" />
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/15.png" title="Prometheus - step 13" width="60%" height="60%" />
 
 ```sh
 oc expose svc/polar-flow-api -n ${current_project}
