@@ -42,7 +42,7 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 - <b>gauge</b>.running.index
 - <b>timer</b>.user.sync_ [seconds_max, seconds_count, seconds_sum]
 
-![instrumentation](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus.png "Business-centric instrumentation with prometheus and grafana")
+![instrumentation](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/dashboard.png "Business-centric instrumentation with prometheus and grafana")
 
 ##### Sync a ordinary training session:
 

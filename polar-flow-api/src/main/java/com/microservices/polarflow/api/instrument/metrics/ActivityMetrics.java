@@ -20,6 +20,12 @@ public class ActivityMetrics implements BaseMetrics<Activity> {
     @Override
     public void loadMetrics(Activity activity) {
         if (activity != null) {
+            // gauge for max heart rate
+            Metrics.gauge("gauge.heart.max", activity, Activity::getHrMax);
+
+            // gauge for avg heart rate
+            Metrics.gauge("gauge.heart.avg", activity, Activity::getHrAvg);
+
             // counter for every type of exercise
             if (activity.getSport() != null) {
                 Metrics.counter("counter.activity.sport", "value", activity.getSport().getName()).increment();
@@ -29,9 +35,6 @@ public class ActivityMetrics implements BaseMetrics<Activity> {
 
                 // gauge for user VO2 max
                 Metrics.gauge("gauge.vo2max", u, User::getVo2max);
-
-                // gauge for max heart rate
-                Metrics.gauge("gauge.heart.max", u, User::getHrMax);
             }
             if (activity.isRunningActivity()) {
                 RunningActivity r = activity.getRunning();
