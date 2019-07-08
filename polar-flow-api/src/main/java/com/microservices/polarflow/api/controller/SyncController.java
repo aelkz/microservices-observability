@@ -1,6 +1,7 @@
 package com.microservices.polarflow.api.controller;
 
 import com.microservices.polarflow.api.controller.validator.EventValidator;
+import com.microservices.polarflow.api.instrument.metrics.ActivityMetrics;
 import com.microservices.polarflow.api.instrument.tracer.ActivityTracer;
 import com.microservices.polarflow.api.model.Activity;
 import com.microservices.polarflow.api.service.ActivityService;
@@ -9,6 +10,7 @@ import com.microservices.polarflow.api.service.async.medical.CardiologistIntegra
 import com.microservices.polarflow.api.service.async.medical.NutritionistIntegrationService;
 import com.microservices.polarflow.api.service.async.social.StravaIntegrationService;
 import com.microservices.polarflow.api.service.pojo.SyncStatus;
+import io.micrometer.core.annotation.Timed;
 import io.opentracing.Span;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -34,16 +36,26 @@ public class SyncController extends BaseController {
     private final CardiologistIntegrationService cardiologistIntegrationService;
     private final StravaIntegrationService stravaIntegrationService;
     private final ActivityTracer tracer;
+    private final ActivityMetrics metrics;
 
-    public SyncController(ActivityService service, GoogleIntegrationService googleIntegrationService, NutritionistIntegrationService nutritionistIntegrationService, CardiologistIntegrationService cardiologistIntegrationService, StravaIntegrationService stravaIntegrationService, ActivityTracer tracer) {
+    public SyncController(
+            ActivityService service,
+            GoogleIntegrationService googleIntegrationService,
+            NutritionistIntegrationService nutritionistIntegrationService,
+            CardiologistIntegrationService cardiologistIntegrationService,
+            StravaIntegrationService stravaIntegrationService,
+            ActivityTracer tracer,
+            ActivityMetrics metrics) {
         this.service = service;
         this.googleIntegrationService = googleIntegrationService;
         this.nutritionistIntegrationService = nutritionistIntegrationService;
         this.cardiologistIntegrationService = cardiologistIntegrationService;
         this.stravaIntegrationService = stravaIntegrationService;
         this.tracer = tracer;
+        this.metrics = metrics;
     }
 
+    @Timed(value = "user.sync", description = "Sync operation")
     @RequestMapping(path = "/v1/sync", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ApiOperation(
             value = "Sync polar user data across linked 3rd party software",
@@ -54,6 +66,7 @@ public class SyncController extends BaseController {
         Span rootSpan = tracer.startRootSpan("sync activity");
 
         activity = service.save(activity);
+        metrics.loadMetrics(activity);
 
         // add context to span (tag running activities)
         if (activity.isRunningActivity()) {

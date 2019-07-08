@@ -1,7 +1,7 @@
 package com.microservices.polarflow.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.microservices.polarflow.api.instrument.listener.ActivityListener;
+import com.microservices.polarflow.api.instrument.metrics.listener.ActivityListener;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;

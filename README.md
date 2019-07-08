@@ -32,9 +32,15 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 - <b>counter</b>.activity
 - <b>counter</b>.running
 - <b>gauge</b>.burned.calories
-- <b>gauge</b>.running.distance
 - <b>gauge</b>.training.load
+- <b>gauge</b>.running.distance
 - <b>counter</b>.activity.sport (for different sport types)
+- <b>gauge</b>.vo2max
+- <b>gauge</b>.heart.max
+- <b>gauge</b>.running.distance
+- <b>gauge</b>.running.cadence
+- <b>gauge</b>.running.index
+- <b>timer</b>.user.sync_ [seconds_max, seconds_count, seconds_sum]
 
 ![instrumentation](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus.png "Business-centric instrumentation with prometheus and grafana")
 
