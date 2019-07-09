@@ -42,3 +42,40 @@ spring:
     #spring.jackson.date-format=yyyy-MM-dd'T'HH:mm:ss.SSSZ
     serialization:
       write_dates_as_timestamps: true
+
+# =============================================
+# spring actuator configurations
+# ---------------------------------------------
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+      # if you want to change the default prometheus endpoint, just change the 'id' to another value.
+      id: prometheus
+  endpoints:
+    web:
+      exposure:
+        include: ["*"]
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# =============================================
+# opentracing configurations
+# ---------------------------------------------
+opentracing:
+  jaeger:
+    enabled: true
+    enable-b3-propagation: true
+    log-spans: true
+    const-sampler:
+      decision: true
+    http-sender:
+      url: http://jaeger-collector:14268/api/traces
+
+jaeger.tracer:
+  host: jaeger-agent.microservices.svc
+  port: 6831
