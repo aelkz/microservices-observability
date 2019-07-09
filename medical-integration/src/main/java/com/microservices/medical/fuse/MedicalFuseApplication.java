@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//import javax.enterprise.event.Observes;
-//import org.apache.camel.cdi.ContextName;
-//import org.apache.camel.spi.CamelEvent.CamelContextStartingEvent;
+/**
+ * There are three ways in which an OpenTracing tracer can be configured to provide distributed tracing for a Camel application.
+ * https://github.com/apache/camel/blob/master/components/camel-opentracing/src/main/docs/opentracing.adoc
+ */
 
 @SpringBootApplication
 @CamelOpenTracing

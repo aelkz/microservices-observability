@@ -6,10 +6,12 @@ import com.microservices.medical.fuse.model.Activity;
 import com.microservices.medical.fuse.processor.APIKeyNotFoundExceptionProcessor;
 import com.microservices.medical.fuse.processor.ConvertActivityToEventProcessor;
 import com.microservices.medical.fuse.route.RouteDescriptor;
+import io.opentracing.Span;
+import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
-import org.apache.camel.opentracing.OpenTracingTracer;
+import org.apache.camel.opentracing.ActiveSpanManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import javax.ws.rs.core.MediaType;
 
-@Component
+@Component("RestRouteBuilder")
 public class RestRouteBuilder extends RouteBuilder {
 
     static final Logger logger = LoggerFactory.getLogger(RestRouteBuilder.class);
@@ -43,10 +45,6 @@ public class RestRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-
-        OpenTracingTracer tracer = new OpenTracingTracer();
-        tracer.init(getContext());
-
         // /--------------------------------------------------\
         // | Configure REST endpoint                          |
         // \--------------------------------------------------/
@@ -82,9 +80,12 @@ public class RestRouteBuilder extends RouteBuilder {
                     .log(LoggingLevel.INFO, logger, "checking the existence of nutritionist user api key into http header")
                     .choice()
                         .when(header(nutritionistConfig.getApiKeyName()).isNotNull())
-                        .log(LoggingLevel.INFO, logger, "calling nutritionist api with api key=${header.Nutritionist-API-User-Key}")
-                        .process(convertActivityToEventProcessor)
-                        .to(RouteDescriptor.INTERNAL_POST_NUTRITIONIST.getUri())
+                        .pipeline()
+                            .log(LoggingLevel.INFO, logger, "calling nutritionist api with api key=${header.Nutritionist-API-User-Key}")
+                            .process(convertActivityToEventProcessor)
+                            .bean("RestRouteBuilder", "addTracer")
+                            .to(RouteDescriptor.INTERNAL_POST_NUTRITIONIST.getUri())
+                    .endChoice()
                     .otherwise()
                         .process(apiKeyNotFoundExceptionProcessor)
                         .log(LoggingLevel.WARN, logger, "nutritionist user api key not found into http header")
@@ -102,9 +103,12 @@ public class RestRouteBuilder extends RouteBuilder {
                     .log(LoggingLevel.INFO, logger, "checking the existence of cardiologist user api key into http header")
                     .choice()
                         .when(header(cardiologistConfig.getApiKeyName()).isNotNull())
-                        .log(LoggingLevel.INFO, logger, "calling cardiologist api with api key=${header.Cardiologist-API-User-Key}")
-                        .process(convertActivityToEventProcessor)
-                        .to(RouteDescriptor.INTERNAL_POST_CARDIOLOGIST.getUri())
+                        .pipeline()
+                            .log(LoggingLevel.INFO, logger, "calling cardiologist api with api key=${header.Cardiologist-API-User-Key}")
+                            .process(convertActivityToEventProcessor)
+                            .bean("RestRouteBuilder", "addTracer")
+                            .to(RouteDescriptor.INTERNAL_POST_CARDIOLOGIST.getUri())
+                    .endChoice()
                     .otherwise()
                         .process(apiKeyNotFoundExceptionProcessor)
                         .log(LoggingLevel.WARN, logger, "cardiologist user api key not found into http header")
@@ -112,5 +116,12 @@ public class RestRouteBuilder extends RouteBuilder {
             .endRest();
 
     }
+
+    public void addTracer(Exchange exchange){
+        String userAgent = (String) exchange.getIn().getHeader("user-agent");
+        Span span = ActiveSpanManager.getSpan(exchange);
+        span.setBaggageItem("user-agent", userAgent);
+    }
+
 
 }

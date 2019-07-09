@@ -111,13 +111,6 @@
             <artifactId>gson</artifactId>
             <version>${google-gson.version}</version>
         </dependency>
-        <!-- use undertow as http producer -->
-        <!--
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-undertow-starter</artifactId>
-        </dependency>
-       -->
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4-starter</artifactId>
@@ -149,9 +142,9 @@
             <artifactId>camel-opentracing-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.opentracing.contrib</groupId>
-            <artifactId>opentracing-spring-cloud-starter</artifactId>
-            <version>0.3.2</version>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-tracerresolver</artifactId>
+            <version>0.35.5</version>
         </dependency>
         <!-- testing -->
         <dependency>
