@@ -115,8 +115,15 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 | GET    |/actuator/prometheus | Prometheus metrics export (will expose all custom metrics also) |
 | GET    |/actuator/metrics/activity.count | total activities |
 | GET    |/actuator/metrics/running.count | total running activities |
- 
-### `polar-flow-api` secondary/exposed endpoints
+
+### `*-integration-api` (FUSE) endpoints
+
+| method | URI | description |
+| ------ | --- | ---------- |
+| GET    |8081:/metrics | Default metrics export (will expose all custom metrics also) |
+| GET    |8081:/prometheus | Prometheus metrics export (will expose all custom metrics also) |
+
+### `polar-flow-api` secondary endpoints
 
 | method | URI | description |
 | ------ | --- | ---------- |
