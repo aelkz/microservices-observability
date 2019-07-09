@@ -136,7 +136,12 @@
         <!-- opentracing -->
         <dependency>
             <groupId>io.jaegertracing</groupId>
-            <artifactId>jaeger-tracerresolver</artifactId>
+            <artifactId>jaeger-core</artifactId>
+            <version>0.35.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-client</artifactId>
             <version>0.35.5</version>
         </dependency>
         <dependency>
