@@ -15,7 +15,7 @@ metadata:
     version: "1.3"
   creationTimestamp: 2019-07-08T18:40:08Z
   name: s2i-microservices-fuse73-spring-boot-camel
-  namespace: openshift
+  namespace: microservices
   resourceVersion: "420951"
   selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/s2i-microservices-fuse73-spring-boot-camel
   uid: cfa468d8-a1af-12e9-8344-0ab28c8a4fc9
