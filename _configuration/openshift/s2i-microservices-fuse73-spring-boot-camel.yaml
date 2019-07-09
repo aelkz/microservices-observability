@@ -14,11 +14,11 @@ metadata:
     tags: quickstart,java,springboot,fis,jboss-fuse
     version: "1.3"
   creationTimestamp: 2019-07-08T18:40:08Z
-  name: s2i-fuse73-spring-boot-camel
+  name: s2i-microservices-fuse73-spring-boot-camel
   namespace: openshift
   resourceVersion: "420951"
-  selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/s2i-fuse73-spring-boot-camel
-  uid: cfa468d8-a1af-11e9-8233-0ab28c8a4fc8
+  selfLink: /apis/template.openshift.io/v1/namespaces/openshift/templates/s2i-microservices-fuse73-spring-boot-camel
+  uid: cfa468d8-a1af-12e9-8344-0ab28c8a4fc9
 objects:
   - apiVersion: v1
     kind: ImageStream
@@ -90,74 +90,74 @@ objects:
           type: ImageChange
     status:
       lastVersion: 0
-      # service configuration block
-      - apiVersion: v1
+  # service configuration block
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9779"
+      labels:
+        expose: "true"
+        app: ${APP_NAME}
+        provider: s2i
+        version: ${APP_VERSION}
+        group: ${APP_GROUP}
+      name: ${APP_NAME}
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: ${APP_NAME}
+        provider: s2i
+        group: ${APP_GROUP}
+      type: ClusterIP
+      sessionAffinity: "None"
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9779"
+      labels:
+        expose: "true"
+        app: ${APP_NAME}
+        provider: s2i
+        version: ${APP_VERSION}
+        group: ${APP_GROUP}
+      name: ${APP_NAME}-metrics
+    spec:
+      ports:
+        - name: http
+          port: 8081
+          protocol: TCP
+          targetPort: 8081
+      selector:
+        app: ${APP_NAME}
+        provider: s2i
+        group: ${APP_GROUP}
+      type: ClusterIP
+      sessionAffinity: "None"
+  # default route configuration block (only 8080 will be exposed)
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        expose: "true"
+        app: ${APP_NAME}
+        provider: s2i
+        version: ${APP_VERSION}
+        group: ${APP_GROUP}
+      name: ${APP_NAME}
+    spec:
+      port:
+        targetPort: http
+      to:
         kind: Service
-        metadata:
-          annotations:
-            prometheus.io/scrape: "true"
-            prometheus.io/port: "9779"
-          labels:
-            expose: "true"
-            app: ${APP_NAME}
-            provider: s2i
-            version: ${APP_VERSION}
-            group: ${APP_GROUP}
-          name: ${APP_NAME}
-        spec:
-          ports:
-            - name: http
-              port: 8080
-              protocol: TCP
-              targetPort: 8080
-          selector:
-            app: ${APP_NAME}
-            provider: s2i
-            group: ${APP_GROUP}
-          type: ClusterIP
-          sessionAffinity: "None"
-      - apiVersion: v1
-        kind: Service
-        metadata:
-          annotations:
-            prometheus.io/scrape: "true"
-            prometheus.io/port: "9779"
-          labels:
-            expose: "true"
-            app: ${APP_NAME}
-            provider: s2i
-            version: ${APP_VERSION}
-            group: ${APP_GROUP}
-          name: ${APP_NAME}-metrics
-        spec:
-          ports:
-            - name: http
-              port: 8081
-              protocol: TCP
-              targetPort: 8081
-          selector:
-            app: ${APP_NAME}
-            provider: s2i
-            group: ${APP_GROUP}
-          type: ClusterIP
-          sessionAffinity: "None"
-      # default route configuration block (only 8080 will be exposed)
-      - apiVersion: route.openshift.io/v1
-        kind: Route
-        metadata:
-          labels:
-            expose: "true"
-            app: ${APP_NAME}
-            provider: s2i
-            version: ${APP_VERSION}
-            group: ${APP_GROUP}
-          name: ${APP_NAME}
-        spec:
-          port:
-            targetPort: http
-          to:
-            kind: Service
-            name: ${APP_NAME}
+        name: ${APP_NAME}
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -303,7 +303,7 @@ parameters:
     name: BUILD_MEMORY_LIMIT
     required: true
     value: 0.8G
-  - description: The application group, e.g. com.redhat.blueprint, com.microservices.
+  - description: The application group, e.g. com.redhat.blueprint, br.com.cassi.
     displayName: Application Group
     name: APP_GROUP
-    value: com.redhat.microservices
+    value: com.redhat.blueprint
