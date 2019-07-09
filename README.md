@@ -7,10 +7,10 @@
 
 | Framework       | Version              | Prometheus Metrics | Jaeger Tracing |
 | --------------- | -------------------- | ------------------ | -------------- |
-| spring boot     | 2.1.4.RELEASE        | true               | true           |
+| spring boot     | 2.1.4.RELEASE        | enabled            | enabled        |
 | thorntail       | 2.4.0.Final          | pending            | pending        |
 | vertx           | 3.6.3.redhat-00009   | pending            | pending        |
-| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) | true | true |
+| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) | enabled | enabled |
 
 </center>
 
