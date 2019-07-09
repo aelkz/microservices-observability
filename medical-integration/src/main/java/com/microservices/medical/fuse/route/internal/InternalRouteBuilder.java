@@ -58,7 +58,7 @@ public class InternalRouteBuilder extends RouteBuilder {
                 .process(logHeaderProcessor)
                 .removeHeader(Exchange.HTTP_PATH)
                 .bean("InternalRouteBuilder", "addTracer")
-                .to("http4://"+nutritionistConfig.getHost()+":"+nutritionistConfig.getPort()+nutritionistConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")
+                .to("http4://"+nutritionistConfig.getHost()+":"+nutritionistConfig.getPort()+nutritionistConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true&copyHeaders=true&connectionClose=true")
             .end()
             .unmarshal().json(JsonLibrary.Jackson)
             .end();
@@ -73,7 +73,7 @@ public class InternalRouteBuilder extends RouteBuilder {
                 .process(logHeaderProcessor)
                 .removeHeader(Exchange.HTTP_PATH)
                 .bean("InternalRouteBuilder", "addTracer")
-                .to("http4://"+cardiologistConfig.getHost()+":"+cardiologistConfig.getPort()+cardiologistConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true")
+                .to("http4://"+cardiologistConfig.getHost()+":"+cardiologistConfig.getPort()+cardiologistConfig.getContextPath()+"?connectTimeout=500&bridgeEndpoint=true&copyHeaders=true&connectionClose=true")
             .end()
             .unmarshal().json(JsonLibrary.Jackson)
             .end();
