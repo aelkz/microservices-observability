@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * There are three ways in which an OpenTracing tracer can be configured to provide distributed tracing for a Camel application.
  * https://github.com/apache/camel/blob/master/components/camel-opentracing/src/main/docs/opentracing.adoc
+ * https://github.com/redhat-developer-demos/istio-tutorial/blob/master/customer/java/camel-springboot/src/main/java/com/redhat/developer/demos/CustomerCamelRoute.java
+ * https://access.redhat.com/solutions/3606001
  */
 
 @SpringBootApplication

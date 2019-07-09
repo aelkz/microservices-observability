@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>fuse-medical-integration-api</name>
+    <name>medical-integration-api</name>
     <description>medical integration api</description>
 
     <properties>
