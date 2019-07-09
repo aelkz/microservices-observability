@@ -56,6 +56,23 @@ endpoints:
     id: prometheus
 
 # =============================================
+# opentracing configurations
+# ---------------------------------------------
+opentracing:
+  jaeger:
+    enabled: true
+    enable-b3-propagation: true
+    log-spans: true
+    const-sampler:
+      decision: true
+    http-sender:
+      url: http://jaeger-collector:14268/api/traces
+
+jaeger.tracer:
+  host: jaeger-agent.microservices.svc
+  port: 6831
+
+# =============================================
 # nutritionist api parameters
 # ---------------------------------------------
 # http://localhost:8070/api/v1/event
