@@ -60,8 +60,8 @@ endpoints:
 # ---------------------------------------------
 # http://localhost:8070/api/v1/event
 nutritionist:
-  host: 127.0.0.1
-  port: 8070
+  host: nutritionist-api.microservices.svc.cluster.local
+  port: 8080
   contextPath: /api/v1/event
   apiKeyName: Nutritionist-API-User-Key
 
@@ -70,7 +70,7 @@ nutritionist:
 # ---------------------------------------------
 # http://localhost:8071/api/v1/event
 cardiologist:
-  host: 127.0.0.1
-  port: 8071
+  host: cardiologist-api.microservices.svc.cluster.local
+  port: 8080
   contextPath: /api/v1/event
   apiKeyName: Cardiologist-API-User-Key
