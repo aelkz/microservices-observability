@@ -9,6 +9,7 @@ import com.microservices.medical.fuse.route.RouteDescriptor;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.camel.opentracing.OpenTracingTracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class RestRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+
+        OpenTracingTracer tracer = new OpenTracingTracer();
+        tracer.init(getContext());
 
         // /--------------------------------------------------\
         // | Configure REST endpoint                          |

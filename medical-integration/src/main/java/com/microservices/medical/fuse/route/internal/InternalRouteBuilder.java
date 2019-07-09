@@ -9,6 +9,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.apache.camel.opentracing.OpenTracingTracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class InternalRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+
+        OpenTracingTracer tracer = new OpenTracingTracer();
+        tracer.init(getContext());
 
         onException(Exception.class)
             .handled(true)
