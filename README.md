@@ -5,12 +5,12 @@
 
 <center>
 
-| FRAMEWORK       | VERSION              |
-| --------------- | -------------------- |
-| spring boot     | 2.1.4.RELEASE        |
-| thorntail       | 2.4.0.Final          |
-| vertx           | 3.6.3.redhat-00009   |
-| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) |
+| Framework       | Version              | Prometheus Metrics | Jaeger Tracing |
+| --------------- | -------------------- | ------------------ | -------------- |
+| spring boot     | 2.1.4.RELEASE        | true               | true           |
+| thorntail       | 2.4.0.Final          | pending            | pending        |
+| vertx           | 3.6.3.redhat-00009   | pending            | pending        |
+| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) | true | true |
 
 </center>
 
@@ -18,9 +18,9 @@
 
 According to microservices architecture and modern systems design, there are 5 observability patterns that help us to achieve the best in terms of monitoring distributed systems. They are the foundation to all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business centered approach with a practical view using open-source projects sustained by the cloud native computing foundation (CNCF).
 
- <b>NOTE</b>: This is not an production application! It will not integrate with any polar API or device. 
+ <b>NOTE</b>: This is not an production application! It will not integrate with any polar API or device.
  This project was built in order to demonstrate concepts regarding observability patterns for microservices architectures.
- The main goal is to demonstrate how to monitor, instrument and trace microservices accross the 
+ The main goal is to demonstrate how to monitor, instrument and trace microservices accross the
  network with different technologies.
 
 ![architecture](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/architecture-view.png "Architecture View")
@@ -28,7 +28,7 @@ According to microservices architecture and modern systems design, there are 5 o
 <b>The use-case scenario:</b><br>
 The user send a activity log after a training session. It could be a ordinary training session or a running session (w/ specific running data added).
 The API collects the training session data and propagates through the wire to different 3rd party "example" applications like strava and google calendar.
-All data is received and/or enriched to specific 3rd party APIs.<br>All the communication is traced using OpenTracing API and we can also collect custom metrics in the `polar-flow-api` like:  
+All data is received and/or enriched to specific 3rd party APIs.<br>All the communication is traced using OpenTracing API and we can also collect custom metrics in the `polar-flow-api` like:
 - <b>counter</b>.activity
 - <b>counter</b>.running
 - <b>gauge</b>.burned.calories
@@ -284,7 +284,7 @@ git clone https://github.com/aelkz/microservices-observability.git
 cd microservices-observability/
 
 # download maven settings.xml file
-curl -o maven-settings-template.xml -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/nexus/settings.xml
+curl -o maven-settings-template.xml -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/nexus/maven-settings-template.xml
 
 # change mirror url using your nexus openshift route
 export MAVEN_URL=http://$(oc get route nexus3 --template='{{ .spec.host }}')/repository/maven-group/
@@ -308,6 +308,7 @@ oc create secret generic "redhat.io" --from-file=.dockerconfigjson=config.json -
 
 oc import-image openjdk/openjdk-8-rhel8 --from=registry.redhat.io/openjdk/openjdk-8-rhel8 --confirm -n openshift
 
+# oc delete all -lapp=polar-flow-api
 oc new-app openjdk-8-rhel8:latest~https://github.com/aelkz/microservices-observability.git --name=polar-flow-api --context-dir=/polar-flow-api --build-env='MAVEN_MIRROR_URL='${MAVEN_URL} -e MAVEN_MIRROR_URL=${MAVEN_URL}
 
 oc patch svc polar-flow-api -p '{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}'
@@ -331,9 +332,109 @@ oc create configmap polar-flow-api-config --from-file=src/main/resources/applica
 oc set volume dc/polar-flow-api --add --overwrite --name=polar-flow-api-config-volume -m /deployments/config -t configmap --configmap-name=polar-flow-api-config
 ```
 
+### `INSTALLATION STEPS: INTEGRATION DEPLOYMENT`
+Now that the main API is deployed, let’s deploy the integration layer.
+
+```sh
+# import a new spring-boot camel template
+curl -o s2i-microservices-fuse73-spring-boot-camel.yaml -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/openshift/s2i-microservices-fuse73-spring-boot-camel.yaml
+
+oc delete template s2i-microservices-fuse73-spring-boot-camel -n microservices
+
+oc create -n microservices -f s2i-microservices-fuse73-spring-boot-camel.yaml
+
+export current_project=microservices
+export app_name=medical-integration
+export app_group=com.redhat.microservices
+export app_git=https://github.com/aelkz/microservices-observability.git
+export app_git_branch=master
+export maven_url=http://$(oc get route nexus3 --template='{{ .spec.host }}' -n ${current_project})/repository/maven-group/
+
+oc delete all -lapp=${app_name}-api
+
+# the custom template has some modifications regarding services,route and group definitions.
+oc new-app --template=s2i-microservices-fuse73-spring-boot-camel --name=${app_name}-api --build-env='MAVEN_MIRROR_URL='${maven_url} -e MAVEN_MIRROR_URL=${maven_url} --param GIT_REPO=${app_git} --param APP_NAME=${app_name}-api --param ARTIFACT_DIR=${app_name}/target --param GIT_REF=${app_git_branch} --param MAVEN_ARGS_APPEND='-pl '${app_name}' --also-make'
+
+# check the created services:
+# 1 for default app-context and 1 for /metrics endpoint.
+oc get svc -n microservices | grep medical
+
+# in order to polar-flow-api call the medical-integration-api, we need to change it's configuration
+curl -o application.yaml -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/openshift/polar-flow/application.yaml
+
+# NOTE. If you have changed the service or application's name, you need to edit and change the downloaded application.yaml file with your definitions.
+
+# create a configmap and mount a volume for polar-flow-api
+
+oc delete configmap polar-flow-api-config
+
+oc create configmap polar-flow-api-config --from-file=application.yaml
+
+oc set volume dc/polar-flow-api --add --overwrite --name=polar-flow-api-config-volume -m /deployments/config -t configmap --configmap-name=polar-flow-api-config
+
+rm -fr application.yaml
+
+# now let's create a new service monitor under prometheus operator, to scrape medical-integration-api metrics
+
+# repeat the initial steps of this tutorial on how to create a prometheus service monitor. Use the following definition to scrape FUSE based application metrics:
+```
+
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/16.png" title="Prometheus - step 13" width="40%" height="40%" /><img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 09.1" width="10%" height="10%" /><br>
+
+```sh
+# now, we change the medical-integration-api svc to enable prometheus scraping.
+
+# not needed actually
+oc patch svc medical-integration-api-metrics -p '{"spec":{"ports":[{"name":"http","port":8081,"protocol":"TCP","targetPort":8081}]}}'
+
+# NOTE: The metrics of FUSE applications will be exposed on port 8081 by default as defined on our custom template (s2i-microservices-fuse73-spring-boot-camel)
+
+oc label svc medical-integration-api-metrics monitor=fuse73-api
+
+# if you quick navigate to prometheus console, you'll see the FUSE target being loaded state=UNKNOWN and then becoming with state=UP:
+```
+
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/17.png" title="Prometheus - step 13" width="60%" height="60%" /><br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/18.png" title="Prometheus - step 13" width="60%" height="60%" />
+
+```sh
+# If you want to validate pod communication, go to polar-flow-api terminal and issue:
+
+curl -X GET http://medical-integration-api-metrics.microservices.svc.cluster.local:8081/metrics
+
+curl telnet://medical-integration-api-metrics.microservices.svc.cluster.local:8081
+```
+
+### `INSTALLATION STEPS: 3RD PARTY API DEPLOYMENT`
+
+Now that the main API and the integration API are deployed, let’s deploy the 3rd party application layer. This layer, represents all 3rd party applications in our example like social networks and medical specific APIs.
+
+```sh
+export current_project=microservices
+
+export MAVEN_URL=http://$(oc get route nexus3 --template='{{ .spec.host }}')/repository/maven-group/
+export MAVEN_URL_RELEASES=http://$(oc get route nexus3 --template='{{ .spec.host }}')/repository/maven-releases/
+export MAVEN_URL_SNAPSHOTS=http://$(oc get route nexus3 --template='{{ .spec.host }}')/repository/maven-snapshots/
+
+# deploy nutritionist-api (spring boot 2 API)
+
+# oc delete all -lapp=nutritionist-api
+oc new-app openjdk-8-rhel8:latest~https://github.com/aelkz/microservices-observability.git --name=nutritionist-api --context-dir=/nutritionist-api --build-env='MAVEN_MIRROR_URL='${MAVEN_URL} -e MAVEN_MIRROR_URL=${MAVEN_URL}
+
+oc patch svc nutritionist-api -p '{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}'
+
+# we will also be using the same service monitor defined in the main API
+oc label svc nutritionist-api monitor=springboot2-api
+
+oc expose svc/nutritionist-api -n ${current_project}
+```
+
+Now all the APIs are exposed to Prometheus:
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="60%" height="60%" />
+
 ### `ADDITIONAL DETAILS`
 
-[Openshift Operators](https://www.openshift.com/learn/topics/operators) An Operator is a method of packaging, deploying and managing a Kubernetes-native application. A Kubernetes-native application is an application that is both deployed on Kubernetes and managed using the Kubernetes APIs and kubectl tooling. 
+[Openshift Operators](https://www.openshift.com/learn/topics/operators) An Operator is a method of packaging, deploying and managing a Kubernetes-native application. A Kubernetes-native application is an application that is both deployed on Kubernetes and managed using the Kubernetes APIs and kubectl tooling.
 
 [Prometheus](https://prometheus.io) is an open source tool for instrumenting and monitoring metrics. It works in a pull-based manner, makes HTTP requests to your metric endpoint with the pre-determined time intervals(default 10seconds), and store these metrics in its own time-series database. Prometheus also provides a GUI to make queries over these metrics with its own query language PromQL. It provides basic graphics to visualize metrics. Prometheus also has an alert plugin to produce alerts according to metrics values.
 
@@ -357,6 +458,8 @@ oc set volume dc/polar-flow-api --add --overwrite --name=polar-flow-api-config-v
 java -jar target/my-first-app-1.0-SNAPSHOT.jar \
   -conf src/main/resources/external-configuration/application-conf.json
 ```
+
+
 
 ```text
 mvn clean package
