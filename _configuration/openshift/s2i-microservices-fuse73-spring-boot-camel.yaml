@@ -303,7 +303,7 @@ parameters:
     name: BUILD_MEMORY_LIMIT
     required: true
     value: 0.8G
-  - description: The application group, e.g. com.redhat.blueprint, br.com.cassi.
+  - description: The application group, e.g. com.redhat.blueprint, com.redhat.microservices.
     displayName: Application Group
     name: APP_GROUP
-    value: com.redhat.blueprint
+    value: com.redhat.microservices
