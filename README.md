@@ -429,8 +429,8 @@ oc label svc nutritionist-api monitor=springboot2-api
 oc expose svc/nutritionist-api -n ${current_project}
 ```
 
-Now all the APIs are exposed to Prometheus:
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="60%" height="60%" />
+Now all the APIs are exposed to Prometheus:<br>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="80%" height="80%" />
 
 ### `ADDITIONAL DETAILS`
 
