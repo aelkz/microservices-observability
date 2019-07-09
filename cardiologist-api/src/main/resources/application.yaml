@@ -8,7 +8,7 @@ logging:
 # contextPath: /api/v${api.version}/*
 server:
   address: 0.0.0.0
-  port: 8071
+  port: 8080
 
 # =============================================
 # spring configurations
