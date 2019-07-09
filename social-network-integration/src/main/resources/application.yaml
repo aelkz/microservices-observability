@@ -73,6 +73,10 @@ endpoints:
     enabled: true
   metrics:
     enabled: true
+  prometheus:
+    enabled: true
+    # if you want to change the default prometheus endpoint, just change the 'id' to another value.
+    id: prometheus
 
 # =============================================
 # opentracing configurations
@@ -86,6 +90,10 @@ opentracing:
       decision: true
     http-sender:
       url: http://jaeger-collector:14268/api/traces
+
+jaeger.tracer:
+  host: jaeger-agent.microservices.svc
+  port: 6831
 
 # =============================================
 # strava api parameters
