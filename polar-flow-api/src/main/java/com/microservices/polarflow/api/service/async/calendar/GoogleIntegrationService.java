@@ -45,11 +45,11 @@ public class GoogleIntegrationService implements IntegrationService<SyncStatus,A
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        logger.info("async call: google calendar service.");
         // Retrieve the API Key from user's profile.
         headers.set(googleConfig.getApiKey(),activity.getUser().getGoogleCalendarApiKey());
 
         String uri = "http://"+ googleConfig.getHost()+":"+ googleConfig.getPort()+ googleConfig.getPath();
+        logger.info("async call: google calendar service at "+uri);
 
         // inject tracing data into the wire
         tracer.inject(uri, headers, HttpMethod.POST);

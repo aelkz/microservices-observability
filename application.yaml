@@ -90,34 +90,34 @@ jaeger.tracer:
 integration:
   social:
     strava:
-      host: social-integration-api-metrics.microservices.svc.cluster.local
+      host: 127.0.0.1
       port: 8080
       path: /api/v1/social/strava
       apiKey: Strava-API-User-Key
     myfitnesspal:
-      host: social-integration-api-metrics.microservices.svc.cluster.local
+      host: 127.0.0.1
       port: 8080
       path: /api/v1/social/myfitnesspal
       apiKey: MyFitnessPal-API-User-Key
     applehealth:
-      host: social-integration-api-metrics.microservices.svc.cluster.local
+      host: 127.0.0.1
       port: 8080
       path: /api/v1/social/applehealth
       apiKey: AppleHealth-API-User-Key
   medical:
     nutritionist:
-      host: medical-integration-api-metrics.microservices.svc.cluster.local
+      host: medical-integration-api-microservices.apps.labs-ef3c.openshiftworkshop.com
       port: 8080
       path: /api/v1/medical/nutritionist
       apiKey: Nutritionist-API-User-Key
     cardiologist:
-      host: medical-integration-api-metrics.microservices.svc.cluster.local
+      host: medical-integration-api-microservices.apps.labs-ef3c.openshiftworkshop.com
       port: 8080
       path: /api/v1/medical/cardiologist
       apiKey: Cardiologist-API-User-Key
   calendar:
     google:
-      host: calendar-integration-api-metrics.microservices.svc.cluster.local
+      host: 127.0.0.1
       port: 8080
       path: /api/v1/calendar
       apiKey: Google-Calendar-API-User-Key

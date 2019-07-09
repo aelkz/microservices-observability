@@ -37,12 +37,11 @@ public class NutritionistIntegrationService implements IntegrationService<SyncSt
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        logger.info("async call: nutritionist service.");
-
         // Retrieve the API Key from user's profile.
         headers.set(nutritionistConfig.getApiKey(),activity.getUser().getNutritionistApiKey());
 
         String uri = "http://"+nutritionistConfig.getHost()+":"+nutritionistConfig.getPort()+nutritionistConfig.getPath();
+        logger.info("async call: nutritionist service at "+uri);
 
         // inject tracing data into the wire
         tracer.inject(uri, headers, HttpMethod.POST);

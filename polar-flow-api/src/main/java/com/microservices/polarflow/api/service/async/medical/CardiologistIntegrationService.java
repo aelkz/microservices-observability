@@ -37,12 +37,11 @@ public class CardiologistIntegrationService implements IntegrationService<SyncSt
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        logger.info("async call: cardiologist service.");
-
         // Retrieve the API Key from user's profile.
         headers.set(cardiologistConnfig.getApiKey(),activity.getUser().getCardiologistApiKey());
 
         String uri = "http://"+cardiologistConnfig.getHost()+":"+cardiologistConnfig.getPort()+cardiologistConnfig.getPath();
+        logger.info("async call: cardiologist service at "+uri);
 
         // inject tracing data into the wire
         tracer.inject(uri, headers, HttpMethod.POST);
