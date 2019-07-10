@@ -359,12 +359,12 @@ oc expose svc/nutritionist-api -n ${current_project}
 
 Now all the APIs are exposed to Prometheus:
 <p align="center">
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="60%" height="60%" />
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="80%" height="80%" />
 </p>
 
 And the tracing working as expected:<br>
 <p align="center">
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/01.png" title="Integration tracing with Jaeger" width="60%" height="60%" />
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/01.png" title="Integration tracing with Jaeger" width="100%" height="100%" />
 </p>
 
 ### `OBSERVABILITY LAB: ADDITIONAL DETAILS`
@@ -433,7 +433,7 @@ https://codepen.io/corenominal/pen/rxOmMJ<br>
 JWT Key Generator
 http://jwt.io
 
-###-----
-Thanks for reading and taking the time to comment!
-Feel free to create a <b>PR</b>.
+- - - - - - - - - -
+Thanks for reading and taking the time to comment!<br>
+Feel free to create a <b>PR</b><br>
 [raphael abreu](rabreu@redhat.com)
