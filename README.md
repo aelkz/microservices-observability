@@ -1,5 +1,5 @@
 # MICROSERVICES OBSERVABILITY
-###### A SIMPLE USE-CASE FOR OBSERVABILITY PATTERNS IN MICROSERVICES ARCHITECTURES.
+###### A SIMPLE USE-CASE USING OBSERVABILITY PATTERNS IN MICROSERVICES ARCHITECTURE.
 
 ![observability](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/intro.png "Microservices Observability demo")
 
@@ -7,28 +7,29 @@
 
 | Framework       | Version              | Prometheus Metrics | Jaeger Tracing |
 | --------------- | -------------------- | ------------------ | -------------- |
-| spring boot     | 2.1.4.RELEASE        | enabled            | enabled        |
-| thorntail       | 2.4.0.Final          | pending            | pending        |
-| vertx           | 3.6.3.redhat-00009   | pending            | pending        |
-| apache camel    | 7.3.0.fuse-730058-redhat-00001<br>(w/ spring boot 1.5.17.RELEASE) | enabled | enabled |
+| [spring boot](https://spring.io/projects/spring-boot)     | 2.1.4.RELEASE        | enabled            | enabled        |
+| [thorntail](https://thorntail.io)       | 2.4.0.Final          | pending            | pending        |
+| [vertx](https://vertx.io)           | 3.6.3.redhat-00009   | pending            | pending        |
+| [apache camel](https://camel.apache.org/)    | [7.3.0.fuse-730058-redhat-00001](https://www.redhat.com/en/technologies/jboss-middleware/fuse)<br>(w/ spring boot 1.5.17.RELEASE) | enabled | enabled |
 
 </center>
 
 <b>TL;DR</b> This is a demonstration on how to observe, trace and monitor microservices.
 
-According to microservices architecture and modern systems design, there are 5 observability patterns that help us to achieve the best in terms of monitoring distributed systems. They are the foundation to all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business centered approach with a practical view using open-source projects sustained by the cloud native computing foundation (CNCF).
+According to microservices architecture and modern systems design, there are [5 observability patterns](https://microservices.io/i/PatternsRelatedToMicroservices.jpg) that help us to achieve the best in terms of monitoring distributed systems. They are the foundation to all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business centered approach with a practical view using open-source projects sustained by the cloud native computing foundation ([CNCF](https://www.cncf.io)).
 
- <b>NOTE</b>: This is not an production application! It will not integrate with any polar API or device.
- This project was built in order to demonstrate concepts regarding observability patterns for microservices architectures.
- The main goal is to demonstrate how to monitor, instrument and trace microservices accross the
- network with different technologies.
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/patterns.png" title="Observability Patterns" width="60%" height="60%" />
+</center>
+
+<b>WARNING</b>: This is not an production application! It will not integrate with any polar API or device. This project was built in order to demonstrate concepts regarding observability patterns for microservices architecture.  The main goal is to demonstrate how to monitor, instrument and trace microservices accross the network with different technologies.
 
 ![architecture](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/architecture-view.png "Architecture View")
 
 <b>The use-case scenario:</b><br>
-The user send a activity log after a training session. It could be a ordinary training session or a running session (w/ specific running data added).
+Almost everyone has a [sports watch](https://www.bestproducts.com/fitness/equipment/g318/sports-watches-for-workouts) or a smart watch. The user synchronize an activity log after a training session. It could be a ordinary training session or a running session (w/ specific running data added).
 The API collects the training session data and propagates through the wire to different 3rd party "example" applications like strava and google calendar.
-All data is received and/or enriched to specific 3rd party APIs.<br>All the communication is traced using OpenTracing API and we can also collect custom metrics in the `polar-flow-api` like:
+All data is received and/or enriched to specific 3rd party APIs.<br>All the communication is traced using [OpenTracing API](https://opentracing.io) and we can also collect custom metrics in the `polar-flow-api` like:
 - <b>counter</b>.activity
 - <b>counter</b>.running
 - <b>gauge</b>.burned.calories
@@ -44,68 +45,22 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 
 ![instrumentation](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/dashboard.png "Business-centric instrumentation with prometheus and grafana")
 
-##### Sync a ordinary training session:
+#### Sync a ordinary training session:
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/postman/01.png" title="Training Session" width="100%" height="100%" />
+</center>
 
-```json
-{
-	"startDate":"2019-06-20T19:00:00",
-	"endDate":"2019-06-20T19:58:21",
-	"hrAvg":165,
-	"hrMin":110,
-	"hrMax":181,
-	"burnedFat":21,
-	"calories":741,
-	"load":11,
-	"notes":"feel a little stress on left shoulder",
-	"device":{
-		"id":2
-	},
-	"sport":{
-		"id":13
-	},
-	"user":{
-		"id":1
-	}
-}
-```
+#### Sync a running training session:
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/postman/02.png" title="Running Session" width="100%" height="100%" />
+</center>
 
-##### Sync a running training session:
+The postman collection used in this lab can be downloaded [here]([https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_configuration/observability.postman\_collection.json)
 
-```json
-{
-	"startDate":"2019-06-20T19:00:00",
-	"endDate":"2019-06-20T19:58:21",
-	"hrAvg":175,
-	"hrMin":120,
-	"hrMax":185,
-	"burnedFat":10,
-	"calories":623,
-	"load":14,
-	"notes":"feel a little stress on right knee",
-	"device":{
-		"id":2
-	},
-	"sport":{
-		"id":9
-	},
-	"user":{
-		"id":1
-	},
-	"running": {
-		"distance": 4.99,
-		"paceAvg": "05:15",
-		"paceMax": "04:33",
-		"ascent": 60,
-		"descent": 60,
-		"cadenceAvg": 91,
-		"cadenceMax": 108,
-		"runningIndex": 50
-	}
-}
-```
+#### With Jaeger it is possible to trace all communication:
+![tracing](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/02.png "Jaeger tracing in action")
 
-##### Tracing of API calls:
-![tracing](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/tracing.png "Jaeger tracing in action")
+You can naveigate through `spans` in a `trace` of the `POST /sync` operation.
 
 ### `polar-flow-api` primary endpoints
 
@@ -136,7 +91,7 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 | GET    |/actuator/info   | info / heartbeat - provided by spring boot actuator |
 | GET    |/actuator/health | application health - provided by spring boot actuator |
 
-### `INSTALLATION STEPS: PROJECT CREATION`
+### `OBSERVABILITY LAB: STEP 1 - PROJECT CREATION`
 
 ```sh
 export current_project=microservices
@@ -148,7 +103,9 @@ oc login https://master.<>.com:443 --token=<>
 oc new-project microservices --description="microservices observability" --display-name="microservices"
 ```
 
-### `INSTALLATION STEPS: PROMETHEUS OPERATOR`
+### `OBSERVABILITY LAB: STEP 2 - PROMETHEUS OPERATOR`
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/20.png" title="Prometheus - step 01" width="100%" height="100%" /></center><br>
 
 1-Go to the Cluster Console menu:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/01.png" title="Prometheus - step 01" width="50%" height="50%" /><br>
@@ -199,52 +156,14 @@ Confirm the service monitor creation clicking on Create button.
 14-Expose prometheus server:<br>
 `oc expose svc prometheus-operated`
 
-### `INSTALLATION STEPS: SONATYPE NEXUS`
+### `OBSERVABILITY LAB: STEP 3 - SONATYPE NEXUS`
+In order to continue this lab, you must provide a Sonatype Nexus instance in the `microservices` namespace. The detailed instructions can be found in this [readme](https://github.com/aelkz/microservices-observability/blob/master/README-NEXUS.md).
+
+### `OBSERVABILITY LAB: STEP 4 - JAEGER`
 
 ```sh
-oc new-app --docker-image docker.io/sonatype/nexus3:latest
+# We will use a all-in-one Jaeger deployment. This should not be used in production!
 
-oc rollout pause dc/nexus3
-
-oc patch dc nexus3 -p '{"spec":{"strategy":{"type":"Recreate"}}}'
-
-oc expose svc nexus3
-
-oc set resources dc nexus3 --limits=memory=4Gi,cpu=2 --requests=memory=2Gi,cpu=500m
-
-oc set volume dc/nexus3 --add --overwrite --name=nexus3-volume-1 --mount-path=/nexus-data/ --type persistentVolumeClaim --claim-name=nexus-pvc --claim-size=10Gi
-
-oc set probe dc/nexus3 --liveness --failure-threshold 3 --initial-delay-seconds 60 -- echo ok
-
-oc set probe dc/nexus3 --readiness --failure-threshold 3 --initial-delay-seconds 60 --get-url=http://:8081/
-
-oc rollout resume dc nexus3
-
-oc get pods | grep Running
-#[root@ocp-bastion lab04]# oc get pods | grep Running
-#nexus3-xyz    1/1     Running     0          2m36s
-
-oc exec nexus3-xyz cat /nexus-data/admin.password
-# 33456b65-7e85-4dfc-a063-78b413cf4a47
-
-oc get routes | grep nexus3
-
-# log into the nexus and change password to admin123
-
-curl -o setup_nexus3.sh -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/nexus/setup_nexus3.sh
-
-chmod +x setup_nexus3.sh
-
-./setup_nexus3.sh admin admin123 http://$(oc get route nexus3 --template='{{ .spec.host }}')
-
-oc expose dc nexus3 --port=5000 --name=nexus-registry
-
-oc create route edge nexus-registry --service=nexus-registry --port=5000
-```
-
-### `INSTALLATION STEPS: JAEGER`
-
-```sh
 wget -O jaeger-all-in-one-template.yml https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/jaeger/jaeger-all-in-one-template.yml
 
 oc process -f jaeger-all-in-one-template.yml | oc create -f -
@@ -253,7 +172,7 @@ oc process -f jaeger-all-in-one-template.yml | oc create -f -
 echo https://$(oc get route jaeger-query --template='{{ .spec.host }}')
 ```
 
-### `INSTALLATION STEPS: GRAFANA`
+### `OBSERVABILITY LAB: STEP 5 - GRAFANA`
 
 ```sh
 oc import-image openshift3/grafana --from=registry.redhat.io/openshift3/grafana --confirm -n openshift
@@ -274,7 +193,9 @@ echo https://$(oc get route grafana --template='{{ .spec.host }}')
 
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/grafana/01.png" title="Grafana Prometheus DataSource" width="60%" height="60%" />
 
-### `INSTALLATION STEPS: APPLICATION DEPLOYMENT`
+3. After that, import the main dashboard that was design to this use case. The json file can be located in this repository at `_configuration/grafana/main-dashboard.json`
+
+### `OBSERVABILITY LAB: STEP 6 - MAIN APPLICATION DEPLOYMENT`
 
 ```sh
 export current_project=microservices
@@ -316,8 +237,10 @@ oc patch svc polar-flow-api -p '{"spec":{"ports":[{"name":"http","port":8080,"pr
 oc label svc polar-flow-api monitor=springboot2-api
 ```
 
-The API can now be discoverable throught Prometheus scrape process, showing it’s state as `UP`:
+The API can now be discoverable throught Prometheus scrape process, showing it’s state as `UP`:<br>
+<center>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/15.png" title="Prometheus - step 13" width="60%" height="60%" />
+</center>
 
 ```sh
 oc expose svc/polar-flow-api -n ${current_project}
@@ -332,7 +255,7 @@ oc create configmap polar-flow-api-config --from-file=src/main/resources/applica
 oc set volume dc/polar-flow-api --add --overwrite --name=polar-flow-api-config-volume -m /deployments/config -t configmap --configmap-name=polar-flow-api-config
 ```
 
-### `INSTALLATION STEPS: INTEGRATION DEPLOYMENT`
+### `OBSERVABILITY LAB: STEP 7 - INTEGRATION DEPLOYMENT`
 Now that the main API is deployed, let’s deploy the integration layer.
 
 ```sh
@@ -394,8 +317,13 @@ oc label svc medical-integration-api-metrics monitor=fuse73-api
 # if you quick navigate to prometheus console, you'll see the FUSE target being loaded state=UNKNOWN and then becoming with state=UP:
 ```
 
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/17.png" title="Prometheus - step 13" width="60%" height="60%" /><br>
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/17.png" title="Prometheus - step 13" width="60%" height="60%" />
+</center>
+<br>
+<center>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/18.png" title="Prometheus - step 13" width="60%" height="60%" />
+</center>
 
 ```sh
 # If you want to validate pod communication, go to polar-flow-api terminal and issue:
@@ -405,7 +333,7 @@ curl -X GET http://medical-integration-api-metrics.microservices.svc.cluster.loc
 curl telnet://medical-integration-api-metrics.microservices.svc.cluster.local:8081
 ```
 
-### `INSTALLATION STEPS: 3RD PARTY API DEPLOYMENT`
+### `OBSERVABILITY LAB: STEP 8 - 3RD PARTY API DEPLOYMENT`
 
 Now that the main API and the integration API are deployed, let’s deploy the 3rd party application layer. This layer, represents all 3rd party applications in our example like social networks and medical specific APIs.
 
@@ -429,10 +357,17 @@ oc label svc nutritionist-api monitor=springboot2-api
 oc expose svc/nutritionist-api -n ${current_project}
 ```
 
-Now all the APIs are exposed to Prometheus:<br>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="80%" height="80%" />
+Now all the APIs are exposed to Prometheus:
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="60%" height="60%" />
+</center>
 
-### `ADDITIONAL DETAILS`
+And the tracing working as expected:<br>
+<center>
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/01.png" title="Integration tracing with Jaeger" width="60%" height="60%" />
+</center>
+
+### `OBSERVABILITY LAB: ADDITIONAL DETAILS`
 
 [Openshift Operators](https://www.openshift.com/learn/topics/operators) An Operator is a method of packaging, deploying and managing a Kubernetes-native application. A Kubernetes-native application is an application that is both deployed on Kubernetes and managed using the Kubernetes APIs and kubectl tooling.
 
@@ -451,6 +386,8 @@ Now all the APIs are exposed to Prometheus:<br>
 - Cloud Native Deployment – Jaeger backend is distributed as a collection of Docker images. - Deployment to Kubernetes clusters is assisted by Kubernetes templates and a Helm chart.
 
 - All Jaeger backend components expose Prometheus metrics by default
+
+[Grafana](https://grafana.com) Grafana is an open source metric analytics & visualization suite. It is most commonly used for visualizing time series data for infrastructure and application analytics but many use it in other domains including industrial sensors, home automation, weather, and process control.
 
 [Vertx](https://vertx.io) commands:
 
@@ -489,9 +426,14 @@ mvn springboot:run
 Apache Camel ™ is a versatile open-source integration framework based on known [Enterprise Integration Patterns](https://camel.apache.org/enterprise-integration-patterns.html).
 Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL. This means you get smart completion of routing rules in your IDE, whether in a Java, Scala or XML editor.
 
-### `REFERENCES`
+### `EXTERNAL REFERENCES`
 
 API Key Generator
 https://codepen.io/corenominal/pen/rxOmMJ<br>
 JWT Key Generator
 http://jwt.io
+
+###-----
+Thanks for reading and taking the time to comment!
+Feel free to create a <b>PR</b>.
+[raphael abreu](rabreu@redhat.com)
