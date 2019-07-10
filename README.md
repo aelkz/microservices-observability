@@ -3,7 +3,7 @@
 
 ![observability](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/intro.png "Microservices Observability demo")
 
-<center>
+<p align="center">
 
 | Framework       | Version              | Prometheus Metrics | Jaeger Tracing |
 | --------------- | -------------------- | ------------------ | -------------- |
@@ -12,15 +12,15 @@
 | [vertx](https://vertx.io)           | 3.6.3.redhat-00009   | pending            | pending        |
 | [apache camel](https://camel.apache.org/)    | [7.3.0.fuse-730058-redhat-00001](https://www.redhat.com/en/technologies/jboss-middleware/fuse)<br>(w/ spring boot 1.5.17.RELEASE) | enabled | enabled |
 
-</center>
+</p>
 
 <b>TL;DR</b> This is a demonstration on how to observe, trace and monitor microservices.
 
 According to microservices architecture and modern systems design, there are [5 observability patterns](https://microservices.io/i/PatternsRelatedToMicroservices.jpg) that help us to achieve the best in terms of monitoring distributed systems. They are the foundation to all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business centered approach with a practical view using open-source projects sustained by the cloud native computing foundation ([CNCF](https://www.cncf.io)).
 
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/patterns.png" title="Observability Patterns" width="60%" height="60%" />
-</center>
+</p>
 
 <b>WARNING</b>: This is not an production application! It will not integrate with any polar API or device. This project was built in order to demonstrate concepts regarding observability patterns for microservices architecture.  The main goal is to demonstrate how to monitor, instrument and trace microservices accross the network with different technologies.
 
@@ -46,16 +46,16 @@ All data is received and/or enriched to specific 3rd party APIs.<br>All the comm
 ![instrumentation](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/dashboard.png "Business-centric instrumentation with prometheus and grafana")
 
 #### Sync a ordinary training session:
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/postman/01.png" title="Training Session" width="100%" height="100%" />
-</center>
+</p>
 
 #### Sync a running training session:
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/postman/02.png" title="Running Session" width="100%" height="100%" />
-</center>
+</p>
 
-The postman collection used in this lab can be downloaded [here]([https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_configuration/observability.postman\_collection.json)
+The postman collection used in this lab can be downloaded [here](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/observability.postman_collection.json)
 
 #### With Jaeger it is possible to trace all communication:
 ![tracing](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/02.png "Jaeger tracing in action")
@@ -104,8 +104,8 @@ oc new-project microservices --description="microservices observability" --displ
 ```
 
 ### `OBSERVABILITY LAB: STEP 2 - PROMETHEUS OPERATOR`
-<center>
-<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/20.png" title="Prometheus - step 01" width="100%" height="100%" /></center><br>
+<p align="center">
+<img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/20.png" title="Prometheus - step 01" width="100%" height="100%" /></p><br>
 
 1-Go to the Cluster Console menu:<br>
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/01.png" title="Prometheus - step 01" width="50%" height="50%" /><br>
@@ -238,9 +238,9 @@ oc label svc polar-flow-api monitor=springboot2-api
 ```
 
 The API can now be discoverable throught Prometheus scrape process, showing it’s state as `UP`:<br>
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/15.png" title="Prometheus - step 13" width="60%" height="60%" />
-</center>
+</p>
 
 ```sh
 oc expose svc/polar-flow-api -n ${current_project}
@@ -317,13 +317,13 @@ oc label svc medical-integration-api-metrics monitor=fuse73-api
 # if you quick navigate to prometheus console, you'll see the FUSE target being loaded state=UNKNOWN and then becoming with state=UP:
 ```
 
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/17.png" title="Prometheus - step 13" width="60%" height="60%" />
-</center>
+</p>
 <br>
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/18.png" title="Prometheus - step 13" width="60%" height="60%" />
-</center>
+</p>
 
 ```sh
 # If you want to validate pod communication, go to polar-flow-api terminal and issue:
@@ -358,14 +358,14 @@ oc expose svc/nutritionist-api -n ${current_project}
 ```
 
 Now all the APIs are exposed to Prometheus:
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="60%" height="60%" />
-</center>
+</p>
 
 And the tracing working as expected:<br>
-<center>
+<p align="center">
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/01.png" title="Integration tracing with Jaeger" width="60%" height="60%" />
-</center>
+</p>
 
 ### `OBSERVABILITY LAB: ADDITIONAL DETAILS`
 
