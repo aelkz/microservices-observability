@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "c0768954-fb50-4ad3-92d7-46c8b49ecb6b",
+		"name": "OBSERVABILITY-DEMO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://polar-flow-api-microservices.apps.arekkusu.io/api/v1/sync",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"startDate\":\"2019-06-20T19:00:00\",\n\t\"endDate\":\"2019-06-20T19:58:21\",\n\t\"hrAvg\":172,\n\t\"hrMin\":120,\n\t\"hrMax\":181,\n\t\"burnedFat\":11,\n\t\"calories\":800,\n\t\"load\":12,\n\t\"notes\":\"feel a little stress on right knee\",\n\t\"device\":{\n\t\t\"id\":2\n\t},\n\t\"sport\":{\n\t\t\"id\":9\n\t},\n\t\"user\":{\n\t\t\"id\":1\n\t},\n\t\"running\": {\n\t\t\"distance\": 8,\n\t\t\"paceAvg\": \"05:35\",\n\t\t\"paceMax\": \"04:43\",\n\t\t\"ascent\": 60,\n\t\t\"descent\": 60,\n\t\t\"cadenceAvg\": 90,\n\t\t\"cadenceMax\": 110,\n\t\t\"runningIndex\": 47\n\t}\t\n}"
+				},
+				"url": {
+					"raw": "http://polar-flow-api-microservices.apps.arekkusu.io/api/v1/sync",
+					"protocol": "http",
+					"host": [
+						"polar-flow-api-microservices",
+						"apps",
+						"arekkusu",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sync"
+					]
+				},
+				"description": "sync running activity"
+			},
+			"response": []
+		},
+		{
+			"name": "http://polar-flow-api-microservices.apps.arekkusu.io/api/v1/sync",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"startDate\":\"2019-06-20T19:00:00\",\n\t\"endDate\":\"2019-06-20T19:58:21\",\n\t\"hrAvg\":165,\n\t\"hrMin\":120,\n\t\"hrMax\":181,\n\t\"burnedFat\":21,\n\t\"calories\":741,\n\t\"load\":11,\n\t\"notes\":\"feel a little stress on left shoulder\",\n\t\"device\":{\n\t\t\"id\":2\n\t},\n\t\"sport\":{\n\t\t\"id\":13\n\t},\n\t\"user\":{\n\t\t\"id\":1\n\t}\t\n}"
+				},
+				"url": {
+					"raw": "http://polar-flow-api-microservices.apps.arekkusu.io/api/v1/sync",
+					"protocol": "http",
+					"host": [
+						"polar-flow-api-microservices",
+						"apps",
+						"arekkusu",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sync"
+					]
+				},
+				"description": "sync weight lifting activity"
+			},
+			"response": []
+		}
+	]
+}
