@@ -60,7 +60,7 @@ The postman collection used in this lab can be downloaded [here](https://raw.git
 #### With Jaeger it is possible to trace all communication:
 ![tracing](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/02.png "Jaeger tracing in action")
 
-You can naveigate through `spans` in a `trace` of the `POST /sync` operation.
+You can navigate through `spans` in a `trace` of the `POST /sync` operation.
 
 ### `polar-flow-api` primary endpoints
 
