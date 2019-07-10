@@ -1,0 +1,597 @@
+<div>
+    <h2>MICROSERVICES OBSERVABILITY</h2>
+</div>
+<div>
+    <div class="cell markdown-cell">
+        <h6><span style="color: #ff0000;">A SIMPLE USE-CASE USING OBSERVABILITY PATTERNS IN MICROSERVICES ARCHITECTURE.</span></h6>
+        <p><img alt="observability" height="720" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/intro.png" title="Microservices Observability demo" width="809" /></p>
+        <p align="center"></p>
+        <table style="border-width: 1px; border-color: #ed0909;">
+            <thead>
+            <tr style="height: 25px;">
+                <th style="height: 25px; background-color: #e6e6e6; text-align: justify;"><strong>Framework</strong></th>
+                <th style="height: 25px; background-color: #e6e6e6; text-align: justify;"><strong>Version</strong></th>
+                <th style="height: 25px; background-color: #e6e6e6; text-align: justify;"><strong>Prometheus Metrics</strong></th>
+                <th style="height: 25px; background-color: #e6e6e6; text-align: justify;"><strong>Jaeger Tracing</strong></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr style="height: 25px;">
+                <td style="height: 25px; text-align: justify;"><a href="https://spring.io/projects/spring-boot">spring boot</a></td>
+                <td style="height: 25px; text-align: justify;">2.1.4.RELEASE</td>
+                <td style="height: 25px; text-align: justify;">enabled</td>
+                <td style="height: 25px; text-align: justify;">enabled</td>
+            </tr>
+            <tr style="height: 25px;">
+                <td style="height: 25px; text-align: justify;"><a href="https://thorntail.io">thorntail</a></td>
+                <td style="height: 25px; text-align: justify;">2.4.0.Final</td>
+                <td style="height: 25px; text-align: justify;">pending</td>
+                <td style="height: 25px; text-align: justify;">pending</td>
+            </tr>
+            <tr style="height: 25px;">
+                <td style="height: 25px; text-align: justify;"><a href="https://vertx.io">vertx</a></td>
+                <td style="height: 25px; text-align: justify;">3.6.3.redhat-00009</td>
+                <td style="height: 25px; text-align: justify;">pending</td>
+                <td style="height: 25px; text-align: justify;">pending</td>
+            </tr>
+            <tr style="height: 50px;">
+                <td style="height: 50px; text-align: justify;"><a href="https://camel.apache.org/">apache camel</a></td>
+                <td style="height: 50px; text-align: justify;"><a href="https://www.redhat.com/en/technologies/jboss-middleware/fuse">7.3.0.fuse-730058-redhat-00001</a><br />(w/ spring boot 1.5.17.RELEASE)</td>
+                <td style="height: 50px; text-align: justify;">enabled</td>
+                <td style="height: 50px; text-align: justify;">enabled</td>
+            </tr>
+            </tbody>
+        </table>
+        <p></p>
+        <p><strong>TL;DR</strong> This is a demonstration on how to observe, trace and monitor microservices.</p>
+        <p></p>
+        <p></p>
+        <p>According to microservices architecture and modern systems design, there are <a href="https://microservices.io/i/PatternsRelatedToMicroservices.jpg">5 observability patterns</a> that help us to achieve the best in terms of monitoring distributed systems. They are the foundation for all who want to build reliable cloud applications. This tutorial will dive into domain-oriented observability, monitoring, instrumentation and tracing in a business-centered approach with a practical view using open-source projects sustained by the cloud native computing foundation (<a href="https://www.cncf.io">CNCF</a>).</p>
+        <p align="center"><img height="60%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/patterns.png" title="Observability Patterns" width="60%" /></p>
+        <p><strong>WARNING</strong>: This is not a production application! It will not integrate with any polar API or device. This project was built in order to demonstrate concepts regarding observability patterns for microservices architecture. The main goal is to demonstrate how to monitor, instrument and trace microservices across the network with different technologies.<br /><br /></p>
+        <p><img alt="architecture" height="704" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/architecture-view.png" title="Architecture View" width="808" /></p>
+        <p><strong>The use-case scenario:</strong><br />Almost everyone has a <a href="https://www.bestproducts.com/fitness/equipment/g318/sports-watches-for-workouts">sports watch</a> or a smart watch. The user synchronizes an activity log after a training session. It could be an ordinary training session or a running session (w/ specific running data added).<br /> The API collects the training session data and propagates through the wire to different 3rd party "example" applications like strava and google calendar.&nbsp;All data is received and/or enriched to specific 3rd party APIs.<br /><br />All the communication is traced using <a href="https://opentracing.io">OpenTracing API</a> and we can also collect custom metrics in the <code>polar-flow-api</code> like:<br /><br /></p>
+        <ul>
+            <li><strong>counter</strong>.activity</li>
+            <li><strong>counter</strong>.running</li>
+            <li><strong>gauge</strong>.burned.calories</li>
+            <li><strong>gauge</strong>.training.load</li>
+            <li><strong>gauge</strong>.running.distance</li>
+            <li><strong>counter</strong>.activity.sport (for different sport types)</li>
+            <li><strong>gauge</strong>.vo2max</li>
+            <li><strong>gauge</strong>.heart.max</li>
+            <li><strong>gauge</strong>.running.distance</li>
+            <li><strong>gauge</strong>.running.cadence</li>
+            <li><strong>gauge</strong>.running.index</li>
+            <li><strong>timer</strong>.user.sync_ [seconds_max, seconds_count, seconds_sum]<br /><br /></li>
+        </ul>
+        <p><img alt="instrumentation" height="432" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/dashboard.png" title="Business-centric instrumentation with prometheus and grafana" width="818" /></p>
+    </div>
+    <div class="cell markdown-cell">
+        <h4><span style="color: #ff6600;">Sync a ordinary training session:</span></h4>
+        <p align="center"><img height="395" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/postman/01.png" title="Training Session" width="715" /></p>
+    </div>
+    <div class="cell markdown-cell">
+        <h4><span style="color: #ff6600;">Sync a running training session:</span></h4>
+        <p align="center"><img height="525" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/postman/02.png" title="Running Session" width="717" /></p>
+    </div>
+    <div class="cell markdown-cell">
+        <p style="text-align: center;">The postman collection used in this lab can be downloaded <a href="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/observability.postman_collection.json">here</a></p>
+    </div>
+    <div class="cell markdown-cell">
+        <h4><br />With Jaeger it is possible to trace all communication:</h4>
+        <p><img alt="tracing" class="j-img-centered" height="613" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/02.png" style="display: block; margin-left: auto; margin-right: auto;" title="Jaeger tracing in action" width="754" /></p>
+        <p>You can navigate through <strong><code>spans</code></strong> in a <strong><code>trace</code></strong> of the <span style="color: #ff6600;"><code>POST /sync</code></span> operation.</p>
+        <p></p>
+        <p></p>
+        <h3><code>polar-flow-api</code> primary endpoints</h3>
+        <table style="width: 713px;">
+            <thead>
+            <tr>
+                <th style="width: 52px; background-color: #f2f2f2;">method</th>
+                <th style="width: 52px; background-color: #f2f2f2;">URI</th>
+                <th style="width: 52px; background-color: #f2f2f2;">description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="width: 52px;"><strong>POST</strong></td>
+                <td style="width: 213px;"><span style="font-family: 'andale mono', monospace;">/v1/sync</span></td>
+                <td style="width: 427px;"><span style="font-size: 11px;">sync polar application data across 3rd party software</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 213px;"><span style="font-family: 'andale mono', monospace;">/actuator/prometheus</span></td>
+                <td style="width: 427px;"><span style="font-size: 11px;">Prometheus metrics export (will expose all custom metrics also)</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 213px;"><span style="font-family: 'andale mono', monospace;">/actuator/metrics/activity.count</span></td>
+                <td style="width: 427px;"><span style="font-size: 11px;">total activities</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 213px;"><span style="font-family: 'andale mono', monospace;">/actuator/metrics/running.count</span></td>
+                <td style="width: 427px;"><span style="font-size: 11px;">total running activities</span></td>
+            </tr>
+            </tbody>
+        </table>
+        <h3><code><br />*-integration-api</code> (FUSE) endpoints</h3>
+        <table>
+            <thead>
+            <tr style="height: 25px;">
+                <th style="background-color: #f5f5f5; height: 25px;">method</th>
+                <th style="background-color: #f5f5f5; height: 25px;">URI</th>
+                <th style="background-color: #f5f5f5; height: 25px;">description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr style="height: 25px;">
+                <td style="height: 25px;"><strong>GET</strong></td>
+                <td style="height: 25px;"><span style="font-family: 'andale mono', monospace;">:8081/metrics</span></td>
+                <td style="height: 25px;"><span style="font-size: 11px;">Default metrics export (will expose all custom metrics also)</span></td>
+            </tr>
+            <tr style="height: 25px;">
+                <td style="height: 25px;"><strong>GET</strong></td>
+                <td style="height: 25px;"><span style="font-family: 'andale mono', monospace;">:8081/prometheus</span></td>
+                <td style="height: 25px;"><span style="font-size: 11px;">Prometheus metrics export (will expose all custom metrics also)</span></td>
+            </tr>
+            </tbody>
+        </table>
+        <h3><code><br />polar-flow-api</code> secondary endpoints</h3>
+        <table style="width: 799px;">
+            <thead>
+            <tr>
+                <th style="background-color: #f2f2f2; width: 52px;">method</th>
+                <th style="background-color: #f2f2f2; width: 467px;">URI</th>
+                <th style="background-color: #f2f2f2; width: 259px;">description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/v2/api-docs</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">swagger json</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/swagger-ui.html</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">swagger html</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/actuator/metrics</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">metrics - provided by spring boot actuator</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/actuator/metrics/jvm.memory.used</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">metrics: jvm.memory.used</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/actuator/metrics/jvm.memory.used?tag=area:heap</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">metrics: jvm.memory.used:heap</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/actuator/metrics/jvm.memory.used?tag=area:heap&amp;tag=id:PS%20Eden%20Space</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">metrics: jvm.memory.used:eden</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/actuator/info</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">info / heartbeat - provided by spring boot actuator</span></td>
+            </tr>
+            <tr>
+                <td style="width: 52px;"><strong>GET</strong></td>
+                <td style="width: 467px;"><span style="font-family: 'andale mono', monospace;">/actuator/health</span></td>
+                <td style="width: 259px;"><span style="font-size: 11px;">application health - provided by spring boot actuator</span></td>
+            </tr>
+            </tbody>
+        </table>
+        <h3><code><br />OBSERVABILITY LAB: STEP 1 - PROJECT CREATION</code></h3>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace; color: #5828de;"><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">current_project=</span><span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># login into openshift platform</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">login</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">master</span>.<span class="ace_operator ace_keyword">&lt;&gt;</span>.<span class="ace_identifier">com</span>:<span class="ace_constant ace_numeric">443</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">token=</span><span class="ace_operator ace_keyword">&lt;&gt;</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># create a new project</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">new</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">project</span> <span class="ace_identifier">microservices</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">description=</span><span class="ace_string">"microservices observability"</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">display</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">name=</span><span class="ace_string">"microservices"<br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: STEP 2 - PROMETHEUS OPERATOR</code></h3>
+        <p align="center"><img height="100%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/20.png" title="Prometheus - step 01" width="100%" /></p>
+        <br />
+        <p>1-Go to the Cluster Console menu:</p>
+        <p></p>
+        <p><img height="50%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/01.png" title="Prometheus - step 01" width="50%" /></p>
+        <p>2-On the left menu, navigate through Catalog Sources, under Operators:</p>
+        <p></p>
+        <p><img height="20%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/02.png" title="Prometheus - step 02" width="20%" /></p>
+        <p>3-Change the namespace for our recently created namespace:</p>
+        <p></p>
+        <p><img height="25%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/04.png" title="Prometheus - step 03" width="25%" /></p>
+        <p>4-Under Red Hat Operators section, choose the Prometheus Operator and click on the button: Create Subscription:</p>
+        <p></p>
+        <p><img height="80%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/03.png" title="Prometheus - step 04" width="80%" /></p>
+        <p>5-Check the yaml definition and confirm the subscription clicking on the Create button:</p>
+        <p></p>
+        <p><img height="40%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/05.png" title="Prometheus - step 05" width="40%" /><img height="10%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 05.1" width="10%" /></p>
+        <p>6-Check if the subscription was created. You'll see the info: <strong>1 installed</strong>:</p>
+        <p></p>
+        <p><img height="70%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/07.png" title="Prometheus - step 06" width="70%" /></p>
+        <p>7-Click on the <strong>1 installed</strong> link to see Prometheus operator overview tab:</p>
+        <p></p>
+        <p><img height="70%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/08.png" title="Prometheus - step 07" width="70%" /></p>
+        <p>8-Create a new service monitor, clicking in the Create New button:</p>
+        <p><img height="20%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/09.png" title="Prometheus - step 08" width="20%" /></p>
+        <p>9-Change the suggested yaml definition with the following:<br /><br /> The new definition will enable:</p>
+        <ul>
+            <li>The namespace that prometheus will work on using <code>namespaceSelector</code>;</li>
+            <li>The label that will be used on all service (svc) definitions: <code>monitor: springboot2-api</code></li>
+            <li>The name of endpoint <code>http</code> that will be used to scrape the prometheus data and the <code>path</code> that the application will expose prometheus endpoint.<br /> All applications using these definitions will be scraped with this service monitor configuration.<br /> Confirm the service monitor creation clicking on Create button.<br /><br /></li>
+        </ul>
+        <p><img height="40%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/10.png" title="Prometheus - step 09" width="40%" /><img height="10%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 09.1" width="10%" /></p>
+        <p>10-The service monitor will be created and be ready to scrape application metrics:</p>
+        <p></p>
+        <p><img height="100%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/11.png" title="Prometheus - step 10" width="100%" /></p>
+        <p>11-Next, let's deploy the prometheus server. Return to operator overview tab and select:</p>
+        <p></p>
+        <p><img height="20%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/12.png" title="Prometheus - step 11" width="20%" /></p>
+        <p>12-Change the suggested yaml definition with the following:</p>
+        <p></p>
+        <p><img height="40%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/13.png" title="Prometheus - step 12" width="40%" /></p>
+        <p>13-Check the deployment under operator instances tab:</p>
+        <p></p>
+        <p><img height="100%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/14.png" title="Prometheus - step 13" width="100%" /></p>
+        <p>14-Expose Prometheus server:</p>
+        <p></p>
+        <p><code><span style="color: #5828de;">oc expose svc prometheus-operated</span><br /><br /></code></p>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: STEP 3 - SONATYPE NEXUS</code></h3>
+        <p>In order to continue this lab, you must provide a Sonatype Nexus instance in the <code>microservices</code> namespace. The detailed instructions can be found in this <a href="https://github.com/aelkz/microservices-observability/blob/master/README-NEXUS.md">readme</a>.</p>
+        <p></p>
+        <p></p>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: STEP 4 - JAEGER</code></h3>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600; font-family: 'andale mono', monospace;"># We will use a all-in-one Jaeger deployment. This should not be used in production!</span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span style="color: #5828de;"><span class="ace_identifier">wget</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">O</span> <span class="ace_identifier">jaeger</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">all</span><span class="ace_operator ace_keyword">-</span><span class="ace_keyword">in</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">one</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">yml</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">raw</span>.<span class="ace_identifier">githubusercontent</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">master</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">_configuration</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">jaeger</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">jaeger</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">all</span><span class="ace_operator ace_keyword">-</span><span class="ace_keyword">in</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">one</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">yml</span></span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="color: #5828de; font-family: 'andale mono', monospace;"></span></div>
+                <div class="ace_line"><span style="color: #5828de; font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">process</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">f</span> <span class="ace_identifier">jaeger</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">all</span><span class="ace_operator ace_keyword">-</span><span class="ace_keyword">in</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">one</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">yml</span> <span class="ace_operator ace_keyword">|</span> <span class="ace_identifier">oc</span> <span class="ace_identifier">create</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">f</span> <span class="ace_operator ace_keyword">-</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># get jaeger's route</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span style="color: #5828de;"><span class="ace_builtin ace_support ace_function">echo</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">jaeger</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">query</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span></span><span class="ace_paren ace_rparen"><span style="color: #5828de;">)</span><br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: STEP 5 - GRAFANA</code></h3>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_identifier">oc</span> <span class="ace_identifier">import</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">image</span> <span class="ace_identifier">openshift3</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">grafana</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">from=</span><span class="ace_identifier">registry</span>.<span class="ace_identifier">redhat</span>.<span class="ace_identifier">io</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">openshift3</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">grafana</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">confirm</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">openshift</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">wget</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">O</span> <span class="ace_identifier">grafana</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">standalone</span>.<span class="ace_identifier">yaml</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">raw</span>.<span class="ace_identifier">githubusercontent</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">master</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">_configuration</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">grafana</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">grafana</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">new</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">app</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">f</span> <span class="ace_identifier">grafana</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">standalone</span>.<span class="ace_identifier">yaml</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">param</span> <span class="ace_variable">NAMESPACE=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">current_project</span><span class="ace_paren ace_rparen">}</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># OBS. Grafana will be deployed with a oauth-proxy sidecard. In order to access grafana, you'll need access using some service-account and/or cluster admin.</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># get grafana's route</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span style="color: #5828de;"><span class="ace_builtin ace_support ace_function">echo</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">grafana</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span></span><span class="ace_paren ace_rparen"><span style="color: #5828de;">)</span><br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <ol>
+            <li>
+                <p>access grafana and confirm user permissions.</p>
+            </li>
+            <li>
+                <p>Add a new prometheus datasource with the prometheus service at<br /><code><a class="jive-link-external-small" href="/http%3A%2F%2Fprometheus-operated.microservices.svc.cluster.local%3A9090" rel="nofollow" target="_blank">http://prometheus-operated.microservices.svc.cluster.local:9090</a></code>, with the following configuration.<br />Click Save&amp;Test, then Back.</p>
+            </li>
+        </ol>
+        <img height="60%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/grafana/01.png" title="Grafana Prometheus DataSource" width="60%" />
+        <ol start="3">
+            <li>After that, import the main dashboard that was designed for this use case. The json file can be located in this repository at <code>_configuration/grafana/main-dashboard.json<br /><br /></code></li>
+        </ol>
+        <h3><code>OBSERVABILITY LAB: STEP 6 - MAIN APPLICATION DEPLOYMENT</code></h3>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace; color: #5828de;"><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">current_project=</span><span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">git</span> <span class="ace_identifier">clone</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">github</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span>.<span class="ace_identifier">git</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_builtin ace_support ace_function">cd</span> <span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># download maven settings.xml file</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">curl</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">o</span> <span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">settings</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">xml</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">s</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">raw</span>.<span class="ace_identifier">githubusercontent</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">master</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">_configuration</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">nexus</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">settings</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">xml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># change mirror url using your nexus openshift route</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">MAVEN_URL=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span><span class="ace_paren ace_rparen">)</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">group</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">MAVEN_URL_RELEASES=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span><span class="ace_paren ace_rparen">)</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">releases</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">MAVEN_URL_SNAPSHOTS=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span><span class="ace_paren ace_rparen">)</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">snapshots</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">awk</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">v</span> <span class="ace_variable">path=</span><span class="ace_string">"</span><span class="ace_variable">$MAVEN_URL</span><span class="ace_string">"</span> <span class="ace_start ace_string">'</span><span class="ace_string">/&lt;url&gt;/{sub(/&gt;.*&lt;/,"&gt;"path"&lt;")}1</span><span class="ace_string ace_end">'</span> <span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">settings</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">xml</span> <span class="ace_operator ace_keyword">&gt;</span> <span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">settings</span>.<span class="ace_identifier">xml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">rm</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fr</span> <span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">settings</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">template</span>.<span class="ace_identifier">xml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># deploy parent project on nexus</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">mvn</span> <span class="ace_identifier">clean</span> <span class="ace_identifier">package</span> <span class="ace_identifier">deploy</span> <span class="ace_operator ace_keyword">-</span><span class="ace_variable">DnexusReleaseRepoUrl=$MAVEN_URL_RELEASES</span> <span class="ace_operator ace_keyword">-</span><span class="ace_variable">DnexusSnapshotRepoUrl=$MAVEN_URL_SNAPSHOTS</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">s</span> .<span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">settings</span>.<span class="ace_identifier">xml</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">e</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">X</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">N</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># deploy polar-flow-api (spring boot 2 API)</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #ff6600;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment"><span># NOTE. In order to import Red Hat container images, you must setup your credentials on openshift. See: </span><a class="jive-link-external-small" href="/https%3A%2F%2Faccess.redhat.com%2Farticles%2F3399531" rel="nofollow" target="_blank">https://access.redhat.com/articles/3399531</a></span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #ff6600;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment"># The config.json can be found at: /var/lib/origin/.docker/ on openshift master node.</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #ff6600;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment"># create a secret with your container credentials</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">delete</span> <span class="ace_identifier">secret</span> <span class="ace_identifier">redhat</span>.<span class="ace_identifier">io</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">openshift</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">create</span> <span class="ace_identifier">secret</span> <span class="ace_identifier">generic</span> <span class="ace_string">"redhat.io"</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">from</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">file=</span>.<span class="ace_variable">dockerconfigjson=</span><span class="ace_identifier">config</span>.<span class="ace_identifier">json</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">type=</span><span class="ace_identifier">kubernetes</span>.<span class="ace_identifier">io</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">dockerconfigjson</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">openshift</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">create</span> <span class="ace_identifier">secret</span> <span class="ace_identifier">generic</span> <span class="ace_string">"redhat.io"</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">from</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">file=</span>.<span class="ace_variable">dockerconfigjson=</span><span class="ace_identifier">config</span>.<span class="ace_identifier">json</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">type=</span><span class="ace_identifier">kubernetes</span>.<span class="ace_identifier">io</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">dockerconfigjson</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">import</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">image</span> <span class="ace_identifier">openjdk</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">openjdk</span><span class="ace_operator ace_keyword">-</span><span class="ace_constant ace_numeric">8</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">rhel8</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">from=</span><span class="ace_identifier">registry</span>.<span class="ace_identifier">redhat</span>.<span class="ace_identifier">io</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">openjdk</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">openjdk</span><span class="ace_operator ace_keyword">-</span><span class="ace_constant ace_numeric">8</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">rhel8</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">confirm</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">openshift</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># oc delete all -lapp=polar-flow-api</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">new</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">app</span> <span class="ace_identifier">openjdk</span><span class="ace_operator ace_keyword">-</span><span class="ace_constant ace_numeric">8</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">rhel8</span>:<span class="ace_identifier">latest</span><span class="ace_operator ace_keyword">~</span><span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">github</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span>.<span class="ace_identifier">git</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">name=</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">context</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">dir=</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">build</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">env=</span><span class="ace_start ace_string">'</span><span class="ace_string">MAVEN_MIRROR_URL=</span><span class="ace_string ace_end">'</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">MAVEN_URL</span><span class="ace_paren ace_rparen">}</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">e</span> <span class="ace_variable">MAVEN_MIRROR_URL=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">MAVEN_URL</span><span class="ace_paren ace_rparen">}</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">patch</span> <span class="ace_identifier">svc</span> <span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">p</span> <span class="ace_start ace_string">'</span><span class="ace_string">{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}</span><span class="ace_string ace_end">'</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span style="color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">label</span> <span class="ace_identifier">svc</span> <span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_variable">monitor=</span><span class="ace_identifier">springboot2</span><span class="ace_operator ace_keyword">-</span></span><span class="ace_identifier"><span style="color: #5828de;">api</span><br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p>The API can now be discoverable throught Prometheus scrape process, showing it&rsquo;s state as <code>UP</code>:</p>
+        <p align="center"><img height="60%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/15.png" title="Prometheus - step 13" width="60%" /></p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_identifier">oc</span> <span class="ace_identifier">expose</span> <span class="ace_identifier">svc</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">current_project</span><span class="ace_paren ace_rparen">}</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="font-family: 'andale mono', monospace; color: #ff6600;"># NOTE: if you need to change jaeger host and port, or any other settings, just create a new application.yaml file and mount as a new volume on polar-flow-api container.</span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">vim</span> <span class="ace_identifier">src</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">main</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">resources</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">application</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">delete</span> <span class="ace_identifier">configmap</span> <span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">create</span> <span class="ace_identifier">configmap</span> <span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">from</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">file=</span><span class="ace_identifier">src</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">main</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">resources</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">application</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_builtin ace_support ace_function">set</span> <span class="ace_identifier">volume</span> <span class="ace_identifier">dc</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">add</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">overwrite</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">name=</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">volume</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">m</span> <span class="ace_operator ace_keyword">/</span><span class="ace_identifier">deployments</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">config</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">t</span> <span class="ace_identifier">configmap</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">configmap</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">name=</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config<br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: STEP 7 - INTEGRATION DEPLOYMENT</code></h3>
+        <p>Now that the main API is deployed, let&rsquo;s deploy the integration layer.</p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"><br /></span><span class="ace_comment" style="font-family: 'andale mono', monospace; color: #ff6600;"># import a new spring-boot camel template</span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">curl</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">o</span> <span class="ace_identifier">s2i</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fuse73</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">spring</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">boot</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">camel</span>.<span class="ace_identifier">yaml</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">s</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">raw</span>.<span class="ace_identifier">githubusercontent</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">master</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">_configuration</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">openshift</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">s2i</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fuse73</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">spring</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">boot</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">camel</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">delete</span> <span class="ace_identifier">template</span> <span class="ace_identifier">s2i</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fuse73</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">spring</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">boot</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">camel</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">create</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">microservices</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">f</span> <span class="ace_identifier">s2i</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fuse73</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">spring</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">boot</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">camel</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_keyword">export</span> <span class="ace_variable">current_project=</span><span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_keyword">export</span> <span class="ace_variable">app_name=</span><span class="ace_identifier">medical</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">integration</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_keyword">export</span> <span class="ace_variable">app_group=</span><span class="ace_identifier">com</span>.<span class="ace_identifier">redhat</span>.<span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_keyword">export</span> <span class="ace_variable">app_git=</span><span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">github</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span>.<span class="ace_identifier">git</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_keyword">export</span> <span class="ace_variable">app_git_branch=</span><span class="ace_identifier">master</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_keyword">export</span> <span class="ace_variable">maven_url=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">current_project</span><span class="ace_paren ace_rparen">})</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">group</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">delete</span> <span class="ace_identifier">all</span> <span class="ace_operator ace_keyword">-</span><span class="ace_variable">lapp=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_name</span><span class="ace_paren ace_rparen">}</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># the custom template has some modifications regarding services,route and group definitions.</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">new</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">app</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_identifier">s2i</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fuse73</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">spring</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">boot</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">camel</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">name=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_name</span><span class="ace_paren ace_rparen">}</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">build</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">env=</span><span class="ace_start ace_string">'</span><span class="ace_string">MAVEN_MIRROR_URL=</span><span class="ace_string ace_end">'</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">maven_url</span><span class="ace_paren ace_rparen">}</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">e</span> <span class="ace_variable">MAVEN_MIRROR_URL=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">maven_url</span><span class="ace_paren ace_rparen">}</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">param</span> <span class="ace_variable">GIT_REPO=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_git</span><span class="ace_paren ace_rparen">}</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">param</span> <span class="ace_variable">APP_NAME=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_name</span><span class="ace_paren ace_rparen">}</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">param</span> <span class="ace_variable">ARTIFACT_DIR=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_name</span><span class="ace_paren ace_rparen">}</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">target</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">param</span> <span class="ace_variable">GIT_REF=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_git_branch</span><span class="ace_paren ace_rparen">}</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">param</span> <span class="ace_variable">MAVEN_ARGS_APPEND=</span><span class="ace_start ace_string">'</span><span class="ace_string">-pl </span><span class="ace_string ace_end">'</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">app_name</span><span class="ace_paren ace_rparen">}</span><span class="ace_start ace_string">'</span><span class="ace_string"> --also-make</span><span class="ace_string ace_end">'</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># check the created services: </span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #ff6600;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment"># 1 for default app-context and 1 for /metrics endpoint.</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">svc</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_identifier">microservices</span> <span class="ace_operator ace_keyword">|</span> <span class="ace_identifier">grep</span> <span class="ace_identifier">medical</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># in order to polar-flow-api call the medical-integration-api, we need to change it's configuration</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">curl</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">o</span> <span class="ace_identifier">application</span>.<span class="ace_identifier">yaml</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">s</span> <span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">raw</span>.<span class="ace_identifier">githubusercontent</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">master</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">_configuration</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">openshift</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">application</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># NOTE. If you have changed the service or application's name, you need to edit and change the downloaded application.yaml file with your definitions.</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #ff6600;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #ff6600;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment"># create a configmap and mount a volume for polar-flow-api</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">delete</span> <span class="ace_identifier">configmap</span> <span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">create</span> <span class="ace_identifier">configmap</span> <span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">from</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">file=</span><span class="ace_identifier">application</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_builtin ace_support ace_function">set</span> <span class="ace_identifier">volume</span> <span class="ace_identifier">dc</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">add</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">overwrite</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">name=</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">volume</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">m</span> <span class="ace_operator ace_keyword">/</span><span class="ace_identifier">deployments</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">config</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">t</span> <span class="ace_identifier">configmap</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">configmap</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">name=</span><span class="ace_identifier">polar</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">flow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">config</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">rm</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">fr</span> <span class="ace_identifier">application</span>.<span class="ace_identifier">yaml</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># now let's create a new service monitor under prometheus operator, to scrape medical-integration-api metrics</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #ff6600;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell" style="color: #ff6600;"></span><span class="ace_comment"><span style="color: #ff6600;"># repeat the initial steps of this tutorial on how to create a prometheus service monitor. Use the following definition to scrape FUSE based application metrics:</span><br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p><img height="40%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/16.png" title="Prometheus - step 13" width="40%" /><img height="10%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/06.png" title="Prometheus - step 09.1" width="10%" /></p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="font-family: 'andale mono', monospace; color: #ff6600;"># now, we change the medical-integration-api svc to enable prometheus scraping.</span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># not needed actually</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">patch</span> <span class="ace_identifier">svc</span> <span class="ace_identifier">medical</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">integration</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">metrics</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">p</span> <span class="ace_start ace_string">'</span><span class="ace_string">{"spec":{"ports":[{"name":"http","port":8081,"protocol":"TCP","targetPort":8081}]}}</span><span class="ace_string ace_end">'</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># <strong>NOTE</strong>: The metrics of FUSE applications will be exposed on port 8081 by default as defined on our custom template (s2i-microservices-fuse73-spring-boot-camel)</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">label</span> <span class="ace_identifier">svc</span> <span class="ace_identifier">medical</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">integration</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">metrics</span> <span class="ace_variable">monitor=</span><span class="ace_identifier">fuse73</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell" style="color: #5828de;"></span><span class="ace_comment"><span style="color: #ff6600;"># if you quick navigate to prometheus console, you'll see the FUSE target being loaded <span style="color: #000000;">state</span>=<span style="color: #ffcc00;"><strong>UNKNOWN</strong></span> and then becoming with <span style="color: #000000;">state</span>=<span style="color: #339966;"><strong>UP</strong></span>:</span><br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p align="center"><img height="60%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/17.png" title="Prometheus - step 13" width="60%" /></p>
+        <br />
+        <p align="center"><img height="60%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/\_images/prometheus/18.png" title="Prometheus - step 13" width="60%" /></p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="font-family: 'andale mono', monospace; color: #ff6600;"># If you want to validate pod communication, go to polar-flow-api terminal and issue:</span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span style="color: #5828de;"><span class="ace_identifier">curl</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">X</span> <span class="ace_identifier">GET</span> <span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">medical</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">integration</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">metrics</span>.<span class="ace_identifier">microservices</span>.<span class="ace_identifier">svc</span>.<span class="ace_identifier">cluster</span>.<span class="ace_keyword">local</span>:<span class="ace_constant ace_numeric">8081</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">metrics</span></span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span style="color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">curl</span> <span class="ace_identifier">telnet</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">medical</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">integration</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">metrics</span>.<span class="ace_identifier">microservices</span>.<span class="ace_identifier">svc</span>.<span class="ace_identifier">cluster</span>.<span class="ace_keyword">local</span>:</span><span class="ace_constant ace_numeric"><span style="color: #5828de;">8081</span><br /><br /></span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: STEP 8 - 3RD PARTY API DEPLOYMENT</code></h3>
+        <p>Now that the main API and the integration API are deployed, let&rsquo;s deploy the 3rd party application layer. This layer represents all 3rd party applications in our example like social networks and medical specific APIs.</p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"><br /></span><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_keyword">export</span> <span class="ace_variable">current_project=</span><span class="ace_identifier">microservices</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">MAVEN_URL=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span><span class="ace_paren ace_rparen">)</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">group</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">MAVEN_URL_RELEASES=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span><span class="ace_paren ace_rparen">)</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">releases</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><strong><span class="ace_keyword">export</span></strong> <span class="ace_variable">MAVEN_URL_SNAPSHOTS=</span><span class="ace_identifier">http</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_identifier">oc</span> <span class="ace_identifier">get</span> <span class="ace_identifier">route</span> <span class="ace_identifier">nexus3</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">template=</span><span class="ace_start ace_string">'</span><span class="ace_string">{{ .spec.host }}</span><span class="ace_string ace_end">'</span><span class="ace_paren ace_rparen">)</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">repository</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">maven</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">snapshots</span><span class="ace_operator ace_keyword">/</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># deploy nutritionist-api (spring boot 2 API)</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #ff6600;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #ff6600;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment"># oc delete all -lapp=nutritionist-api</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">new</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">app</span> <span class="ace_identifier">openjdk</span><span class="ace_operator ace_keyword">-</span><span class="ace_constant ace_numeric">8</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">rhel8</span>:<span class="ace_identifier">latest</span><span class="ace_operator ace_keyword">~</span><span class="ace_identifier">https</span>:<span class="ace_operator ace_keyword">//</span><span class="ace_identifier">github</span>.<span class="ace_identifier">com</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">aelkz</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">microservices</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">observability</span>.<span class="ace_identifier">git</span> <span class="ace_operator ace_keyword">--</span><span class="ace_variable">name=</span><span class="ace_identifier">nutritionist</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">context</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">dir=</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">nutritionist</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">--</span><span class="ace_identifier">build</span><span class="ace_operator ace_keyword">-</span><span class="ace_variable">env=</span><span class="ace_start ace_string">'</span><span class="ace_string">MAVEN_MIRROR_URL=</span><span class="ace_string ace_end">'</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">MAVEN_URL</span><span class="ace_paren ace_rparen">}</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">e</span> <span class="ace_variable">MAVEN_MIRROR_URL=</span><span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">MAVEN_URL</span><span class="ace_paren ace_rparen">}</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">patch</span> <span class="ace_identifier">svc</span> <span class="ace_identifier">nutritionist</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">p</span> <span class="ace_start ace_string">'</span><span class="ace_string">{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}</span><span class="ace_string ace_end">'</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_comment" style="color: #ff6600;"># we will also be using the same service monitor defined in the main API</span></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">label</span> <span class="ace_identifier">svc</span> <span class="ace_identifier">nutritionist</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_variable">monitor=</span><span class="ace_identifier">springboot2</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span></span></div>
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell" style="font-family: 'andale mono', monospace; color: #5828de;"></span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace; color: #5828de;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">oc</span> <span class="ace_identifier">expose</span> <span class="ace_identifier">svc</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">nutritionist</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">n</span> <span class="ace_variable">$</span><span class="ace_paren ace_lparen">{</span><span class="ace_variable">current_project</span><span class="ace_paren ace_rparen">}</span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p><br />Now all the APIs are exposed to Prometheus:</p>
+        <p align="center"><img height="80%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/prometheus/19.png" title="Prometheus - step 13" width="80%" /></p>
+    </div>
+    <div class="cell markdown-cell">
+        <p>And the tracing working as expected:</p>
+        <p align="center"><img height="100%" src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/jaeger/01.png" title="Integration tracing with Jaeger" width="100%" /></p>
+    </div>
+    <div class="cell markdown-cell">
+        <h3><code>OBSERVABILITY LAB: ADDITIONAL DETAILS</code></h3>
+        <p><a href="https://www.openshift.com/learn/topics/operators">Openshift Operators</a> An Operator is a method of packaging, deploying and managing a Kubernetes-native application. A Kubernetes-native application is an application that is both deployed on Kubernetes and managed using the Kubernetes APIs and <span style="font-family: 'andale mono', monospace;">kubectl</span> tooling.</p>
+        <p></p>
+        <p></p>
+        <p><a href="https://prometheus.io">Prometheus</a> is an open source tool for instrumenting and monitoring metrics. It works in a pull-based manner, makes HTTP requests to your metric endpoint with the pre-determined time intervals(default 10seconds), and store these metrics in its own time-series database. Prometheus also provides a GUI to make queries over these metrics with its own query language PromQL. It provides basic graphics to visualize metrics. Prometheus also has an alert plugin to produce alerts according to metrics values.</p>
+        <p></p>
+        <p></p>
+        <p><a href="https://www.jaegertracing.io">Jaeger</a> key features:</p>
+        <ul>
+            <li>
+                <p>High Scalability &ndash; Jaeger backend is designed to have no single points of failure and to scale with the business needs.</p>
+            </li>
+            <li>
+                <p>Native support for OpenTracing &ndash; Jaeger backend, Web UI, and instrumentation libraries have been designed from ground up to support the OpenTracing standard.</p>
+            </li>
+            <li>
+                <p>Storage Backend &ndash; Jaeger supports two popular open source NoSQL databases as trace storage backends: Cassandra 3.4+ and Elasticsearch 5.x/6.x.</p>
+            </li>
+            <li>
+                <p>Modern UI &ndash; Jaeger Web UI is implemented in Javascript using popular open source frameworks like React.</p>
+            </li>
+            <li>
+                <p>Cloud Native Deployment &ndash; Jaeger backend is distributed as a collection of Docker images. - Deployment to Kubernetes clusters is assisted by Kubernetes templates and a Helm chart.</p>
+            </li>
+            <li>
+                <p>All Jaeger backend components expose Prometheus metrics by default<br /><br /></p>
+            </li>
+        </ul>
+        <p><a href="https://grafana.com">Grafana</a> Grafana is an open source metric analytics &amp; visualization suite. It is most commonly used for visualizing time series data for infrastructure and application analytics but many use it in other domains including industrial sensors, home automation, weather, and process control.</p>
+        <p></p>
+        <p></p>
+        <p><a href="https://vertx.io">Vertx</a> commands:</p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace;">java -jar target/my-first-app-1.0-SNAPSHOT.jar \</span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span> -conf src/main/resources/external-configuration/application-conf.json</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell"></div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span>mvn clean package</span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span>java -jar target/my-first-app-1.0-SNAPSHOT.jar</span></div>
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span>mvn compile vertx:run</span>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p><a href="https://thorntail.io">Thorntail</a> commands:</p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace;"><span class="ace_identifier">mvn</span> <span class="ace_identifier">clean</span> <span class="ace_keyword">package</span> <span class="ace_identifier">thorntail</span>:<span class="ace_identifier">run</span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p><span style="font-family: 'andale mono', monospace;">You can also run through a war package:</span></p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span style="font-family: 'andale mono', monospace;"><span class="ace_gutter ace_gutter-cell"></span><span class="ace_identifier">java</span> <span class="ace_operator ace_keyword">-</span><span class="ace_identifier">jar</span> <span class="ace_identifier">target</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">rhamt</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">effort</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_constant ace_numeric">1.0</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">hollow</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">thorntail</span>.<span class="ace_identifier">jar</span> <span class="ace_identifier">target</span><span class="ace_operator ace_keyword">/</span><span class="ace_identifier">rhamt</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">effort</span><span class="ace_operator ace_keyword">-</span><span class="ace_identifier">api</span><span class="ace_operator ace_keyword">-</span><span class="ace_constant ace_numeric">1.0</span>.</span><span class="ace_identifier"><span style="font-family: 'andale mono', monospace;">war</span><br /><br /></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p><a href="https://spring.io/projects/spring-boot">Springboot</a> commands:</p>
+    </div>
+    <div class="cell code-cell">
+        <div class="ace-chrome">
+            <div class="ace_static_highlight ace_show_gutter" style="counter-reset: ace_line 0;">
+                <div class="ace_line"><span class="ace_gutter ace_gutter-cell"></span><span style="font-family: 'andale mono', monospace;"><span class="ace_identifier">mvn</span> <span class="ace_identifier">springboot</span>:</span><span class="ace_identifier"><span style="font-family: 'andale mono', monospace;">run</span><br /><br /></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="cell markdown-cell">
+        <p><a href="https://camel.apache.org">Apache Camel</a><br /> Apache Camel &trade; is a versatile open-source integration framework based on known <a href="https://camel.apache.org/enterprise-integration-patterns.html">Enterprise Integration Patterns</a>.<br /> Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL. This means you get smart completion of routing rules in your IDE, whether in a Java, Scala or XML editor.</p>
+        <p></p>
+        <p></p>
+        <h3><code>EXTERNAL REFERENCES</code></h3>
+        <p>API Key Generator<br /> <a href="https://codepen.io/corenominal/pen/rxOmMJ">https://codepen.io/corenominal/pen/rxOmMJ</a></p>
+        <p></p>
+        <p>JWT Key Generator<br /> <a href="http://jwt.io">http://jwt.io</a></p>
+        <hr />
+        <p>Thanks for reading and taking the time to comment!&nbsp;<img class="jive_macro jive_emote" src="/images/emoticons/love.png" jivemacro="emoticon" ___jive_emoticon_name="love" /></p>
+        <p>Feel free to create a <strong>PR </strong>on<strong>&nbsp;<a href="https://github.com/aelkz/microservices-observability">https://github.com/aelkz/microservices-observability</a></strong></p>
+        <p></p>
+        <p><a href="/blog/rabreu@redhat.com">raphael abreu</a></p>
+    </div>
+</div>
