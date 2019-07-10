@@ -1,5 +1,6 @@
 # MICROSERVICES OBSERVABILITY
 ###### A SIMPLE USE-CASE USING OBSERVABILITY PATTERNS IN MICROSERVICES ARCHITECTURE.
+https://medium.com/@raphael.alex/microservices-observability-267b3e4244e7
 
 ![observability](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/intro.png "Microservices Observability demo")
 
