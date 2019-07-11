@@ -149,6 +149,11 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-opentracing-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-tracerresolver</artifactId>
+            <version>0.35.5</version>
+        </dependency>
         <!-- testing -->
         <dependency>
             <groupId>junit</groupId>

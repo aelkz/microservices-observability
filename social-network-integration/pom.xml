@@ -118,12 +118,7 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4-starter</artifactId>
         </dependency>
-        <!-- actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>${springboot.version}</version>
-        </dependency>
+        <!-- metrics -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-spring-legacy</artifactId>
@@ -148,6 +143,11 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-opentracing-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jaegertracing</groupId>
+            <artifactId>jaeger-tracerresolver</artifactId>
+            <version>0.35.5</version>
         </dependency>
         <!-- testing -->
         <dependency>

@@ -23,21 +23,21 @@ public class TracingConfiguration {
     @Bean
     public Tracer tracer() {
         return io.jaegertracing.Configuration.fromEnv(applicationName)
-                .withSampler(
-                    io.jaegertracing.Configuration.SamplerConfiguration.fromEnv()
-                        .withType(ConstSampler.TYPE)
-                        .withParam(1))
-                .withReporter(
-                    io.jaegertracing.Configuration.ReporterConfiguration.fromEnv()
-                        .withLogSpans(true)
-                        .withFlushInterval(1000)
-                        .withMaxQueueSize(10000)
-                        .withSender(
-                            io.jaegertracing.Configuration.SenderConfiguration.fromEnv()
-                                .withAgentHost(jaegerHost)
-                                .withAgentPort(jaegerPort)
-                        ))
-                .getTracer();
+            .withSampler(
+                io.jaegertracing.Configuration.SamplerConfiguration.fromEnv()
+                    .withType(ConstSampler.TYPE)
+                    .withParam(1))
+            .withReporter(
+                io.jaegertracing.Configuration.ReporterConfiguration.fromEnv()
+                    .withLogSpans(true)
+                    .withFlushInterval(1000)
+                    .withMaxQueueSize(10000)
+                    .withSender(
+                        io.jaegertracing.Configuration.SenderConfiguration.fromEnv()
+                            .withAgentHost(jaegerHost)
+                            .withAgentPort(jaegerPort)
+                    ))
+            .getTracer();
     }
 
     @PostConstruct
