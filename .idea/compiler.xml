@@ -6,16 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="calendar-integration" />
-        <module name="cardiologist-api" />
-        <module name="google-calendar-api" />
-        <module name="maven-archiver (1)" />
-        <module name="maven-archiver (2)" />
-        <module name="medical-integration" />
         <module name="nutritionist-api" />
-        <module name="polar-flow-api" />
+        <module name="maven-archiver" />
+        <module name="calendar-integration" />
         <module name="social-network-integration" />
         <module name="strava-api" />
+        <module name="medical-integration" />
+        <module name="polar-flow-api" />
+        <module name="google-calendar-api" />
+        <module name="maven-archiver (2)" />
+        <module name="maven-archiver (1)" />
+        <module name="cardiologist-api" />
       </profile>
     </annotationProcessing>
   </component>
