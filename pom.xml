@@ -14,7 +14,7 @@
 
     <modules>
         <!-- mobile backend api -->
-        <module>polar-flow-api</module>
+        <module>fitness-api</module>
         <!-- integration layer -->
         <module>social-network-integration</module>
         <module>medical-integration</module>
@@ -23,7 +23,7 @@
         <module>cardiologist-api</module>
         <module>strava-api</module>
         <module>nutritionist-api</module>
-        <module>google-calendar-api</module>
+        <module>reactive-calendar-api</module>
     </modules>
 
     <distributionManagement>

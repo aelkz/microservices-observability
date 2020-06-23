@@ -69,7 +69,7 @@
       },
       "targets": [
         {
-          "expr": "gauge_burned_calories{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\"}",
+          "expr": "gauge_burned_calories{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -147,7 +147,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "counter_activity_total{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\",type=\"activity\"}",
+          "expr": "counter_activity_total{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\",type=\"activity\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "total training sessions",
@@ -235,7 +235,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "counter_running_total{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\",type=\"activity.running\"}",
+          "expr": "counter_running_total{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\",type=\"activity.running\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -322,7 +322,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "gauge_training_load{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\"}",
+          "expr": "gauge_training_load{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -394,7 +394,7 @@
       },
       "targets": [
         {
-          "expr": "gauge_burned_calories{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\"}",
+          "expr": "gauge_burned_calories{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -466,7 +466,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "gauge_running_cadence{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}",
+          "expr": "gauge_running_cadence{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -544,7 +544,7 @@
       "pluginVersion": "6.2.5",
       "targets": [
         {
-          "expr": "gauge_vo2max{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}",
+          "expr": "gauge_vo2max{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -619,7 +619,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "gauge_heart_max{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}",
+          "expr": "gauge_heart_max{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -704,7 +704,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "gauge_running_distance{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\"}",
+          "expr": "gauge_running_distance{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -792,7 +792,7 @@
       "tableColumn": "__name__",
       "targets": [
         {
-          "expr": "gauge_running_distance{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-grd5r\",service=\"polar-flow-api\"}",
+          "expr": "gauge_running_distance{endpoint=\"http\",instance=\"10.1.2.29:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-grd5r\",service=\"fitness-api\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -817,8 +817,8 @@
     {
       "aliasColors": {
         "A-series": "dark-purple",
-        "process_cpu_usage{endpoint=\"http\",instance=\"10.1.2.30:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-1-xks6l\",service=\"polar-flow-api\"}": "semi-dark-purple",
-        "process_cpu_usage{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}": "semi-dark-purple"
+        "process_cpu_usage{endpoint=\"http\",instance=\"10.1.2.30:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-1-xks6l\",service=\"fitness-api\"}": "semi-dark-purple",
+        "process_cpu_usage{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}": "semi-dark-purple"
       },
       "bars": false,
       "dashLength": 10,
@@ -857,7 +857,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_cpu_usage{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}",
+          "expr": "process_cpu_usage{endpoint=\"http\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -867,7 +867,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "POLAR FLOW API - PROCESS CPU USAGE",
+      "title": "FITNESS API - PROCESS CPU USAGE",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -906,7 +906,7 @@
     },
     {
       "aliasColors": {
-        "jvm_memory_used_bytes{area=\"nonheap\",endpoint=\"http\",id=\"Metaspace\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}": "semi-dark-purple"
+        "jvm_memory_used_bytes{area=\"nonheap\",endpoint=\"http\",id=\"Metaspace\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}": "semi-dark-purple"
       },
       "bars": false,
       "dashLength": 10,
@@ -944,7 +944,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "jvm_memory_used_bytes{area=\"nonheap\",endpoint=\"http\",id=\"Metaspace\",instance=\"10.1.2.33:8080\",job=\"polar-flow-api\",namespace=\"microservices\",pod=\"polar-flow-api-2-bmqn5\",service=\"polar-flow-api\"}",
+          "expr": "jvm_memory_used_bytes{area=\"nonheap\",endpoint=\"http\",id=\"Metaspace\",instance=\"10.1.2.33:8080\",job=\"fitness-api\",namespace=\"microservices\",pod=\"fitness-api-2-bmqn5\",service=\"fitness-api\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -954,7 +954,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "POLAR FLOW API - JVM USED METASPACE",
+      "title": "FITNESS API - JVM USED METASPACE",
       "tooltip": {
         "shared": true,
         "sort": 0,

@@ -4,7 +4,7 @@ public enum RouteDescriptor {
 
     REST_CONFIG( "/calendar", "calendar-api", "fuse-calendar-integration-api"),
     REST_POST_CALENDAR( "/", "post-fuse-calendar-integration-api", "POST fuse-calendar-integration-api"),
-    INTERNAL_POST_CALENDAR( "direct:internal-google-calendar", "post-google-calendar-api", "POST google-calendar-api");
+    INTERNAL_POST_CALENDAR( "direct:internal-reactive-calendar", "post-reactive-calendar-api", "POST reactive-calendar-api");
 
     private String uri;
     private String id;

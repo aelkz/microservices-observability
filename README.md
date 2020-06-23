@@ -25,14 +25,14 @@ According to microservices architecture and modern systems design, there are [5 
 <img src="https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/patterns.png" title="Observability Patterns" width="60%" height="60%" />
 </p>
 
-<b>WARNING</b>: This is not an production application! It will not integrate with any polar API or device. This project was built in order to demonstrate concepts regarding observability patterns for microservices architecture.  The main goal is to demonstrate how to monitor, instrument and trace microservices accross the network with different technologies.
+<b>WARNING</b>: This is not an production application! It will not integrate with any real-world API or device. This project was built in order to demonstrate concepts regarding observability patterns for microservices architecture.  The main goal is to demonstrate how to monitor, instrument and trace microservices accross the network with different technologies.
 
 ![architecture](https://raw.githubusercontent.com/aelkz/microservices-observability/master/_images/architecture-view.png "Architecture View")
 
 <b>The use-case scenario:</b><br>
 Almost everyone has a [sports watch](https://www.bestproducts.com/fitness/equipment/g318/sports-watches-for-workouts) or a smart watch. The user synchronize an activity log after a training session. It could be a ordinary training session or a running session (w/ specific running data added).
-The API collects the training session data and propagates through the wire to different 3rd party "example" applications like strava and google calendar.
-All data is received and/or enriched to specific 3rd party APIs.<br>All the communication is traced using [OpenTracing API](https://opentracing.io) and we can also collect custom metrics in the `polar-flow-api` like:
+The API collects the training session data and propagates through the wire to different 3rd party "example" applications: one for running data and another reactive calendar.
+All data is received and/or enriched to specific 3rd party APIs.<br>All the communication is traced using [OpenTracing API](https://opentracing.io) and we can also collect custom metrics in the `fitness-api` like:
 - <b>counter</b>.activity
 - <b>counter</b>.running
 - <b>gauge</b>.burned.calories
@@ -65,11 +65,11 @@ The postman collection used in this lab can be downloaded [here](https://raw.git
 
 You can navigate through `spans` in a `trace` of the `POST /sync` operation.
 
-### `polar-flow-api` primary endpoints
+### `fitness-api` primary endpoints
 
 | method | URI | description |
 | ------ | --- | ---------- |
-| POST   |/v1/sync         | sync polar application data across 3rd party software |
+| POST   |/v1/sync         | sync fitness application data across 3rd party software |
 | GET    |/actuator/prometheus | Prometheus metrics export (will expose all custom metrics also) |
 | GET    |/actuator/metrics/activity.count | total activities |
 | GET    |/actuator/metrics/running.count | total running activities |
@@ -81,7 +81,7 @@ You can navigate through `spans` in a `trace` of the `POST /sync` operation.
 | GET    |8081:/metrics | Default metrics export (will expose all custom metrics also) |
 | GET    |8081:/prometheus | Prometheus metrics export (will expose all custom metrics also) |
 
-### `polar-flow-api` secondary endpoints
+### `fitness-api` secondary endpoints
 
 | method | URI | description |
 | ------ | --- | ---------- |
@@ -222,7 +222,7 @@ rm -fr maven-settings-template.xml
 # deploy parent project on nexus
 mvn clean package deploy -DnexusReleaseRepoUrl=$MAVEN_URL_RELEASES -DnexusSnapshotRepoUrl=$MAVEN_URL_SNAPSHOTS -s ./maven-settings.xml -e -X -N
 
-# deploy polar-flow-api (spring boot 2 API)
+# deploy fitness-api (spring boot 2 API)
 # NOTE. In order to import Red Hat container images, you must setup your credentials on openshift. See: https://access.redhat.com/articles/3399531
 # The config.json can be found at: /var/lib/origin/.docker/ on openshift master node.
 # create a secret with your container credentials
@@ -232,12 +232,12 @@ oc create secret generic "redhat.io" --from-file=.dockerconfigjson=config.json -
 
 oc import-image openjdk/openjdk-8-rhel8 --from=registry.redhat.io/openjdk/openjdk-8-rhel8 --confirm -n openshift
 
-# oc delete all -lapp=polar-flow-api
-oc new-app openjdk-8-rhel8:latest~https://github.com/aelkz/microservices-observability.git --name=polar-flow-api --context-dir=/polar-flow-api --build-env='MAVEN_MIRROR_URL='${MAVEN_URL} -e MAVEN_MIRROR_URL=${MAVEN_URL}
+# oc delete all -lapp=fitness-api
+oc new-app openjdk-8-rhel8:latest~https://github.com/aelkz/microservices-observability.git --name=fitness-api --context-dir=/fitness-api --build-env='MAVEN_MIRROR_URL='${MAVEN_URL} -e MAVEN_MIRROR_URL=${MAVEN_URL}
 
-oc patch svc polar-flow-api -p '{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}'
+oc patch svc fitness-api -p '{"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":8080}]}}'
 
-oc label svc polar-flow-api monitor=springboot2-api
+oc label svc fitness-api monitor=springboot2-api
 ```
 
 The API can now be discoverable throught Prometheus scrape process, showing itâ€™s state as `UP`:<br>
@@ -246,16 +246,16 @@ The API can now be discoverable throught Prometheus scrape process, showing itâ€
 </p>
 
 ```sh
-oc expose svc/polar-flow-api -n ${current_project}
+oc expose svc/fitness-api -n ${current_project}
 
-# NOTE: if you need to change jaeger host and port, or any other settings, just create a new application.yaml file and mount as a new volume on polar-flow-api container.
+# NOTE: if you need to change jaeger host and port, or any other settings, just create a new application.yaml file and mount as a new volume on fitness-api container.
 vim src/main/resources/application.yaml
 
-oc delete configmap polar-flow-api-config
+oc delete configmap fitness-api-config
 
-oc create configmap polar-flow-api-config --from-file=src/main/resources/application.yaml
+oc create configmap fitness-api-config --from-file=src/main/resources/application.yaml
 
-oc set volume dc/polar-flow-api --add --overwrite --name=polar-flow-api-config-volume -m /deployments/config -t configmap --configmap-name=polar-flow-api-config
+oc set volume dc/fitness-api --add --overwrite --name=fitness-api-config-volume -m /deployments/config -t configmap --configmap-name=fitness-api-config
 ```
 
 ### `OBSERVABILITY LAB: STEP 7 - INTEGRATION DEPLOYMENT`
@@ -285,18 +285,18 @@ oc new-app --template=s2i-microservices-fuse73-spring-boot-camel --name=${app_na
 # 1 for default app-context and 1 for /metrics endpoint.
 oc get svc -n microservices | grep medical
 
-# in order to polar-flow-api call the medical-integration-api, we need to change it's configuration
-curl -o application.yaml -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/openshift/polar-flow/application.yaml
+# in order to fitness-api call the medical-integration-api, we need to change it's configuration
+curl -o application.yaml -s https://raw.githubusercontent.com/aelkz/microservices-observability/master/_configuration/openshift/fitness/application.yaml
 
 # NOTE. If you have changed the service or application's name, you need to edit and change the downloaded application.yaml file with your definitions.
 
-# create a configmap and mount a volume for polar-flow-api
+# create a configmap and mount a volume for fitness-api
 
-oc delete configmap polar-flow-api-config
+oc delete configmap fitness-api-config
 
-oc create configmap polar-flow-api-config --from-file=application.yaml
+oc create configmap fitness-api-config --from-file=application.yaml
 
-oc set volume dc/polar-flow-api --add --overwrite --name=polar-flow-api-config-volume -m /deployments/config -t configmap --configmap-name=polar-flow-api-config
+oc set volume dc/fitness-api --add --overwrite --name=fitness-api-config-volume -m /deployments/config -t configmap --configmap-name=fitness-api-config
 
 rm -fr application.yaml
 
@@ -329,7 +329,7 @@ oc label svc medical-integration-api-metrics monitor=fuse73-api
 </p>
 
 ```sh
-# If you want to validate pod communication, go to polar-flow-api terminal and issue:
+# If you want to validate pod communication, go to fitness-api terminal and issue:
 
 curl -X GET http://medical-integration-api-metrics.microservices.svc.cluster.local:8081/metrics
 

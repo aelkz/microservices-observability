@@ -1,7 +1,6 @@
 package com.microservices.nutritionist.api.controller;
 
 import javax.validation.Valid;
-
 import com.microservices.nutritionist.api.model.Event;
 import com.microservices.nutritionist.api.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;

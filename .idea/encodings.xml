@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+  <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/calendar-integration" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/cardiologist-api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/google-calendar-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fitness-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/medical-integration" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/nutritionist-api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/polar-flow-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/reactive-calendar-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/social-network-integration" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/strava-api" charset="UTF-8" />
   </component>

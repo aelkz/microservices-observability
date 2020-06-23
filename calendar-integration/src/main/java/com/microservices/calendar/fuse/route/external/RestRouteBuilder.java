@@ -1,10 +1,8 @@
 package com.microservices.calendar.fuse.route.external;
 
-import com.microservices.calendar.fuse.configuration.GoogleCalendarConfiguration;
+import com.microservices.calendar.fuse.configuration.ReactiveCalendarConfiguration;
 import com.microservices.calendar.fuse.processor.APIKeyNotFoundExceptionProcessor;
-import com.microservices.calendar.fuse.processor.ExceptionProcessor;
 import com.microservices.calendar.fuse.route.RouteDescriptor;
-import com.microservices.calendar.fuse.route.internal.InternalRouteBuilder;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -29,7 +27,7 @@ public class RestRouteBuilder extends RouteBuilder {
     private String apiVersion;
 
     @Autowired
-    private GoogleCalendarConfiguration calendarConfig;
+    private ReactiveCalendarConfiguration calendarConfig;
 
     @Autowired
     private APIKeyNotFoundExceptionProcessor apiKeyNotFoundExceptionProcessor;
@@ -67,11 +65,11 @@ public class RestRouteBuilder extends RouteBuilder {
             .responseMessage().code(204).message("success").endResponseMessage()
                 .route().routeId(RouteDescriptor.REST_POST_CALENDAR.getId())
                 .log(LoggingLevel.INFO, logger, "received request from ${header.CamelHttpServletRequest.remoteAddr}")
-                .log(LoggingLevel.INFO, logger, "checking the existence of google-calendar user api key into http header")
+                .log(LoggingLevel.INFO, logger, "checking the existence of reactive-calendar user api key into http header")
                 .choice()
                     .when(header(calendarConfig.getApiKeyName()).isNotNull())
-                    //.log(LoggingLevel.INFO, logger, "calling google-calendar api with api key=${header.google-api-integration-key}")
-                    .log(LoggingLevel.INFO, logger, "calling google-calendar api with api key=${header.Google-Calendar-API-User-Key}")
+                    //.log(LoggingLevel.INFO, logger, "calling reactive-calendar api with api key=${header.calendar-api-integration-key}")
+                    .log(LoggingLevel.INFO, logger, "calling reactive-calendar api with api key=${header.Reactive-Calendar-API-User-Key}")
                     .to(RouteDescriptor.INTERNAL_POST_CALENDAR.getUri())
                 .otherwise()
                     .process(apiKeyNotFoundExceptionProcessor)

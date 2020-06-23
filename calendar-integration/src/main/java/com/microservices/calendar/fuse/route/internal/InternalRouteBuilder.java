@@ -1,6 +1,6 @@
 package com.microservices.calendar.fuse.route.internal;
 
-import com.microservices.calendar.fuse.configuration.GoogleCalendarConfiguration;
+import com.microservices.calendar.fuse.configuration.ReactiveCalendarConfiguration;
 import com.microservices.calendar.fuse.processor.ExceptionProcessor;
 import com.microservices.calendar.fuse.route.RouteDescriptor;
 import io.opentracing.Span;
@@ -22,7 +22,7 @@ public class InternalRouteBuilder extends RouteBuilder {
     static final Logger logger = LoggerFactory.getLogger(InternalRouteBuilder.class);
 
     @Autowired
-    private GoogleCalendarConfiguration calendarConfig;
+    private ReactiveCalendarConfiguration calendarConfig;
 
     @Autowired
     private ExceptionProcessor exceptionProcessor;
