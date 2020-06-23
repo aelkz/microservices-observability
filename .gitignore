@@ -7,3 +7,4 @@
 /.idea/
 /fitness-api/target/
 /reactive-calendar-api/target/
+/.mvn/
