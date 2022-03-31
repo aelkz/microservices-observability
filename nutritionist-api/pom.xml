@@ -17,7 +17,7 @@
     <description>nutritionist api</description>
 
     <properties>
-        <springboot.version>2.1.4.RELEASE</springboot.version>
+        <springboot.version>2.5.12</springboot.version>
         <main.basedir>${basedir}/../..</main.basedir>
     </properties>
 
